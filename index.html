@@ -207,7 +207,7 @@
     // 初始化
     async function init() {
       try {
-        const response = await fetch('questions-72.json');
+        const response = await fetch('questions.json');
         questions = await response.json();
       } catch (e) {
         // 如果无法加载JSON，使用内置题目（精简版）
