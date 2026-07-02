@@ -943,6 +943,20 @@
         } else {
             init();
         }
+
+        // 暴露函数到全局作用域（供HTML的onclick调用）
+        window.startNewTest = startNewTest;
+        window.showHistory = showHistory;
+        window.showCompare = showCompare;
+        window.resumeTest = resumeTest;
+        window.discardProgress = discardProgress;
+        window.previousQuestion = previousQuestion;
+        window.nextQuestion = nextQuestion;
+        window.shareResult = shareResult;
+        window.clearAllHistory = clearAllHistory;
+        window.switchResultTab = switchResultTab;
+        window.closeHistoryDetail = closeHistoryDetail;
+        window.deleteHistory = deleteHistory;
     })();
     </script>
 </body>
