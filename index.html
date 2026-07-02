@@ -2099,7 +2099,26 @@
             
             // Tab 切换
             const tabOverview = document.getElementById('tab-overview');
-            if (tabOverview) tabOverview.addEventListener('click', function() { switchResultTab('overview', this); });
+            if (tabOverview) tabOverview.addEventListener('click', function() { switchResultTab('overview', this); 
+
+        // ========== 暴露函数到全局作用域（让onclick能找到）==========
+        window.startTest = startTest;
+        window.showHistory = showHistory;
+        window.showCompare = showCompare;
+        window.resumeTest = resumeTest;
+        window.discardProgress = discardProgress;
+        window.previousQuestion = previousQuestion;
+        window.nextQuestion = nextQuestion;
+        window.shareResult = shareResult;
+        window.clearAllHistory = clearAllHistory;
+        window.closeModal = closeModal;
+        window.showIntro = showIntro;
+        window.switchResultTab = switchResultTab;
+        
+        console.log('函数已暴露到全局作用域');
+    });
+
+});
             
             const tabAnalysis = document.getElementById('tab-analysis');
             if (tabAnalysis) tabAnalysis.addEventListener('click', function() { switchResultTab('analysis', this); });
