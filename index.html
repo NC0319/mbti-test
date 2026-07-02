@@ -663,7 +663,7 @@
             </div>
 
             <div class="action-buttons">
-                <button onclick="startTest()">开始测试</button>
+                <button id="btn-start-test">开始测试</button>
                 <button class="secondary" id="btn-show-history">历史记录 (<span id="history-count">0</span>)</button>
             </div>
         </div>
@@ -750,7 +750,7 @@
 
             <div class="action-buttons">
                 <button class="success" id="btn-share">分享结果</button>
-                <button id="btn-show-history">历史记录</button>
+                <button id="btn-show-history-result">历史记录</button>
                 <button class="secondary" onclick="restartTest()">重新测试</button>
             </div>
         </div>
@@ -777,7 +777,7 @@
             <div id="compare-content"></div>
 
             <div class="action-buttons" style="margin-top: 20px;">
-                <button id="btn-show-history">返回记录</button>
+                <button id="btn-show-history-compare">返回记录</button>
                 <button class="secondary" onclick="showIntro()">返回首页</button>
             </div>
         </div>
@@ -2069,10 +2069,17 @@
         document.addEventListener('DOMContentLoaded', function() {
             // 首页按钮
             const btnStart = document.getElementById('btn-start-test');
-            if (btnStart) btnStart.addEventListener('click', startNewTest);
+            if (btnStart) btnStart.addEventListener('click', startTest);
             
             const btnHistory = document.getElementById('btn-show-history');
             if (btnHistory) btnHistory.addEventListener('click', showHistory);
+            
+            // 结果页和历史对比页的历史记录按钮
+            const btnHistoryResult = document.getElementById('btn-show-history-result');
+            if (btnHistoryResult) btnHistoryResult.addEventListener('click', showHistory);
+            
+            const btnHistoryCompare = document.getElementById('btn-show-history-compare');
+            if (btnHistoryCompare) btnHistoryCompare.addEventListener('click', showHistory);
             
             const btnCompare = document.getElementById('btn-show-compare');
             if (btnCompare) btnCompare.addEventListener('click', showCompare);
