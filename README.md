@@ -2,7 +2,7 @@
 
 60道精选题目，16种人格类型，深入分析你的性格密码。
 
-🔗 https://nc0319.github.io/mbti-test/
+:link: https://nc0319.github.io/mbti-test/
 
 ## 功能
 
