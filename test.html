@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MBTI人格测试</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 600px;
+            width: 100%;
+            padding: 40px 30px;
+        }
+        h1 { color: #667eea; text-align: center; margin-bottom: 20px; }
+        .page { display: none; }
+        .page.active { display: block; }
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.1em;
+            cursor: pointer;
+            margin: 10px 5px;
+            touch-action: manipulation;
+        }
+        button:active { transform: scale(0.95); }
+        .question { font-size: 1.2em; margin: 30px 0; line-height: 1.6; }
+        .option {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+            cursor: pointer;
+            border: 2px solid transparent;
+            touch-action: manipulation;
+        }
+        .option:active { background: #e9ecef; }
+        .option.selected { background: #667eea; color: white; }
+        .progress { background: #e0e0e0; height: 10px; border-radius: 10px; margin: 20px 0; }
+        .progress-fill { background: #667eea; height: 100%; border-radius: 10px; transition: width 0.3s; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 首页 -->
+        <div id="intro-page" class="page active">
+            <h1>MBTI人格测试</h1>
+            <p style="text-align: center; color: #666; margin-bottom: 30px;">
+                5道题 · 快速测试版
+            </p>
+            <button id="btn-start" style="width: 100%;">开始测试</button>
+        </div>
+
+        <!-- 测试页 -->
+        <div id="test-page" class="page">
+            <div class="progress"><div class="progress-fill" id="progress-fill"></div></div>
+            <div class="question" id="question-text"></div>
+            <div class="option" data-value="0" id="opt-0"></div>
+            <div class="option" data-value="1" id="opt-1"></div>
+            <button id="btn-next" style="margin-top: 20px;">下一题</button>
+        </div>
+
+        <!-- 结果页 -->
+        <div id="result-page" class="page">
+            <h1>测试完成！</h1>
+            <div id="result-text" style="text-align: center; font-size: 1.2em; margin: 30px 0;"></div>
+            <button id="btn-restart" style="width: 100%;">重新测试</button>
+        </div>
+    </div>
+
+    <script>
+        // 简化版题目（5道题用于测试）
+        const questions = [
+            { text: "你更喜欢：", options: ["与多人社交", "与小群密友相处"] },
+            { text: "你更倾向于：", options: ["关注具体细节", "关注整体大局"] },
+            { text: "做决定时你：", options: ["逻辑分析优先", "感受他人优先"] },
+            { text: "你更喜欢：", options: ["提前计划", "随性而为"] },
+            { text: "在聚会中你通常：", options: ["精力充沛", "需要时间独处恢复"] }
+        ];
+
+        let currentQ = 0;
+        let answers = [];
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, binding events...');
+            
+            // 绑定按钮事件
+            document.getElementById('btn-start').addEventListener('click', startTest);
+            document.getElementById('btn-next').addEventListener('click', nextQuestion);
+            document.getElementById('btn-restart').addEventListener('click', restartTest);
+            
+            // 绑定选项事件
+            document.getElementById('opt-0').addEventListener('click', function() { selectOption(0); });
+            document.getElementById('opt-1').addEventListener('click', function() { selectOption(1); });
+            
+            console.log('Events bound successfully');
+        });
+
+        function startTest() {
+            console.log('startTest called');
+            currentQ = 0;
+            answers = [];
+            showPage('test-page');
+            showQuestion();
+        }
+
+        function showQuestion() {
+            console.log('Showing question', currentQ);
+            const q = questions[currentQ];
+            document.getElementById('question-text').textContent = (currentQ + 1) + '. ' + q.text;
+            document.getElementById('opt-0').textContent = 'A. ' + q.options[0];
+            document.getElementById('opt-1').textContent = 'B. ' + q.options[1];
+            
+            // 更新进度
+            const progress = ((currentQ + 1) / questions.length) * 100;
+            document.getElementById('progress-fill').style.width = progress + '%';
+            
+            // 清除选择状态
+            document.getElementById('opt-0').classList.remove('selected');
+            document.getElementById('opt-1').classList.remove('selected');
+        }
+
+        function selectOption(index) {
+            console.log('Option selected:', index);
+            answers[currentQ] = index;
+            document.getElementById('opt-0').classList.remove('selected');
+            document.getElementById('opt-1').classList.remove('selected');
+            document.getElementById('opt-' + index).classList.add('selected');
+        }
+
+        function nextQuestion() {
+            console.log('nextQuestion called, current:', currentQ);
+            if (answers[currentQ] === undefined) {
+                alert('请先选择一个选项');
+                return;
+            }
+            
+            if (currentQ < questions.length - 1) {
+                currentQ++;
+                showQuestion();
+            } else {
+                showResult();
+            }
+        }
+
+        function showResult() {
+            console.log('Showing result');
+            const score = answers.filter(a => a === 0).length;
+            document.getElementById('result-text').textContent = 
+                '你选择了 ' + score + ' 个A选项和 ' + (questions.length - score) + ' 个B选项。\n\n（这是简化测试版，完整版将包含93道题和详细分析）';
+            showPage('result-page');
+        }
+
+        function restartTest() {
+            console.log('Restarting test');
+            showPage('intro-page');
+        }
+
+        function showPage(pageId) {
+            const pages = document.querySelectorAll('.page');
+            for (let i = 0; i < pages.length; i++) {
+                pages[i].classList.remove('active');
+            }
+            document.getElementById(pageId).classList.add('active');
+        }
+    </script>
+</body>
+</html>
