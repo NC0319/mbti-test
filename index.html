@@ -673,7 +673,7 @@
                 <ul>
                     <li>预计用时：15-20分钟</li>
                     <li>请根据第一反应作答，无需过度思考</li>
-                    <li>没有"正确《或》错误"的答案</li>
+                    <li>没有《正确》或《错误》的答案</li>
                     <li>所有数据仅存储在本地，保护隐私</li>
                 </ul>
             </div>
@@ -1248,7 +1248,7 @@
                     "工作狂倾向"
                 ],
                 careers: ["管理者", "律师", "法官", "军官", "项目经理", "财务总监", "销售经理"],
-                relationship: "你直接可靠，在关系中是负责任的伴侣。你用行动表达爱意，但可能因为太专注于"应该做什么"而忽略情感的交流。需要学会更多地关注伴侣的感受。",
+                relationship: "你直接可靠，在关系中是负责任的伴侣。你用行动表达爱意，但可能因为太专注于《应该做什么》而忽略情感的交流。需要学会更多地关注伴侣的感受。",
                 growth: "学会倾听不同的观点，不要总是坚持自己的方式。培养情感表达的能力，不要只用行动说话。学会在必要时展现温柔和同理心。",
                 famous: "约翰·洛克菲勒、亨利·福特、米歇尔·奥巴马、桑德拉·戴",
                 compatibility: "与 ISFP 和 INFP 最匹配，他们能软化你的强硬。与 INTP 关系最具挑战性。"
@@ -1279,7 +1279,7 @@
                 ],
                 careers: ["护士", "教师", "销售经理", "活动策划", "公关专员", "人力资源", "客户服务"],
                 relationship: "你热情、关怀，在关系中是支持和鼓励的伴侣。你重视传统和稳定，努力营造和谐的家庭氛围。但可能因为过于在意他人看法而感到压力。",
-                growth: "学会区分"重要他人《和》其他人的看法"。接受变化，不要让传统限制你的选择。培养自我接纳，不要总是需要他人的认可。",
+                growth: "学会区分《重要他人》和《其他人的看法》。接受变化，不要让传统限制你的选择。培养自我接纳，不要总是需要他人的认可。",
                 famous: "泰勒·斯威夫特、詹妮弗·洛佩兹、比尔·克林顿、玛丽·居里",
                 compatibility: "与 ISFP 和 ISTP 最匹配，他们能给你独立的空间。与 INTJ 关系最具挑战性。"
             },
@@ -2128,7 +2128,7 @@
             
             // Tab 切换
             const tabOverview = document.getElementById('tab-overview');
-            if (tabOverview) tabOverview.addEventListener('click', function() { switchResultTab('overview', this); 
+            if (tabOverview) tabOverview.addEventListener('click', function() { switchResultTab('overview', this); });
 
         // ========== 暴露函数到全局作用域（让onclick能找到）==========
         window.startTest = startTest;
@@ -2145,18 +2145,15 @@
         window.switchResultTab = switchResultTab;
         
         console.log('函数已暴露到全局作用域');
+        
+        const tabAnalysis = document.getElementById('tab-analysis');
+        if (tabAnalysis) tabAnalysis.addEventListener('click', function() { switchResultTab('analysis', this); });
+        
+        const tabSuggestions = document.getElementById('tab-suggestions');
+        if (tabSuggestions) tabSuggestions.addEventListener('click', function() { switchResultTab('suggestions', this); });
+        
+        console.log('所有事件已绑定');
     });
-
-});
-            
-            const tabAnalysis = document.getElementById('tab-analysis');
-            if (tabAnalysis) tabAnalysis.addEventListener('click', function() { switchResultTab('analysis', this); });
-            
-            const tabSuggestions = document.getElementById('tab-suggestions');
-            if (tabSuggestions) tabSuggestions.addEventListener('click', function() { switchResultTab('suggestions', this); });
-            
-            console.log('所有事件已绑定');
-        });
 
     </script>
 </body>
