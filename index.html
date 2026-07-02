@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang=《zh-CN》>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="description" content="专业的MBTI人格测试 - 支持详细数据分析、历史记录留存和多维度对比">
-    <meta name="theme-color" content="#667eea">
+    <meta charset=《UTF-8》>
+    <meta name=《viewport》 content=《width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no》>
+    <meta name=《description》 content=《专业的MBTI人格测试 - 支持详细数据分析、历史记录留存和多维度对比》>
+    <meta name=《theme-color》 content=《#667eea》>
     <title>MBTI人格测试 - 完整版</title>
     <script>
         // 全局错误捕获 - 方便手机调试
@@ -31,7 +31,7 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 《Segoe UI》, 《PingFang SC》, 《Hiragino Sans GB》, 《Microsoft YaHei》, 《Helvetica Neue》, Helvetica, Arial, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             display: flex;
@@ -643,17 +643,17 @@
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class=《container》>
         <!-- 介绍页面 -->
-        <div id="intro-page" class="page active">
+        <div id=《intro-page》 class=《page active》>
             <h1>MBTI人格测试</h1>
-            <p class="subtitle">完整版 · 93道题 · 数据分析 · 历史对比</p>
+            <p class=《subtitle》>完整版 · 93道题 · 数据分析 · 历史对比</p>
             
-            <div class="intro">
+            <div class=《intro》>
                 <h3>关于本测试</h3>
                 <p>本测试基于迈尔斯-布里格斯类型指标(MBTI)理论，包含93道精心设计的题目，从四个核心维度全面评估你的人格特质。</p>
                 
-                <p style="margin-top: 15px;"><strong>四个核心维度：</strong></p>
+                <p style=《margin-top: 15px;》><strong>四个核心维度：</strong></p>
                 <ul>
                     <li><strong>E/I</strong> - 外向 vs 内向（能量来源）</li>
                     <li><strong>S/N</strong> - 实感 vs 直觉（信息处理）</li>
@@ -661,7 +661,7 @@
                     <li><strong>J/P</strong> - 判断 vs 感知（生活方式）</li>
                 </ul>
 
-                <p style="margin-top: 15px;"><strong>✨ 完整版功能：</strong></p>
+                <p style=《margin-top: 15px;》><strong>✨ 完整版功能：</strong></p>
                 <ul>
                     <li>📊 <strong>详细数据分析</strong>：维度百分比、认知功能栈、优势/劣势分析</li>
                     <li>💾 <strong>数据自动留存</strong>：所有测试结果自动保存到本地</li>
@@ -669,149 +669,149 @@
                     <li>📝 <strong>个性化报告</strong>：职业建议、关系建议、成长路径</li>
                 </ul>
 
-                <p style="margin-top: 15px;"><strong>使用说明：</strong></p>
+                <p style=《margin-top: 15px;》><strong>使用说明：</strong></p>
                 <ul>
                     <li>预计用时：15-20分钟</li>
                     <li>请根据第一反应作答，无需过度思考</li>
-                    <li>没有"正确"或"错误"的答案</li>
+                    <li>没有《正确》或《错误》的答案</li>
                     <li>所有数据仅存储在本地，保护隐私</li>
                 </ul>
             </div>
 
-            <div class="action-buttons">
-                <button onclick="window.startTest()">开始测试</button>
-                <button class="secondary" onclick="window.showHistory()">历史记录 (<span id="history-count">0</span>)</button>
+            <div class=《action-buttons》>
+                <button onclick=《window.startTest()》>开始测试</button>
+                <button class=《secondary》 onclick=《window.showHistory()》>历史记录 (<span id=《history-count》>0</span>)</button>
             </div>
             
             <!-- 调试按钮（正式发布时可删除） -->
-            <div style="margin-top: 20px; text-align: center;">
-                <button onclick="alert('JavaScript正常工作！\nstartTest函数: ' + (typeof window.startTest === 'function' ? '已定义✓' : '未定义✗') + '\nquestions数量: ' + (typeof questions !== 'undefined' ? questions.length + '题' : '未加载'))" 
-                        style="background: #ccc; font-size: 0.8em; padding: 5px 10px;">调试：检查JS状态</button>
+            <div style=《margin-top: 20px; text-align: center;》>
+                <button onclick=《alert('JavaScript正常工作！\nstartTest函数: ' + (typeof window.startTest === 'function' ? '已定义✓' : '未定义✗') + '\nquestions数量: ' + (typeof questions !== 'undefined' ? questions.length + '题' : '未加载'))》 
+                        style=《background: #ccc; font-size: 0.8em; padding: 5px 10px;》>调试：检查JS状态</button>
             </div>
         </div>
 
         <!-- 测试页面 -->
-        <div id="test-page" class="page">
-            <div class="progress-bar">
-                <div class="progress-fill" id="progress-fill"></div>
+        <div id=《test-page》 class=《page》>
+            <div class=《progress-bar》>
+                <div class=《progress-fill》 id=《progress-fill》></div>
             </div>
-            <div class="question-counter" id="question-counter"></div>
-            <div id="question-container"></div>
-            <div class="navigation">
-                <button id="prev-btn" id="btn-prev" disabled>上一题</button>
-                <button id="next-btn" id="btn-next">下一题</button>
+            <div class=《question-counter》 id=《question-counter》></div>
+            <div id=《question-container》></div>
+            <div class=《navigation》>
+                <button id=《prev-btn》 id=《btn-prev》 disabled>上一题</button>
+                <button id=《next-btn》 id=《btn-next》>下一题</button>
             </div>
         </div>
 
         <!-- 加载动画 -->
-        <div class="loading" id="loading">
-            <div class="spinner"></div>
+        <div class=《loading》 id=《loading》>
+            <div class=《spinner》></div>
             <p>正在分析你的人格特质...</p>
         </div>
 
         <!-- 结果页面 -->
-        <div id="result-page" class="page">
+        <div id=《result-page》 class=《page》>
             <h1>你的测试结果</h1>
-            <div class="personality-type" id="personality-type"></div>
-            <div class="personality-name" id="personality-name"></div>
+            <div class=《personality-type》 id=《personality-type》></div>
+            <div class=《personality-name》 id=《personality-name》></div>
             
-            <div class="tab-bar">
-                <div class="tab active" onclick="switchResultTab('overview')">概览</div>
-                <div class="tab" onclick="switchResultTab('analysis')">详细分析</div>
-                <div class="tab" onclick="switchResultTab('suggestions')">成长建议</div>
+            <div class=《tab-bar》>
+                <div class=《tab active》 onclick=《switchResultTab('overview')》>概览</div>
+                <div class=《tab》 onclick=《switchResultTab('analysis')》>详细分析</div>
+                <div class=《tab》 onclick=《switchResultTab('suggestions')》>成长建议</div>
             </div>
 
-            <div id="tab-overview" class="tab-content">
-                <div class="dimension-scores" id="dimension-scores"></div>
-                <div class="radar-chart" id="radar-chart"></div>
+            <div id=《tab-overview》 class=《tab-content》>
+                <div class=《dimension-scores》 id=《dimension-scores》></div>
+                <div class=《radar-chart》 id=《radar-chart》></div>
             </div>
 
-            <div id="tab-analysis" class="tab-content" style="display:none;">
-                <div class="analysis-section">
+            <div id=《tab-analysis》 class=《tab-content》 style=《display:none;》>
+                <div class=《analysis-section》>
                     <h3>🧠 认知功能栈</h3>
-                    <div class="cognitive-functions" id="cognitive-functions"></div>
+                    <div class=《cognitive-functions》 id=《cognitive-functions》></div>
                 </div>
 
-                <div class="analysis-section">
+                <div class=《analysis-section》>
                     <h3>💪 核心优势</h3>
-                    <ul id="strengths-list"></ul>
+                    <ul id=《strengths-list》></ul>
                 </div>
 
-                <div class="analysis-section">
+                <div class=《analysis-section》>
                     <h3>⚠️ 潜在挑战</h3>
-                    <ul id="weaknesses-list"></ul>
+                    <ul id=《weaknesses-list》></ul>
                 </div>
 
-                <div class="analysis-section">
+                <div class=《analysis-section》>
                     <h3>🎯 适合的职业方向</h3>
-                    <ul id="careers-list"></ul>
+                    <ul id=《careers-list》></ul>
                 </div>
             </div>
 
-            <div id="tab-suggestions" class="tab-content" style="display:none;">
-                <div class="analysis-section">
+            <div id=《tab-suggestions》 class=《tab-content》 style=《display:none;》>
+                <div class=《analysis-section》>
                     <h3>💕 人际关系建议</h3>
-                    <p id="relationship-advice"></p>
+                    <p id=《relationship-advice》></p>
                 </div>
 
-                <div class="analysis-section">
+                <div class=《analysis-section》>
                     <h3>🌱 个人成长方向</h3>
-                    <p id="growth-advice"></p>
+                    <p id=《growth-advice》></p>
                 </div>
 
-                <div class="analysis-section">
+                <div class=《analysis-section》>
                     <h3>🌟 著名人物举例</h3>
-                    <p id="famous-people"></p>
+                    <p id=《famous-people》></p>
                 </div>
 
-                <div class="analysis-section">
+                <div class=《analysis-section》>
                     <h3>💝 与其他类型的相处</h3>
-                    <p id="compatibility"></p>
+                    <p id=《compatibility》></p>
                 </div>
             </div>
 
-            <div class="action-buttons">
-                <button class="success" id="btn-share">分享结果</button>
-                <button onclick="window.showHistory()">历史记录</button>
-                <button class="secondary" onclick="window.restartTest()">重新测试</button>
+            <div class=《action-buttons》>
+                <button class=《success》 id=《btn-share》>分享结果</button>
+                <button onclick=《window.showHistory()》>历史记录</button>
+                <button class=《secondary》 onclick=《window.restartTest()》>重新测试</button>
             </div>
         </div>
 
         <!-- 历史记录页面 -->
-        <div id="history-page" class="page">
+        <div id=《history-page》 class=《page》>
             <h1>历史测试记录</h1>
-            <p class="subtitle">共 <span id="total-records">0</span> 次测试记录</p>
+            <p class=《subtitle》>共 <span id=《total-records》>0</span> 次测试记录</p>
 
-            <div class="action-buttons" style="margin-bottom: 20px;">
-                <button onclick="showIntro()">返回首页</button>
-                <button class="secondary" id="btn-show-compare">数据对比</button>
-                <button class="danger" id="btn-clear-history">清空记录</button>
+            <div class=《action-buttons》 style=《margin-bottom: 20px;》>
+                <button onclick=《showIntro()》>返回首页</button>
+                <button class=《secondary》 id=《btn-show-compare》>数据对比</button>
+                <button class=《danger》 id=《btn-clear-history》>清空记录</button>
             </div>
 
-            <div id="history-list" class="history-list"></div>
+            <div id=《history-list》 class=《history-list》></div>
         </div>
 
         <!-- 对比页面 -->
-        <div id="compare-page" class="page">
+        <div id=《compare-page》 class=《page》>
             <h1>历史数据对比</h1>
-            <p class="subtitle">对比你的人格变化轨迹</p>
+            <p class=《subtitle》>对比你的人格变化轨迹</p>
 
-            <div id="compare-content"></div>
+            <div id=《compare-content》></div>
 
-            <div class="action-buttons" style="margin-top: 20px;">
-                <button onclick="window.showHistory()">返回记录</button>
-                <button class="secondary" onclick="showIntro()">返回首页</button>
+            <div class=《action-buttons》 style=《margin-top: 20px;》>
+                <button onclick=《window.showHistory()》>返回记录</button>
+                <button class=《secondary》 onclick=《showIntro()》>返回首页</button>
             </div>
         </div>
 
         <!-- 详情弹窗 -->
-        <div class="modal" id="detail-modal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3 id="modal-title">测试详情</h3>
-                    <button class="modal-close" onclick="closeModal()">×</button>
+        <div class=《modal》 id=《detail-modal》>
+            <div class=《modal-content》>
+                <div class=《modal-header》>
+                    <h3 id=《modal-title》>测试详情</h3>
+                    <button class=《modal-close》 onclick=《closeModal()》>×</button>
                 </div>
-                <div id="modal-body"></div>
+                <div id=《modal-body》></div>
             </div>
         </div>
     </div>
@@ -820,588 +820,588 @@
         // 测试题目（93题）
         const questions = [
             // E/I 维度
-            { id: 1, text: "你通常更喜欢：", dimension: "EI", options: ["与他人一起度过时光", "独自度过时光"] },
-            { id: 2, text: "在社交场合中，你通常：", dimension: "EI", options: ["主动与陌生人交谈", "等待别人来与你交谈"] },
-            { id: 3, text: "你更倾向于：", dimension: "EI", options: ["通过与人讨论来理清思路", "通过独自思考来理清思路"] },
-            { id: 4, text: "你觉得自己是：", dimension: "EI", options: ["外向的", "内向的"] },
-            { id: 5, text: "在聚会中，你通常：", dimension: "EI", options: ["认识很多新朋友并乐在其中", "只与几个熟悉的朋友交谈"] },
-            { id: 6, text: "你更喜欢：", dimension: "EI", options: ["多个人一起工作", "独自工作"] },
-            { id: 7, text: "你通常：", dimension: "EI", options: ["说话多于倾听", "倾听多于说话"] },
-            { id: 8, text: "你更容易被什么\"充电\"：", dimension: "EI", options: ["与他人相处", "独处"] },
-            { id: 9, text: "你倾向于：", dimension: "EI", options: ["广泛交友，朋友很多", "深交几个好友"] },
-            { id: 10, text: "在团队中，你通常：", dimension: "EI", options: ["主动表达自己的观点", "先听听别人的观点"] },
-            { id: 11, text: "你更喜欢的工作环境是：", dimension: "EI", options: ["开放、热闹的空间", "安静、私密的空间"] },
-            { id: 12, text: "你通常：", dimension: "EI", options: ["先做再说", "先想再做"] },
-            { id: 13, text: "你更容易注意：", dimension: "EI", options: ["外部世界的活动和变化", "自己内心的想法和感受"] },
-            { id: 14, text: "你觉得自己：", dimension: "EI", options: ["容易接近和交谈", "需要时间才能打开心扉"] },
-            { id: 15, text: "在解决问题时，你倾向于：", dimension: "EI", options: ["与他人讨论获得不同视角", "自己独立思考"] },
-            { id: 16, text: "你更喜欢：", dimension: "EI", options: ["经常变化的活动", "稳定规律的活动"] },
-            { id: 17, text: "你通常：", dimension: "EI", options: ["表达情绪比较外露", "把情绪藏在心里"] },
-            { id: 18, text: "在会议中，你通常：", dimension: "EI", options: ["积极发言", "多数时候倾听"] },
-            { id: 19, text: "你更容易：", dimension: "EI", options: ["快速做出决定并行动", "深思熟虑后再行动"] },
-            { id: 20, text: "你更喜欢的学习方式是：", dimension: "EI", options: ["通过讨论和互动", "通过阅读和思考"] },
-            { id: 21, text: "你通常觉得：", dimension: "EI", options: ["与人相处很容易", "与人相处需要努力"] },
-            { id: 22, text: "你更倾向于：", dimension: "EI", options: ["成为关注的焦点", "在幕后工作"] },
-            { id: 23, text: "你的能量主要来自：", dimension: "EI", options: ["外部世界的人和事", "内心世界的想法和反思"] },
+            { id: 1, text: 《你通常更喜欢：》, dimension: 《EI》, options: [《与他人一起度过时光》, 《独自度过时光》] },
+            { id: 2, text: 《在社交场合中，你通常：》, dimension: 《EI》, options: [《主动与陌生人交谈》, 《等待别人来与你交谈》] },
+            { id: 3, text: 《你更倾向于：》, dimension: 《EI》, options: [《通过与人讨论来理清思路》, 《通过独自思考来理清思路》] },
+            { id: 4, text: 《你觉得自己是：》, dimension: 《EI》, options: [《外向的》, 《内向的》] },
+            { id: 5, text: 《在聚会中，你通常：》, dimension: 《EI》, options: [《认识很多新朋友并乐在其中》, 《只与几个熟悉的朋友交谈》] },
+            { id: 6, text: 《你更喜欢：》, dimension: 《EI》, options: [《多个人一起工作》, 《独自工作》] },
+            { id: 7, text: 《你通常：》, dimension: 《EI》, options: [《说话多于倾听》, 《倾听多于说话》] },
+            { id: 8, text: 《你更容易被什么\》充电\《：》, dimension: 《EI》, options: [《与他人相处》, 《独处》] },
+            { id: 9, text: 《你倾向于：》, dimension: 《EI》, options: [《广泛交友，朋友很多》, 《深交几个好友》] },
+            { id: 10, text: 《在团队中，你通常：》, dimension: 《EI》, options: [《主动表达自己的观点》, 《先听听别人的观点》] },
+            { id: 11, text: 《你更喜欢的工作环境是：》, dimension: 《EI》, options: [《开放、热闹的空间》, 《安静、私密的空间》] },
+            { id: 12, text: 《你通常：》, dimension: 《EI》, options: [《先做再说》, 《先想再做》] },
+            { id: 13, text: 《你更容易注意：》, dimension: 《EI》, options: [《外部世界的活动和变化》, 《自己内心的想法和感受》] },
+            { id: 14, text: 《你觉得自己：》, dimension: 《EI》, options: [《容易接近和交谈》, 《需要时间才能打开心扉》] },
+            { id: 15, text: 《在解决问题时，你倾向于：》, dimension: 《EI》, options: [《与他人讨论获得不同视角》, 《自己独立思考》] },
+            { id: 16, text: 《你更喜欢：》, dimension: 《EI》, options: [《经常变化的活动》, 《稳定规律的活动》] },
+            { id: 17, text: 《你通常：》, dimension: 《EI》, options: [《表达情绪比较外露》, 《把情绪藏在心里》] },
+            { id: 18, text: 《在会议中，你通常：》, dimension: 《EI》, options: [《积极发言》, 《多数时候倾听》] },
+            { id: 19, text: 《你更容易：》, dimension: 《EI》, options: [《快速做出决定并行动》, 《深思熟虑后再行动》] },
+            { id: 20, text: 《你更喜欢的学习方式是：》, dimension: 《EI》, options: [《通过讨论和互动》, 《通过阅读和思考》] },
+            { id: 21, text: 《你通常觉得：》, dimension: 《EI》, options: [《与人相处很容易》, 《与人相处需要努力》] },
+            { id: 22, text: 《你更倾向于：》, dimension: 《EI》, options: [《成为关注的焦点》, 《在幕后工作》] },
+            { id: 23, text: 《你的能量主要来自：》, dimension: 《EI》, options: [《外部世界的人和事》, 《内心世界的想法和反思》] },
             
             // S/N 维度
-            { id: 24, text: "你更倾向于相信：", dimension: "SN", options: ["实际经验和事实", "直觉和灵感"] },
-            { id: 25, text: "你更关注：", dimension: "SN", options: ["具体的事实和细节", "整体的模式和可能性"] },
-            { id: 26, text: "你更喜欢：", dimension: "SN", options: ["处理具体、实际的问题", "探索抽象、理论的概念"] },
-            { id: 27, text: "你更容易被什么吸引：", dimension: "SN", options: ["实际的、可操作的事物", "创新的、有创意的想法"] },
-            { id: 28, text: "你更倾向于：", dimension: "SN", options: ["按照既定程序工作", "寻找新的、更好的方法"] },
-            { id: 29, text: "你更擅长：", dimension: "SN", options: ["记住具体的细节和事实", "看到事物的整体和联系"] },
-            { id: 30, text: "你更喜欢的描述是：", dimension: "SN", options: ["务实的、现实的", "有想象力的、有远见的"] },
-            { id: 31, text: "在面对新情况时，你更倾向于：", dimension: "SN", options: ["依靠过去的经验", "相信自己的直觉"] },
-            { id: 32, text: "你更容易注意到：", dimension: "SN", options: ["眼前的具体事物", "未来可能的发展"] },
-            { id: 33, text: "你更喜欢的工作是：", dimension: "SN", options: ["有明确步骤和程序", "充满变化和不确定性"] },
-            { id: 34, text: "你更倾向于：", dimension: "SN", options: ["使用已经证明有效的方法", "尝试全新的、未经测试的方法"] },
-            { id: 35, text: "你更看重：", dimension: "SN", options: ["实用性和可行性", "创新性和原创性"] },
-            { id: 36, text: "你更容易理解：", dimension: "SN", options: ["字面意思和具体说明", "隐含意义和深层含义"] },
-            { id: 37, text: "你更喜欢：", dimension: "SN", options: ["专注于当下", "思考未来"] },
-            { id: 38, text: "你更倾向于：", dimension: "SN", options: ["循序渐进地学习", "跳跃式地学习"] },
-            { id: 39, text: "你更容易：", dimension: "SN", options: ["接受现状", "想象事物可以如何不同"] },
-            { id: 40, text: "你更喜欢的信息呈现方式是：", dimension: "SN", options: ["具体、详细的说明", "概括、概念性的框架"] },
-            { id: 41, text: "你更倾向于：", dimension: "SN", options: ["依赖感官获取信息", "依赖直觉获取信息"] },
-            { id: 42, text: "你更容易被什么打动：", dimension: "SN", options: ["真实的、具体的事物", "象征性的、有意义的事物"] },
-            { id: 43, text: "你更喜欢：", dimension: "SN", options: ["处理现实问题", "探索理论可能性"] },
-            { id: 44, text: "你更倾向于：", dimension: "SN", options: ["关注\"是什么\"", "关注\"可能是什么\""] },
-            { id: 45, text: "你更容易：", dimension: "SN", options: ["记住具体的事件和细节", "记住整体的印象和感觉"] },
-            { id: 46, text: "你更喜欢的描述是：", dimension: "SN", options: ["脚踏实地", "头在云端"] },
+            { id: 24, text: 《你更倾向于相信：》, dimension: 《SN》, options: [《实际经验和事实》, 《直觉和灵感》] },
+            { id: 25, text: 《你更关注：》, dimension: 《SN》, options: [《具体的事实和细节》, 《整体的模式和可能性》] },
+            { id: 26, text: 《你更喜欢：》, dimension: 《SN》, options: [《处理具体、实际的问题》, 《探索抽象、理论的概念》] },
+            { id: 27, text: 《你更容易被什么吸引：》, dimension: 《SN》, options: [《实际的、可操作的事物》, 《创新的、有创意的想法》] },
+            { id: 28, text: 《你更倾向于：》, dimension: 《SN》, options: [《按照既定程序工作》, 《寻找新的、更好的方法》] },
+            { id: 29, text: 《你更擅长：》, dimension: 《SN》, options: [《记住具体的细节和事实》, 《看到事物的整体和联系》] },
+            { id: 30, text: 《你更喜欢的描述是：》, dimension: 《SN》, options: [《务实的、现实的》, 《有想象力的、有远见的》] },
+            { id: 31, text: 《在面对新情况时，你更倾向于：》, dimension: 《SN》, options: [《依靠过去的经验》, 《相信自己的直觉》] },
+            { id: 32, text: 《你更容易注意到：》, dimension: 《SN》, options: [《眼前的具体事物》, 《未来可能的发展》] },
+            { id: 33, text: 《你更喜欢的工作是：》, dimension: 《SN》, options: [《有明确步骤和程序》, 《充满变化和不确定性》] },
+            { id: 34, text: 《你更倾向于：》, dimension: 《SN》, options: [《使用已经证明有效的方法》, 《尝试全新的、未经测试的方法》] },
+            { id: 35, text: 《你更看重：》, dimension: 《SN》, options: [《实用性和可行性》, 《创新性和原创性》] },
+            { id: 36, text: 《你更容易理解：》, dimension: 《SN》, options: [《字面意思和具体说明》, 《隐含意义和深层含义》] },
+            { id: 37, text: 《你更喜欢：》, dimension: 《SN》, options: [《专注于当下》, 《思考未来》] },
+            { id: 38, text: 《你更倾向于：》, dimension: 《SN》, options: [《循序渐进地学习》, 《跳跃式地学习》] },
+            { id: 39, text: 《你更容易：》, dimension: 《SN》, options: [《接受现状》, 《想象事物可以如何不同》] },
+            { id: 40, text: 《你更喜欢的信息呈现方式是：》, dimension: 《SN》, options: [《具体、详细的说明》, 《概括、概念性的框架》] },
+            { id: 41, text: 《你更倾向于：》, dimension: 《SN》, options: [《依赖感官获取信息》, 《依赖直觉获取信息》] },
+            { id: 42, text: 《你更容易被什么打动：》, dimension: 《SN》, options: [《真实的、具体的事物》, 《象征性的、有意义的事物》] },
+            { id: 43, text: 《你更喜欢：》, dimension: 《SN》, options: [《处理现实问题》, 《探索理论可能性》] },
+            { id: 44, text: 《你更倾向于：》, dimension: 《SN》, options: [《关注\》是什么\《》, 《关注\》可能是什么\《》] },
+            { id: 45, text: 《你更容易：》, dimension: 《SN》, options: [《记住具体的事件和细节》, 《记住整体的印象和感觉》] },
+            { id: 46, text: 《你更喜欢的描述是：》, dimension: 《SN》, options: [《脚踏实地》, 《头在云端》] },
             
             // T/F 维度
-            { id: 47, text: "在做决定时，你更倾向于：", dimension: "TF", options: ["客观分析利弊", "考虑对他人的影响"] },
-            { id: 48, text: "你更容易：", dimension: "TF", options: ["注意到逻辑上的不一致", "注意到他人的情绪变化"] },
-            { id: 49, text: "你更倾向于：", dimension: "TF", options: ["说实话，即使可能伤害感情", "说善意的谎言来维护和谐"] },
-            { id: 50, text: "你更看重：", dimension: "TF", options: ["公平（对所有人一视同仁）", "仁慈（考虑个人情况）"] },
-            { id: 51, text: "在面对冲突时，你通常：", dimension: "TF", options: ["直接面对问题", "试图缓和气氛"] },
-            { id: 52, text: "你更容易被什么激励：", dimension: "TF", options: ["完成任务的成就感", "帮助他人带来的满足感"] },
-            { id: 53, text: "你更倾向于：", dimension: "TF", options: ["依据逻辑做决定", "依据价值观做决定"] },
-            { id: 54, text: "你更擅长：", dimension: "TF", options: ["分析复杂问题", "理解他人感受"] },
-            { id: 55, text: "你更容易：", dimension: "TF", options: ["批评他人的想法", "鼓励他人的想法"] },
-            { id: 56, text: "你更倾向于：", dimension: "TF", options: ["被视为理性、客观的人", "被视为温暖、有同理心的人"] },
-            { id: 57, text: "在做决定时，你更依赖：", dimension: "TF", options: ["头脑", "心灵"] },
-            { id: 58, text: "你更容易注意到：", dimension: "TF", options: ["事物运作的原理", "人与人之间的关系"] },
-            { id: 59, text: "你更倾向于：", dimension: "TF", options: ["坚持原则，即使不受欢迎", "灵活变通，维持和谐"] },
-            { id: 60, text: "你更容易：", dimension: "TF", options: ["表达自己的观点", "倾听他人的观点"] },
-            { id: 61, text: "你更看重：", dimension: "TF", options: ["真理和正直", "和谐和合作"] },
-            { id: 62, text: "在面对批评时，你通常：", dimension: "TF", options: ["关注批评的内容是否有道理", "关注批评的方式是否伤害感情"] },
-            { id: 63, text: "你更容易被什么说服：", dimension: "TF", options: ["逻辑严密的论证", "情感真挚的故事"] },
-            { id: 64, text: "你更倾向于：", dimension: "TF", options: ["解决问题时保持冷静客观", "解决问题时考虑人的因素"] },
-            { id: 65, text: "你更容易：", dimension: "TF", options: ["做决定后不轻易改变", "根据新情况调整决定"] },
-            { id: 66, text: "你更喜欢的工作环境是：", dimension: "TF", options: ["理性、高效导向", "温暖、人际关系导向"] },
-            { id: 67, text: "你更倾向于：", dimension: "TF", options: ["直截了当的沟通", "委婉体贴的沟通"] },
-            { id: 68, text: "你更容易：", dimension: "TF", options: ["看到他人的错误", "看到他人的优点"] },
-            { id: 69, text: "你更倾向于：", dimension: "TF", options: ["被视为有能力的", "被视为好人"] },
+            { id: 47, text: 《在做决定时，你更倾向于：》, dimension: 《TF》, options: [《客观分析利弊》, 《考虑对他人的影响》] },
+            { id: 48, text: 《你更容易：》, dimension: 《TF》, options: [《注意到逻辑上的不一致》, 《注意到他人的情绪变化》] },
+            { id: 49, text: 《你更倾向于：》, dimension: 《TF》, options: [《说实话，即使可能伤害感情》, 《说善意的谎言来维护和谐》] },
+            { id: 50, text: 《你更看重：》, dimension: 《TF》, options: [《公平（对所有人一视同仁）》, 《仁慈（考虑个人情况）》] },
+            { id: 51, text: 《在面对冲突时，你通常：》, dimension: 《TF》, options: [《直接面对问题》, 《试图缓和气氛》] },
+            { id: 52, text: 《你更容易被什么激励：》, dimension: 《TF》, options: [《完成任务的成就感》, 《帮助他人带来的满足感》] },
+            { id: 53, text: 《你更倾向于：》, dimension: 《TF》, options: [《依据逻辑做决定》, 《依据价值观做决定》] },
+            { id: 54, text: 《你更擅长：》, dimension: 《TF》, options: [《分析复杂问题》, 《理解他人感受》] },
+            { id: 55, text: 《你更容易：》, dimension: 《TF》, options: [《批评他人的想法》, 《鼓励他人的想法》] },
+            { id: 56, text: 《你更倾向于：》, dimension: 《TF》, options: [《被视为理性、客观的人》, 《被视为温暖、有同理心的人》] },
+            { id: 57, text: 《在做决定时，你更依赖：》, dimension: 《TF》, options: [《头脑》, 《心灵》] },
+            { id: 58, text: 《你更容易注意到：》, dimension: 《TF》, options: [《事物运作的原理》, 《人与人之间的关系》] },
+            { id: 59, text: 《你更倾向于：》, dimension: 《TF》, options: [《坚持原则，即使不受欢迎》, 《灵活变通，维持和谐》] },
+            { id: 60, text: 《你更容易：》, dimension: 《TF》, options: [《表达自己的观点》, 《倾听他人的观点》] },
+            { id: 61, text: 《你更看重：》, dimension: 《TF》, options: [《真理和正直》, 《和谐和合作》] },
+            { id: 62, text: 《在面对批评时，你通常：》, dimension: 《TF》, options: [《关注批评的内容是否有道理》, 《关注批评的方式是否伤害感情》] },
+            { id: 63, text: 《你更容易被什么说服：》, dimension: 《TF》, options: [《逻辑严密的论证》, 《情感真挚的故事》] },
+            { id: 64, text: 《你更倾向于：》, dimension: 《TF》, options: [《解决问题时保持冷静客观》, 《解决问题时考虑人的因素》] },
+            { id: 65, text: 《你更容易：》, dimension: 《TF》, options: [《做决定后不轻易改变》, 《根据新情况调整决定》] },
+            { id: 66, text: 《你更喜欢的工作环境是：》, dimension: 《TF》, options: [《理性、高效导向》, 《温暖、人际关系导向》] },
+            { id: 67, text: 《你更倾向于：》, dimension: 《TF》, options: [《直截了当的沟通》, 《委婉体贴的沟通》] },
+            { id: 68, text: 《你更容易：》, dimension: 《TF》, options: [《看到他人的错误》, 《看到他人的优点》] },
+            { id: 69, text: 《你更倾向于：》, dimension: 《TF》, options: [《被视为有能力的》, 《被视为好人》] },
             
             // J/P 维度
-            { id: 70, text: "你更倾向于：", dimension: "JP", options: ["提前计划好所有事情", "随遇而安，灵活应对"] },
-            { id: 71, text: "你更容易：", dimension: "JP", options: ["早早完成任务", "等到截止日期前才完成"] },
-            { id: 72, text: "你更喜欢：", dimension: "JP", options: ["一切井然有序", "保持一定的灵活性和混乱"] },
-            { id: 73, text: "你更倾向于：", dimension: "JP", options: ["做出决定并坚持下去", "保持选择的开放性"] },
-            { id: 74, text: "你更容易：", dimension: "JP", options: ["按照计划行事", "根据情况调整计划"] },
-            { id: 75, text: "你更喜欢的工作方式是：", dimension: "JP", options: ["设定明确的目标和截止日期", "保持工作的开放性和自由度"] },
-            { id: 76, text: "你更倾向于：", dimension: "JP", options: ["快速完成决策", "尽可能收集更多信息"] },
-            { id: 77, text: "你更容易感到：", dimension: "JP", options: ["完成任务后的满足感", "开始新任务时的兴奋感"] },
-            { id: 78, text: "你更倾向于：", dimension: "JP", options: ["控制局面", "适应局面"] },
-            { id: 79, text: "你更喜欢：", dimension: "JP", options: ["有结构、有秩序的生活", "自由、随性的生活"] },
-            { id: 80, text: "你更容易：", dimension: "JP", options: ["把事情做完", "开始新事情"] },
-            { id: 81, text: "你更倾向于：", dimension: "JP", options: ["遵循时间表", "跟随自己的节奏"] },
-            { id: 82, text: "你更容易：", dimension: "JP", options: ["把工作放在玩乐之前", "把玩乐和工作混合"] },
-            { id: 83, text: "你更喜欢的描述是：", dimension: "JP", options: ["有组织、有纪律", "自发、灵活"] },
-            { id: 84, text: "你更倾向于：", dimension: "JP", options: ["尽快回复邮件和信息", "当有时间时再回复"] },
-            { id: 85, text: "你更容易：", dimension: "JP", options: ["坚持既定安排", "临时改变计划"] },
-            { id: 86, text: "你更喜欢：", dimension: "JP", options: ["事情明确、可预测", "事情开放、充满可能性"] },
-            { id: 87, text: "你更倾向于：", dimension: "JP", options: ["把工作视为待完成的任务", "把工作视为待探索的过程"] },
-            { id: 88, text: "你更容易：", dimension: "JP", options: ["感到焦虑当事情未定", "感到无聊当事情太固定"] },
-            { id: 89, text: "你更喜欢：", dimension: "JP", options: ["提前知道行程安排", "到了现场再决定"] },
-            { id: 90, text: "你更倾向于：", dimension: "JP", options: ["解决问题后继续前进", "继续探索问题的其他可能性"] },
-            { id: 91, text: "你更容易：", dimension: "JP", options: ["把东西收拾整齐", "把东西随手放置"] },
-            { id: 92, text: "你更喜欢的描述是：", dimension: "JP", options: ["果断的", "好奇的"] },
-            { id: 93, text: "你更倾向于：", dimension: "JP", options: ["喜欢闭合（完成感）", "喜欢开放（可能性）"] }
+            { id: 70, text: 《你更倾向于：》, dimension: 《JP》, options: [《提前计划好所有事情》, 《随遇而安，灵活应对》] },
+            { id: 71, text: 《你更容易：》, dimension: 《JP》, options: [《早早完成任务》, 《等到截止日期前才完成》] },
+            { id: 72, text: 《你更喜欢：》, dimension: 《JP》, options: [《一切井然有序》, 《保持一定的灵活性和混乱》] },
+            { id: 73, text: 《你更倾向于：》, dimension: 《JP》, options: [《做出决定并坚持下去》, 《保持选择的开放性》] },
+            { id: 74, text: 《你更容易：》, dimension: 《JP》, options: [《按照计划行事》, 《根据情况调整计划》] },
+            { id: 75, text: 《你更喜欢的工作方式是：》, dimension: 《JP》, options: [《设定明确的目标和截止日期》, 《保持工作的开放性和自由度》] },
+            { id: 76, text: 《你更倾向于：》, dimension: 《JP》, options: [《快速完成决策》, 《尽可能收集更多信息》] },
+            { id: 77, text: 《你更容易感到：》, dimension: 《JP》, options: [《完成任务后的满足感》, 《开始新任务时的兴奋感》] },
+            { id: 78, text: 《你更倾向于：》, dimension: 《JP》, options: [《控制局面》, 《适应局面》] },
+            { id: 79, text: 《你更喜欢：》, dimension: 《JP》, options: [《有结构、有秩序的生活》, 《自由、随性的生活》] },
+            { id: 80, text: 《你更容易：》, dimension: 《JP》, options: [《把事情做完》, 《开始新事情》] },
+            { id: 81, text: 《你更倾向于：》, dimension: 《JP》, options: [《遵循时间表》, 《跟随自己的节奏》] },
+            { id: 82, text: 《你更容易：》, dimension: 《JP》, options: [《把工作放在玩乐之前》, 《把玩乐和工作混合》] },
+            { id: 83, text: 《你更喜欢的描述是：》, dimension: 《JP》, options: [《有组织、有纪律》, 《自发、灵活》] },
+            { id: 84, text: 《你更倾向于：》, dimension: 《JP》, options: [《尽快回复邮件和信息》, 《当有时间时再回复》] },
+            { id: 85, text: 《你更容易：》, dimension: 《JP》, options: [《坚持既定安排》, 《临时改变计划》] },
+            { id: 86, text: 《你更喜欢：》, dimension: 《JP》, options: [《事情明确、可预测》, 《事情开放、充满可能性》] },
+            { id: 87, text: 《你更倾向于：》, dimension: 《JP》, options: [《把工作视为待完成的任务》, 《把工作视为待探索的过程》] },
+            { id: 88, text: 《你更容易：》, dimension: 《JP》, options: [《感到焦虑当事情未定》, 《感到无聊当事情太固定》] },
+            { id: 89, text: 《你更喜欢：》, dimension: 《JP》, options: [《提前知道行程安排》, 《到了现场再决定》] },
+            { id: 90, text: 《你更倾向于：》, dimension: 《JP》, options: [《解决问题后继续前进》, 《继续探索问题的其他可能性》] },
+            { id: 91, text: 《你更容易：》, dimension: 《JP》, options: [《把东西收拾整齐》, 《把东西随手放置》] },
+            { id: 92, text: 《你更喜欢的描述是：》, dimension: 《JP》, options: [《果断的》, 《好奇的》] },
+            { id: 93, text: 《你更倾向于：》, dimension: 《JP》, options: [《喜欢闭合（完成感）》, 《喜欢开放（可能性）》] }
         ];
 
         // 16种人格类型完整数据
         const personalityData = {
-            "INTJ": {
-                name: "建筑师",
-                nickname: "战略思想家",
-                description: "你是一个富有想象力和战略性的思想家，对一切都有计划。",
+            《INTJ》: {
+                name: 《建筑师》,
+                nickname: 《战略思想家》,
+                description: 《你是一个富有想象力和战略性的思想家，对一切都有计划。》,
                 cognitiveFunctions: [
-                    { name: "Ni", desc: "内倾直觉 - 远见卓识" },
-                    { name: "Te", desc: "外倾思考 - 高效执行" },
-                    { name: "Fi", desc: "内倾情感 - 深度价值" },
-                    { name: "Se", desc: "外倾实感 - 当下体验" }
+                    { name: 《Ni》, desc: 《内倾直觉 - 远见卓识》 },
+                    { name: 《Te》, desc: 《外倾思考 - 高效执行》 },
+                    { name: 《Fi》, desc: 《内倾情感 - 深度价值》 },
+                    { name: 《Se》, desc: 《外倾实感 - 当下体验》 }
                 ],
                 strengths: [
-                    "理性、客观的思考能力",
-                    "强大的长期战略眼光",
-                    "独立自主，不受他人影响",
-                    "追求完美，高标准要求",
-                    "善于识别模式和趋势"
+                    《理性、客观的思考能力》,
+                    《强大的长期战略眼光》,
+                    《独立自主，不受他人影响》,
+                    《追求完美，高标准要求》,
+                    《善于识别模式和趋势》
                 ],
                 weaknesses: [
-                    "可能显得过于批判和傲慢",
-                    "对他人情感不够敏感",
-                    "完美主义导致拖延",
-                    "不善于表达内心感受",
-                    "可能显得冷漠疏离"
+                    《可能显得过于批判和傲慢》,
+                    《对他人情感不够敏感》,
+                    《完美主义导致拖延》,
+                    《不善于表达内心感受》,
+                    《可能显得冷漠疏离》
                 ],
-                careers: ["战略顾问", "系统架构师", "投资分析师", "科学家", "工程师", "律师", "管理顾问", "产品经理"],
-                relationship: "在人际关系中，你重视深度和质量超过广度。你寻找能够与你进行智力对话、尊重你独立性的伴侣。你可能不擅长表达情感，但内心深处有强烈的爱和忠诚。",
-                growth: "学会关注他人的情感需求，培养耐心和同理心。不要让完美主义阻碍你开始行动。尝试更多地活在当下，享受过程而不仅仅是结果。",
-                famous: "埃隆·马斯克、马克·扎克伯格、弗里德里希·尼采、米开朗基罗",
-                compatibility: "与 ENFP 和 ENTP 最匹配，因为他们的外向直觉和情感特质能平衡你的内向思考。与 ESFP 关系最具挑战性。"
+                careers: [《战略顾问》, 《系统架构师》, 《投资分析师》, 《科学家》, 《工程师》, 《律师》, 《管理顾问》, 《产品经理》],
+                relationship: 《在人际关系中，你重视深度和质量超过广度。你寻找能够与你进行智力对话、尊重你独立性的伴侣。你可能不擅长表达情感，但内心深处有强烈的爱和忠诚。》,
+                growth: 《学会关注他人的情感需求，培养耐心和同理心。不要让完美主义阻碍你开始行动。尝试更多地活在当下，享受过程而不仅仅是结果。》,
+                famous: 《埃隆·马斯克、马克·扎克伯格、弗里德里希·尼采、米开朗基罗》,
+                compatibility: 《与 ENFP 和 ENTP 最匹配，因为他们的外向直觉和情感特质能平衡你的内向思考。与 ESFP 关系最具挑战性。》
             },
-            "INTP": {
-                name: "逻辑学家",
-                nickname: "创新思想家",
-                description: "你是一个创新的发明家，对知识有着无尽的渴望。",
+            《INTP》: {
+                name: 《逻辑学家》,
+                nickname: 《创新思想家》,
+                description: 《你是一个创新的发明家，对知识有着无尽的渴望。》,
                 cognitiveFunctions: [
-                    { name: "Ti", desc: "内倾思考 - 逻辑分析" },
-                    { name: "Ne", desc: "外倾直觉 - 创意联想" },
-                    { name: "Si", desc: "内倾实感 - 经验记忆" },
-                    { name: "Fe", desc: "外倾情感 - 人际和谐" }
+                    { name: 《Ti》, desc: 《内倾思考 - 逻辑分析》 },
+                    { name: 《Ne》, desc: 《外倾直觉 - 创意联想》 },
+                    { name: 《Si》, desc: 《内倾实感 - 经验记忆》 },
+                    { name: 《Fe》, desc: 《外倾情感 - 人际和谐》 }
                 ],
                 strengths: [
-                    "强大的逻辑分析能力",
-                    "富有创造力和想象力",
-                    "客观理性的思考",
-                    "善于发现问题和矛盾",
-                    "独立思考，不盲从权威"
+                    《强大的逻辑分析能力》,
+                    《富有创造力和想象力》,
+                    《客观理性的思考》,
+                    《善于发现问题和矛盾》,
+                    《独立思考，不盲从权威》
                 ],
                 weaknesses: [
-                    "可能过于专注理论忽视实践",
-                    "不善于处理人际冲突",
-                    "容易拖延重要决定",
-                    "可能显得冷漠或疏离",
-                    "对日常事务缺乏耐心"
+                    《可能过于专注理论忽视实践》,
+                    《不善于处理人际冲突》,
+                    《容易拖延重要决定》,
+                    《可能显得冷漠或疏离》,
+                    《对日常事务缺乏耐心》
                 ],
-                careers: ["软件架构师", "数据科学家", "哲学家", "数学家", "研究员", "作家", "经济学家"],
-                relationship: "你重视智力和独立性，寻找能够与你进行深入思想交流的伴侣。你可能不擅长表达情感，但会以独特的方式展现爱意。需要学会更多地关注伴侣的情感需求。",
-                growth: "将你的想法付诸实践，不要让完美的理论成为行动的障碍。培养社交技能和情感表达能力。学会在适当的时候做出决定并坚持执行。",
-                famous: "阿尔伯特·爱因斯坦、比尔·盖茨、艾萨克·牛顿、列奥纳多·达·芬奇",
-                compatibility: "与 ENTJ 和 ENFJ 最匹配，他们能帮助你将想法付诸实践。与 ESFJ 关系最具挑战性。"
+                careers: [《软件架构师》, 《数据科学家》, 《哲学家》, 《数学家》, 《研究员》, 《作家》, 《经济学家》],
+                relationship: 《你重视智力和独立性，寻找能够与你进行深入思想交流的伴侣。你可能不擅长表达情感，但会以独特的方式展现爱意。需要学会更多地关注伴侣的情感需求。》,
+                growth: 《将你的想法付诸实践，不要让完美的理论成为行动的障碍。培养社交技能和情感表达能力。学会在适当的时候做出决定并坚持执行。》,
+                famous: 《阿尔伯特·爱因斯坦、比尔·盖茨、艾萨克·牛顿、列奥纳多·达·芬奇》,
+                compatibility: 《与 ENTJ 和 ENFJ 最匹配，他们能帮助你将想法付诸实践。与 ESFJ 关系最具挑战性。》
             },
-            "ENTJ": {
-                name: "指挥官",
-                nickname: "天生的领导者",
-                description: "你是一个大胆、富有想象力的领导者，总能找到或创造解决问题的方法。",
+            《ENTJ》: {
+                name: 《指挥官》,
+                nickname: 《天生的领导者》,
+                description: 《你是一个大胆、富有想象力的领导者，总能找到或创造解决问题的方法。》,
                 cognitiveFunctions: [
-                    { name: "Te", desc: "外倾思考 - 高效组织" },
-                    { name: "Ni", desc: "内倾直觉 - 战略远见" },
-                    { name: "Se", desc: "外倾实感 - 实际行动" },
-                    { name: "Fi", desc: "内倾情感 - 核心价值" }
+                    { name: 《Te》, desc: 《外倾思考 - 高效组织》 },
+                    { name: 《Ni》, desc: 《内倾直觉 - 战略远见》 },
+                    { name: 《Se》, desc: 《外倾实感 - 实际行动》 },
+                    { name: 《Fi》, desc: 《内倾情感 - 核心价值》 }
                 ],
                 strengths: [
-                    "天生的领导能力",
-                    "高效的组织执行",
-                    "战略性思考",
-                    "自信果断",
-                    "善于识别低效并改进"
+                    《天生的领导能力》,
+                    《高效的组织执行》,
+                    《战略性思考》,
+                    《自信果断》,
+                    《善于识别低效并改进》
                 ],
                 weaknesses: [
-                    "可能过于强势和专制",
-                    "不耐烦他人的慢节奏",
-                    "可能忽视他人情感",
-                    "工作狂倾向",
-                    "可能显得冷酷无情"
+                    《可能过于强势和专制》,
+                    《不耐烦他人的慢节奏》,
+                    《可能忽视他人情感》,
+                    《工作狂倾向》,
+                    《可能显得冷酷无情》
                 ],
-                careers: ["首席执行官", "管理顾问", "律师", "企业家", "投资银行家", "军官", "政治领袖"],
-                relationship: "你直接、坦率，在关系中寻求智力挑战和共同成长。你重视诚实和直接的沟通。需要学会更多地表达柔情和欣赏。",
-                growth: "学会倾听他人的观点，培养同理心和耐心。记住不是所有事情都需要立即解决，给关系留出成长空间。工作与生活需要平衡。",
-                famous: "史蒂夫·乔布斯、玛格丽特·撒切尔、切·格瓦拉、拿破仑·波拿巴",
-                compatibility: "与 INTP 和 INFP 最匹配，他们能软化你的强硬。与 ISFP 关系最具挑战性。"
+                careers: [《首席执行官》, 《管理顾问》, 《律师》, 《企业家》, 《投资银行家》, 《军官》, 《政治领袖》],
+                relationship: 《你直接、坦率，在关系中寻求智力挑战和共同成长。你重视诚实和直接的沟通。需要学会更多地表达柔情和欣赏。》,
+                growth: 《学会倾听他人的观点，培养同理心和耐心。记住不是所有事情都需要立即解决，给关系留出成长空间。工作与生活需要平衡。》,
+                famous: 《史蒂夫·乔布斯、玛格丽特·撒切尔、切·格瓦拉、拿破仑·波拿巴》,
+                compatibility: 《与 INTP 和 INFP 最匹配，他们能软化你的强硬。与 ISFP 关系最具挑战性。》
             },
-            "ENTP": {
-                name: "辩论家",
-                nickname: "智力挑战者",
-                description: "你是一个聪明的思想家，喜欢挑战智力的极限。",
+            《ENTP》: {
+                name: 《辩论家》,
+                nickname: 《智力挑战者》,
+                description: 《你是一个聪明的思想家，喜欢挑战智力的极限。》,
                 cognitiveFunctions: [
-                    { name: "Ne", desc: "外倾直觉 - 创意联想" },
-                    { name: "Ti", desc: "内倾思考 - 逻辑分析" },
-                    { name: "Fe", desc: "外倾情感 - 人际和谐" },
-                    { name: "Si", desc: "内倾实感 - 经验细节" }
+                    { name: 《Ne》, desc: 《外倾直觉 - 创意联想》 },
+                    { name: 《Ti》, desc: 《内倾思考 - 逻辑分析》 },
+                    { name: 《Fe》, desc: 《外倾情感 - 人际和谐》 },
+                    { name: 《Si》, desc: 《内倾实感 - 经验细节》 }
                 ],
                 strengths: [
-                    "思维敏捷，反应快",
-                    "富有创造力和创新",
-                    "优秀的辩论能力",
-                    "善于看到多种可能性",
-                    "知识面广，好奇心强"
+                    《思维敏捷，反应快》,
+                    《富有创造力和创新》,
+                    《优秀的辩论能力》,
+                    《善于看到多种可能性》,
+                    《知识面广，好奇心强》
                 ],
                 weaknesses: [
-                    "难以坚持长期项目",
-                    "容易争论而不妥协",
-                    "对常规感到厌烦",
-                    "可能忽视细节",
-                    "承诺困难"
+                    《难以坚持长期项目》,
+                    《容易争论而不妥协》,
+                    《对常规感到厌烦》,
+                    《可能忽视细节》,
+                    《承诺困难》
                 ],
-                careers: ["企业家", "创意总监", "律师", "发明家", "营销专家", "记者", "顾问"],
-                relationship: "你充满魅力和智慧，在关系中寻求智力刺激和新鲜感。你享受辩论和思想的碰撞。需要学会在争论中给予伴侣情感安全感。",
-                growth: "学会将创意想法落实到具体行动。培养耐心和专注力。重视他人的情感需求，不仅仅是智力层面的交流。",
-                famous: "托马斯·爱迪生、马克·吐温、本杰明·富兰克林、萨尔瓦多·达利",
-                compatibility: "与 INFJ 和 INTJ 最匹配，他们能与你进行深度对话。与 ISFJ 关系最具挑战性。"
+                careers: [《企业家》, 《创意总监》, 《律师》, 《发明家》, 《营销专家》, 《记者》, 《顾问》],
+                relationship: 《你充满魅力和智慧，在关系中寻求智力刺激和新鲜感。你享受辩论和思想的碰撞。需要学会在争论中给予伴侣情感安全感。》,
+                growth: 《学会将创意想法落实到具体行动。培养耐心和专注力。重视他人的情感需求，不仅仅是智力层面的交流。》,
+                famous: 《托马斯·爱迪生、马克·吐温、本杰明·富兰克林、萨尔瓦多·达利》,
+                compatibility: 《与 INFJ 和 INTJ 最匹配，他们能与你进行深度对话。与 ISFJ 关系最具挑战性。》
             },
-            "INFJ": {
-                name: "提倡者",
-                nickname: "理想主义的倡导者",
-                description: "你是一个富有同情心、富有理想主义的导师，总是希望帮助他人。",
+            《INFJ》: {
+                name: 《提倡者》,
+                nickname: 《理想主义的倡导者》,
+                description: 《你是一个富有同情心、富有理想主义的导师，总是希望帮助他人。》,
                 cognitiveFunctions: [
-                    { name: "Ni", desc: "内倾直觉 - 深层洞察" },
-                    { name: "Fe", desc: "外倾情感 - 人际和谐" },
-                    { name: "Ti", desc: "内倾思考 - 逻辑分析" },
-                    { name: "Se", desc: "外倾实感 - 感官体验" }
+                    { name: 《Ni》, desc: 《内倾直觉 - 深层洞察》 },
+                    { name: 《Fe》, desc: 《外倾情感 - 人际和谐》 },
+                    { name: 《Ti》, desc: 《内倾思考 - 逻辑分析》 },
+                    { name: 《Se》, desc: 《外倾实感 - 感官体验》 }
                 ],
                 strengths: [
-                    "深刻的洞察力和直觉",
-                    "强烈的同理心",
-                    "坚持理想和价值观",
-                    "善于帮助他人成长",
-                    "富有创造力和想象力"
+                    《深刻的洞察力和直觉》,
+                    《强烈的同理心》,
+                    《坚持理想和价值观》,
+                    《善于帮助他人成长》,
+                    《富有创造力和想象力》
                 ],
                 weaknesses: [
-                    "对批评过于敏感",
-                    "容易 burn out（精疲力竭）",
-                    "过度理想主义",
-                    "难以设定界限",
-                    "完美主义倾向"
+                    《对批评过于敏感》,
+                    《容易 burn out（精疲力竭）》,
+                    《过度理想主义》,
+                    《难以设定界限》,
+                    《完美主义倾向》
                 ],
-                careers: ["心理咨询师", "作家", "教师", "社会工作者", "艺术家", "宗教领袖", "人力资源"],
-                relationship: "你追求深度和真实的人际关系，是忠诚而温柔的伴侣。你能深刻理解伴侣的需求，但可能因为付出过多而疲惫。需要学会接受而不是总是给予。",
-                growth: "学会设定健康的界限，照顾自己的需求。接受不完美，包括他人和自己的不完美。避免过度分析关系，让感情自然流动。",
-                famous: "马丁·路德·金、特蕾莎修女、柏拉图、莫扎特",
-                compatibility: "与 ENTP 和 ENFP 最匹配，他们能激发你的外向直觉。与 ESTP 关系最具挑战性。"
+                careers: [《心理咨询师》, 《作家》, 《教师》, 《社会工作者》, 《艺术家》, 《宗教领袖》, 《人力资源》],
+                relationship: 《你追求深度和真实的人际关系，是忠诚而温柔的伴侣。你能深刻理解伴侣的需求，但可能因为付出过多而疲惫。需要学会接受而不是总是给予。》,
+                growth: 《学会设定健康的界限，照顾自己的需求。接受不完美，包括他人和自己的不完美。避免过度分析关系，让感情自然流动。》,
+                famous: 《马丁·路德·金、特蕾莎修女、柏拉图、莫扎特》,
+                compatibility: 《与 ENTP 和 ENFP 最匹配，他们能激发你的外向直觉。与 ESTP 关系最具挑战性。》
             },
-            "INFP": {
-                name: "调停者",
-                nickname: "理想主义的和平使者",
-                description: "你是一个温和、敏感的诗人，珍视内心深处的理想。",
+            《INFP》: {
+                name: 《调停者》,
+                nickname: 《理想主义的和平使者》,
+                description: 《你是一个温和、敏感的诗人，珍视内心深处的理想。》,
                 cognitiveFunctions: [
-                    { name: "Fi", desc: "内倾情感 - 核心价值" },
-                    { name: "Ne", desc: "外倾直觉 - 创意可能" },
-                    { name: "Si", desc: "内倾实感 - 经验记忆" },
-                    { name: "Te", desc: "外倾思考 - 组织执行" }
+                    { name: 《Fi》, desc: 《内倾情感 - 核心价值》 },
+                    { name: 《Ne》, desc: 《外倾直觉 - 创意可能》 },
+                    { name: 《Si》, desc: 《内倾实感 - 经验记忆》 },
+                    { name: 《Te》, desc: 《外倾思考 - 组织执行》 }
                 ],
                 strengths: [
-                    "强烈的个人价值观",
-                    "富有同理心",
-                    "创造力和艺术天赋",
-                    "对他人真诚关心",
-                    "忠于自我"
+                    《强烈的个人价值观》,
+                    《富有同理心》,
+                    《创造力和艺术天赋》,
+                    《对他人真诚关心》,
+                    《忠于自我》
                 ],
                 weaknesses: [
-                    "过于理想化",
-                    "难以处理批评",
-                    "可能过于敏感",
-                    "回避冲突",
-                    "容易自我怀疑"
+                    《过于理想化》,
+                    《难以处理批评》,
+                    《可能过于敏感》,
+                    《回避冲突》,
+                    《容易自我怀疑》
                 ],
-                careers: ["作家", "艺术家", "心理咨询师", "音乐家", "教师", "图书管理员", "社会工作者"],
-                relationship: "你寻求灵魂深处的连接，是浪漫而忠诚的伴侣。你重视情感的真实和深度，但可能因为期待过高而失望。需要学会接受伴侣的不完美。",
-                growth: "将理想转化为实际行动，不要让梦想只停留在脑海。培养自我接纳，不要总是与他人比较。学会面对和处理冲突，而不是回避。",
-                famous: "威廉·莎士比亚、约翰·列侬、梵高、奥黛丽·赫本",
-                compatibility: "与 ENFJ 和 ENTJ 最匹配，他们能帮助你实现想法。与 ESTJ 关系最具挑战性。"
+                careers: [《作家》, 《艺术家》, 《心理咨询师》, 《音乐家》, 《教师》, 《图书管理员》, 《社会工作者》],
+                relationship: 《你寻求灵魂深处的连接，是浪漫而忠诚的伴侣。你重视情感的真实和深度，但可能因为期待过高而失望。需要学会接受伴侣的不完美。》,
+                growth: 《将理想转化为实际行动，不要让梦想只停留在脑海。培养自我接纳，不要总是与他人比较。学会面对和处理冲突，而不是回避。》,
+                famous: 《威廉·莎士比亚、约翰·列侬、梵高、奥黛丽·赫本》,
+                compatibility: 《与 ENFJ 和 ENTJ 最匹配，他们能帮助你实现想法。与 ESTJ 关系最具挑战性。》
             },
-            "ENFJ": {
-                name: "主人公",
-                nickname: "天生的启发者",
-                description: "你是一个富有魅力、富有同情心的领导者，能够激励他人。",
+            《ENFJ》: {
+                name: 《主人公》,
+                nickname: 《天生的启发者》,
+                description: 《你是一个富有魅力、富有同情心的领导者，能够激励他人。》,
                 cognitiveFunctions: [
-                    { name: "Fe", desc: "外倾情感 - 人际和谐" },
-                    { name: "Ni", desc: "内倾直觉 - 远见洞察" },
-                    { name: "Se", desc: "外倾实感 - 当下体验" },
-                    { name: "Ti", desc: "内倾思考 - 逻辑分析" }
+                    { name: 《Fe》, desc: 《外倾情感 - 人际和谐》 },
+                    { name: 《Ni》, desc: 《内倾直觉 - 远见洞察》 },
+                    { name: 《Se》, desc: 《外倾实感 - 当下体验》 },
+                    { name: 《Ti》, desc: 《内倾思考 - 逻辑分析》 }
                 ],
                 strengths: [
-                    "出色的沟通能力",
-                    "富有同理心",
-                    "天生的领导者",
-                    "善于激励他人",
-                    "负责任和可靠"
+                    《出色的沟通能力》,
+                    《富有同理心》,
+                    《天生的领导者》,
+                    《善于激励他人》,
+                    《负责任和可靠》
                 ],
                 weaknesses: [
-                    "过于关注他人而忽视自己",
-                    "可能过于理想化",
-                    "对批评敏感",
-                    "难以做艰难决定",
-                    "可能操控他人"
+                    《过于关注他人而忽视自己》,
+                    《可能过于理想化》,
+                    《对批评敏感》,
+                    《难以做艰难决定》,
+                    《可能操控他人》
                 ],
-                careers: ["教师", "心理咨询师", "人力资源经理", "销售经理", "宗教领袖", "政治家", "培训师"],
-                relationship: "你热情、关怀，在关系中是支持和鼓励的伴侣。你愿意为伴侣付出很多，但可能因为付出过多而感到不平衡。需要学会接受爱而不只是给予爱。",
-                growth: "学会设定界限，不要为了和谐而牺牲自己的需求。培养客观决策能力，不要总是被他人的情感影响。相信自己的判断，不要过度依赖他人的认可。",
-                famous: "巴拉克·奥巴马、奥普拉·温弗瑞、马丁·路德·金、孔子",
-                compatibility: "与 INFP 和 INTP 最匹配，他们能让你看到不同的视角。与 ISTP 关系最具挑战性。"
+                careers: [《教师》, 《心理咨询师》, 《人力资源经理》, 《销售经理》, 《宗教领袖》, 《政治家》, 《培训师》],
+                relationship: 《你热情、关怀，在关系中是支持和鼓励的伴侣。你愿意为伴侣付出很多，但可能因为付出过多而感到不平衡。需要学会接受爱而不只是给予爱。》,
+                growth: 《学会设定界限，不要为了和谐而牺牲自己的需求。培养客观决策能力，不要总是被他人的情感影响。相信自己的判断，不要过度依赖他人的认可。》,
+                famous: 《巴拉克·奥巴马、奥普拉·温弗瑞、马丁·路德·金、孔子》,
+                compatibility: 《与 INFP 和 INTP 最匹配，他们能让你看到不同的视角。与 ISTP 关系最具挑战性。》
             },
-            "ENFP": {
-                name: "竞选者",
-                nickname: "热情的探索者",
-                description: "你是一个热情、富有创造力的社交蝴蝶，总能找到理由微笑。",
+            《ENFP》: {
+                name: 《竞选者》,
+                nickname: 《热情的探索者》,
+                description: 《你是一个热情、富有创造力的社交蝴蝶，总能找到理由微笑。》,
                 cognitiveFunctions: [
-                    { name: "Ne", desc: "外倾直觉 - 创意可能" },
-                    { name: "Fi", desc: "内倾情感 - 核心价值" },
-                    { name: "Te", desc: "外倾思考 - 组织执行" },
-                    { name: "Si", desc: "内倾实感 - 经验细节" }
+                    { name: 《Ne》, desc: 《外倾直觉 - 创意可能》 },
+                    { name: 《Fi》, desc: 《内倾情感 - 核心价值》 },
+                    { name: 《Te》, desc: 《外倾思考 - 组织执行》 },
+                    { name: 《Si》, desc: 《内倾实感 - 经验细节》 }
                 ],
                 strengths: [
-                    "热情洋溢，富有感染力",
-                    "出色的社交能力",
-                    "创造力和创新思维",
-                    "善于看到他人的潜力",
-                    "适应能力强"
+                    《热情洋溢，富有感染力》,
+                    《出色的社交能力》,
+                    《创造力和创新思维》,
+                    《善于看到他人的潜力》,
+                    《适应能力强》
                 ],
                 weaknesses: [
-                    "难以坚持长期项目",
-                    "容易分心",
-                    "过度思考，焦虑倾向",
-                    "不擅长处理细节",
-                    "难以做艰难决定"
+                    《难以坚持长期项目》,
+                    《容易分心》,
+                    《过度思考，焦虑倾向》,
+                    《不擅长处理细节》,
+                    《难以做艰难决定》
                 ],
-                careers: ["营销专员", "记者", "演员", "企业家", "顾问", "教师", "活动策划"],
-                relationship: "你充满热情和浪漫，在关系中寻求深度的情感连接和共同成长。你善于让伴侣感到被欣赏，但可能因为变化太快而让伴侣不安。需要学会在变化中保持稳定。",
-                growth: "学会将创意想法落实到具体行动。培养专注力和坚持。接受不是所有可能性都能实现，学会做减法。",
-                famous: "沃尔特·迪士尼、罗宾·威廉姆斯、马克·吐温、塞雷娜·威廉姆斯",
-                compatibility: "与 INTJ 和 INFJ 最匹配，他们能与你进行深度对话。与 ISTJ 关系最具挑战性。"
+                careers: [《营销专员》, 《记者》, 《演员》, 《企业家》, 《顾问》, 《教师》, 《活动策划》],
+                relationship: 《你充满热情和浪漫，在关系中寻求深度的情感连接和共同成长。你善于让伴侣感到被欣赏，但可能因为变化太快而让伴侣不安。需要学会在变化中保持稳定。》,
+                growth: 《学会将创意想法落实到具体行动。培养专注力和坚持。接受不是所有可能性都能实现，学会做减法。》,
+                famous: 《沃尔特·迪士尼、罗宾·威廉姆斯、马克·吐温、塞雷娜·威廉姆斯》,
+                compatibility: 《与 INTJ 和 INFJ 最匹配，他们能与你进行深度对话。与 ISTJ 关系最具挑战性。》
             },
-            "ISTJ": {
-                name: "物流师",
-                nickname: "可靠的组织者",
-                description: "你是一个实际、注重事实的人，可靠性是你最大的特点。",
+            《ISTJ》: {
+                name: 《物流师》,
+                nickname: 《可靠的组织者》,
+                description: 《你是一个实际、注重事实的人，可靠性是你最大的特点。》,
                 cognitiveFunctions: [
-                    { name: "Si", desc: "内倾实感 - 经验细节" },
-                    { name: "Te", desc: "外倾思考 - 组织执行" },
-                    { name: "Fi", desc: "内倾情感 - 核心价值" },
-                    { name: "Ne", desc: "外倾直觉 - 创意可能" }
+                    { name: 《Si》, desc: 《内倾实感 - 经验细节》 },
+                    { name: 《Te》, desc: 《外倾思考 - 组织执行》 },
+                    { name: 《Fi》, desc: 《内倾情感 - 核心价值》 },
+                    { name: 《Ne》, desc: 《外倾直觉 - 创意可能》 }
                 ],
                 strengths: [
-                    "诚实守信",
-                    "强烈的责任感",
-                    "注重细节",
-                    "稳定可靠",
-                    "实际务实"
+                    《诚实守信》,
+                    《强烈的责任感》,
+                    《注重细节》,
+                    《稳定可靠》,
+                    《实际务实》
                 ],
                 weaknesses: [
-                    "固执，不易变通",
-                    "可能过于严肃",
-                    "抗拒变化",
-                    "不善表达情感",
-                    "可能过于传统"
+                    《固执，不易变通》,
+                    《可能过于严肃》,
+                    《抗拒变化》,
+                    《不善表达情感》,
+                    《可能过于传统》
                 ],
-                careers: ["会计", "项目经理", "军官", "法官", "医生", "系统管理员", "审计师"],
-                relationship: "你忠诚可靠，是可以依靠的伴侣。你用行动而非言语表达爱意。虽然不浪漫，但你的稳定和可靠是最珍贵的品质。需要学会更多地表达情感。",
-                growth: "学会接受变化和新的可能性。培养开放的心态，不要过度依赖过去的方法。学会表达情感，不要只用行动说话。",
-                famous: "乔治·华盛顿、安格拉·默克尔、沃伦·巴菲特、斯蒂芬·金",
-                compatibility: "与 ESFP 和 ESTP 最匹配，他们能给你的生活带来乐趣。与 ENFP 关系最具挑战性。"
+                careers: [《会计》, 《项目经理》, 《军官》, 《法官》, 《医生》, 《系统管理员》, 《审计师》],
+                relationship: 《你忠诚可靠，是可以依靠的伴侣。你用行动而非言语表达爱意。虽然不浪漫，但你的稳定和可靠是最珍贵的品质。需要学会更多地表达情感。》,
+                growth: 《学会接受变化和新的可能性。培养开放的心态，不要过度依赖过去的方法。学会表达情感，不要只用行动说话。》,
+                famous: 《乔治·华盛顿、安格拉·默克尔、沃伦·巴菲特、斯蒂芬·金》,
+                compatibility: 《与 ESFP 和 ESTP 最匹配，他们能给你的生活带来乐趣。与 ENFP 关系最具挑战性。》
             },
-            "ISFJ": {
-                name: "守卫者",
-                nickname: "温暖的守护者",
-                description: "你是一个温暖的守护者，总是准备保护你所爱的人。",
+            《ISFJ》: {
+                name: 《守卫者》,
+                nickname: 《温暖的守护者》,
+                description: 《你是一个温暖的守护者，总是准备保护你所爱的人。》,
                 cognitiveFunctions: [
-                    { name: "Si", desc: "内倾实感 - 经验细节" },
-                    { name: "Fe", desc: "外倾情感 - 人际和谐" },
-                    { name: "Ti", desc: "内倾思考 - 逻辑分析" },
-                    { name: "Ne", desc: "外倾直觉 - 创意可能" }
+                    { name: 《Si》, desc: 《内倾实感 - 经验细节》 },
+                    { name: 《Fe》, desc: 《外倾情感 - 人际和谐》 },
+                    { name: 《Ti》, desc: 《内倾思考 - 逻辑分析》 },
+                    { name: 《Ne》, desc: 《外倾直觉 - 创意可能》 }
                 ],
                 strengths: [
-                    "支持他人",
-                    "可靠和负责任",
-                    "耐心和细心",
-                    "善于观察",
-                    "实际解决问题"
+                    《支持他人》,
+                    《可靠和负责任》,
+                    《耐心和细心》,
+                    《善于观察》,
+                    《实际解决问题》
                 ],
                 weaknesses: [
-                    "过于谦虚",
-                    "压抑自己的需求",
-                    "抗拒变化",
-                    "过度承担",
-                    "难以接受赞美"
+                    《过于谦虚》,
+                    《压抑自己的需求》,
+                    《抗拒变化》,
+                    《过度承担》,
+                    《难以接受赞美》
                 ],
-                careers: ["护士", "教师", "行政助理", "图书管理员", "社会工作者", "客户服务"],
-                relationship: "你温柔体贴，是关心和支持伴侣的好伴侣。你记得所有重要的日子和细节，但可能因为付出过多而感到疲惫。需要学会接受伴侣的照顾。",
-                growth: "学会表达自己的需求，不要总是把他人放在第一位。接受变化，不要让舒适区限制你的成长。学会说"不"，不要总是勉强自己。",
-                famous: "特蕾莎修女、凯特·米德尔顿、碧昂丝、蕾哈娜",
-                compatibility: "与 ESFP 和 ESTP 最匹配，他们能带给你欢乐和刺激。与 ENTJ 关系最具挑战性。"
+                careers: [《护士》, 《教师》, 《行政助理》, 《图书管理员》, 《社会工作者》, 《客户服务》],
+                relationship: 《你温柔体贴，是关心和支持伴侣的好伴侣。你记得所有重要的日子和细节，但可能因为付出过多而感到疲惫。需要学会接受伴侣的照顾。》,
+                growth: 《学会表达自己的需求，不要总是把他人放在第一位。接受变化，不要让舒适区限制你的成长。学会说《不》，不要总是勉强自己。》,
+                famous: 《特蕾莎修女、凯特·米德尔顿、碧昂丝、蕾哈娜》,
+                compatibility: 《与 ESFP 和 ESTP 最匹配，他们能带给你欢乐和刺激。与 ENTJ 关系最具挑战性。》
             },
-            "ESTJ": {
-                name: "总经理",
-                nickname: "高效的组织者",
-                description: "你是一个出色的管理者，在执行事情方面无与伦比。",
+            《ESTJ》: {
+                name: 《总经理》,
+                nickname: 《高效的组织者》,
+                description: 《你是一个出色的管理者，在执行事情方面无与伦比。》,
                 cognitiveFunctions: [
-                    { name: "Te", desc: "外倾思考 - 组织执行" },
-                    { name: "Si", desc: "内倾实感 - 经验细节" },
-                    { name: "Ne", desc: "外倾直觉 - 创意可能" },
-                    { name: "Fi", desc: "内倾情感 - 核心价值" }
+                    { name: 《Te》, desc: 《外倾思考 - 组织执行》 },
+                    { name: 《Si》, desc: 《内倾实感 - 经验细节》 },
+                    { name: 《Ne》, desc: 《外倾直觉 - 创意可能》 },
+                    { name: 《Fi》, desc: 《内倾情感 - 核心价值》 }
                 ],
                 strengths: [
-                    "强大的执行力",
-                    "直接坦率的沟通",
-                    "强烈的责任感",
-                    "天生的领导者",
-                    "实际和务实"
+                    《强大的执行力》,
+                    《直接坦率的沟通》,
+                    《强烈的责任感》,
+                    《天生的领导者》,
+                    《实际和务实》
                 ],
                 weaknesses: [
-                    "可能过于固执",
-                    "不灵活",
-                    "难以表达情感",
-                    "可能显得专制",
-                    "工作狂倾向"
+                    《可能过于固执》,
+                    《不灵活》,
+                    《难以表达情感》,
+                    《可能显得专制》,
+                    《工作狂倾向》
                 ],
-                careers: ["管理者", "律师", "法官", "军官", "项目经理", "财务总监", "销售经理"],
-                relationship: "你直接可靠，在关系中是负责任的伴侣。你用行动表达爱意，但可能因为太专注于"应该做什么"而忽略情感的交流。需要学会更多地关注伴侣的感受。",
-                growth: "学会倾听不同的观点，不要总是坚持自己的方式。培养情感表达的能力，不要只用行动说话。学会在必要时展现温柔和同理心。",
-                famous: "约翰·洛克菲勒、亨利·福特、米歇尔·奥巴马、桑德拉·戴",
-                compatibility: "与 ISFP 和 INFP 最匹配，他们能软化你的强硬。与 INTP 关系最具挑战性。"
+                careers: [《管理者》, 《律师》, 《法官》, 《军官》, 《项目经理》, 《财务总监》, 《销售经理》],
+                relationship: 《你直接可靠，在关系中是负责任的伴侣。你用行动表达爱意，但可能因为太专注于》应该做什么《而忽略情感的交流。需要学会更多地关注伴侣的感受。》,
+                growth: 《学会倾听不同的观点，不要总是坚持自己的方式。培养情感表达的能力，不要只用行动说话。学会在必要时展现温柔和同理心。》,
+                famous: 《约翰·洛克菲勒、亨利·福特、米歇尔·奥巴马、桑德拉·戴》,
+                compatibility: 《与 ISFP 和 INFP 最匹配，他们能软化你的强硬。与 INTP 关系最具挑战性。》
             },
-            "ESFJ": {
-                name: "执政官",
-                nickname: "热心的照顾者",
-                description: "你是一个极富同情心的人，总是渴望帮助他人。",
+            《ESFJ》: {
+                name: 《执政官》,
+                nickname: 《热心的照顾者》,
+                description: 《你是一个极富同情心的人，总是渴望帮助他人。》,
                 cognitiveFunctions: [
-                    { name: "Fe", desc: "外倾情感 - 人际和谐" },
-                    { name: "Si", desc: "内倾实感 - 经验细节" },
-                    { name: "Ti", desc: "内倾思考 - 逻辑分析" },
-                    { name: "Ne", desc: "外倾直觉 - 创意可能" }
+                    { name: 《Fe》, desc: 《外倾情感 - 人际和谐》 },
+                    { name: 《Si》, desc: 《内倾实感 - 经验细节》 },
+                    { name: 《Ti》, desc: 《内倾思考 - 逻辑分析》 },
+                    { name: 《Ne》, desc: 《外倾直觉 - 创意可能》 }
                 ],
                 strengths: [
-                    "强烈的责任感",
-                    "出色的社交能力",
-                    "实际解决问题",
-                    "忠诚可靠",
-                    "善于照顾他人"
+                    《强烈的责任感》,
+                    《出色的社交能力》,
+                    《实际解决问题》,
+                    《忠诚可靠》,
+                    《善于照顾他人》
                 ],
                 weaknesses: [
-                    "过于在意他人看法",
-                    "容易受到批评影响",
-                    "不善于处理变化",
-                    "过度自我牺牲",
-                    "可能过于传统"
+                    《过于在意他人看法》,
+                    《容易受到批评影响》,
+                    《不善于处理变化》,
+                    《过度自我牺牲》,
+                    《可能过于传统》
                 ],
-                careers: ["护士", "教师", "销售经理", "活动策划", "公关专员", "人力资源", "客户服务"],
-                relationship: "你热情、关怀，在关系中是支持和鼓励的伴侣。你重视传统和稳定，努力营造和谐的家庭氛围。但可能因为过于在意他人看法而感到压力。",
-                growth: "学会区分"重要他人"和"其他人的看法"。接受变化，不要让传统限制你的选择。培养自我接纳，不要总是需要他人的认可。",
-                famous: "泰勒·斯威夫特、詹妮弗·洛佩兹、比尔·克林顿、玛丽·居里",
-                compatibility: "与 ISFP 和 ISTP 最匹配，他们能给你独立的空间。与 INTJ 关系最具挑战性。"
+                careers: [《护士》, 《教师》, 《销售经理》, 《活动策划》, 《公关专员》, 《人力资源》, 《客户服务》],
+                relationship: 《你热情、关怀，在关系中是支持和鼓励的伴侣。你重视传统和稳定，努力营造和谐的家庭氛围。但可能因为过于在意他人看法而感到压力。》,
+                growth: 《学会区分》重要他人《和》其他人的看法《。接受变化，不要让传统限制你的选择。培养自我接纳，不要总是需要他人的认可。》,
+                famous: 《泰勒·斯威夫特、詹妮弗·洛佩兹、比尔·克林顿、玛丽·居里》,
+                compatibility: 《与 ISFP 和 ISTP 最匹配，他们能给你独立的空间。与 INTJ 关系最具挑战性。》
             },
-            "ISTP": {
-                name: "鉴赏家",
-                nickname: "冷静的问题解决者",
-                description: "你是一个大胆的实验者，擅长解决紧急问题。",
+            《ISTP》: {
+                name: 《鉴赏家》,
+                nickname: 《冷静的问题解决者》,
+                description: 《你是一个大胆的实验者，擅长解决紧急问题。》,
                 cognitiveFunctions: [
-                    { name: "Ti", desc: "内倾思考 - 逻辑分析" },
-                    { name: "Se", desc: "外倾实感 - 当下体验" },
-                    { name: "Ni", desc: "内倾直觉 - 深层洞察" },
-                    { name: "Fe", desc: "外倾情感 - 人际和谐" }
+                    { name: 《Ti》, desc: 《内倾思考 - 逻辑分析》 },
+                    { name: 《Se》, desc: 《外倾实感 - 当下体验》 },
+                    { name: 《Ni》, desc: 《内倾直觉 - 深层洞察》 },
+                    { name: 《Fe》, desc: 《外倾情感 - 人际和谐》 }
                 ],
                 strengths: [
-                    "冷静理性的分析",
-                    "解决实际问题的能力",
-                    "适应力强",
-                    "独立自主",
-                    "危机处理能力"
+                    《冷静理性的分析》,
+                    《解决实际问题的能力》,
+                    《适应力强》,
+                    《独立自主》,
+                    《危机处理能力》
                 ],
                 weaknesses: [
-                    "可能显得冷漠",
-                    "不善于表达情感",
-                    "容易感到无聊",
-                    "可能过于冒险",
-                    "承诺困难"
+                    《可能显得冷漠》,
+                    《不善于表达情感》,
+                    《容易感到无聊》,
+                    《可能过于冒险》,
+                    《承诺困难》
                 ],
-                careers: ["工程师", "机械师", "飞行员", "运动员", "程序员", "消防员", "调查记者"],
-                relationship: "你独立、理性，在关系中需要自由和空间。你不善于表达情感，但会以实际行动展现爱意。需要学会更多地与伴侣沟通情感需求。",
-                growth: "学会表达情感，不要只用行动说话。培养长期承诺的能力，不要因为无聊而逃避关系。学会在必要时展现同理心和温柔。",
-                famous: "克林特·伊斯特伍德、迈克尔·乔丹、汤姆·克鲁斯、布鲁斯·李",
-                compatibility: "与 ESFJ 和 ESTJ 最匹配，他们能给你稳定和温暖。与 ENFJ 关系最具挑战性。"
+                careers: [《工程师》, 《机械师》, 《飞行员》, 《运动员》, 《程序员》, 《消防员》, 《调查记者》],
+                relationship: 《你独立、理性，在关系中需要自由和空间。你不善于表达情感，但会以实际行动展现爱意。需要学会更多地与伴侣沟通情感需求。》,
+                growth: 《学会表达情感，不要只用行动说话。培养长期承诺的能力，不要因为无聊而逃避关系。学会在必要时展现同理心和温柔。》,
+                famous: 《克林特·伊斯特伍德、迈克尔·乔丹、汤姆·克鲁斯、布鲁斯·李》,
+                compatibility: 《与 ESFJ 和 ESTJ 最匹配，他们能给你稳定和温暖。与 ENFJ 关系最具挑战性。》
             },
-            "ISFP": {
-                name: "探险家",
-                nickname: "温和的艺术家",
-                description: "你是一个灵活、富有魅力的艺术家，时刻准备探索新的可能。",
+            《ISFP》: {
+                name: 《探险家》,
+                nickname: 《温和的艺术家》,
+                description: 《你是一个灵活、富有魅力的艺术家，时刻准备探索新的可能。》,
                 cognitiveFunctions: [
-                    { name: "Fi", desc: "内倾情感 - 核心价值" },
-                    { name: "Se", desc: "外倾实感 - 当下体验" },
-                    { name: "Ni", desc: "内倾直觉 - 深层洞察" },
-                    { name: "Te", desc: "外倾思考 - 组织执行" }
+                    { name: 《Fi》, desc: 《内倾情感 - 核心价值》 },
+                    { name: 《Se》, desc: 《外倾实感 - 当下体验》 },
+                    { name: 《Ni》, desc: 《内倾直觉 - 深层洞察》 },
+                    { name: 《Te》, desc: 《外倾思考 - 组织执行》 }
                 ],
                 strengths: [
-                    "艺术天赋和审美能力",
-                    "对当下敏感",
-                    "温柔善良",
-                    "实际行动能力",
-                    "忠于自我"
+                    《艺术天赋和审美能力》,
+                    《对当下敏感》,
+                    《温柔善良》,
+                    《实际行动能力》,
+                    《忠于自我》
                 ],
                 weaknesses: [
-                    "过于敏感",
-                    "难以处理批评",
-                    "回避冲突",
-                    "难以长期规划",
-                    "容易自我怀疑"
+                    《过于敏感》,
+                    《难以处理批评》,
+                    《回避冲突》,
+                    《难以长期规划》,
+                    《容易自我怀疑》
                 ],
-                careers: ["艺术家", "设计师", "音乐家", "厨师", "摄影师", "兽医", "理疗师"],
-                relationship: "你温柔、敏感，在关系中渴望真实和自由的连接。你用感官体验表达爱意，创造美的氛围。但可能因为过于敏感而难以处理冲突。",
-                growth: "学会面对冲突，不要总是回避。培养长期目标，不要只活在当下。学会接受不完美，包括自己和他人的不完美。",
-                famous: "迈克尔·杰克逊、大卫·鲍伊、玛丽莲·梦露、Lady Gaga",
-                compatibility: "与 ENFJ 和 ESFJ 最匹配，他们能给你安全感和认可。与 ENTJ 关系最具挑战性。"
+                careers: [《艺术家》, 《设计师》, 《音乐家》, 《厨师》, 《摄影师》, 《兽医》, 《理疗师》],
+                relationship: 《你温柔、敏感，在关系中渴望真实和自由的连接。你用感官体验表达爱意，创造美的氛围。但可能因为过于敏感而难以处理冲突。》,
+                growth: 《学会面对冲突，不要总是回避。培养长期目标，不要只活在当下。学会接受不完美，包括自己和他人的不完美。》,
+                famous: 《迈克尔·杰克逊、大卫·鲍伊、玛丽莲·梦露、Lady Gaga》,
+                compatibility: 《与 ENFJ 和 ESFJ 最匹配，他们能给你安全感和认可。与 ENTJ 关系最具挑战性。》
             },
-            "ESTP": {
-                name: "企业家",
-                nickname: "充满活力的实干家",
-                description: "你是一个聪明的、精力充沛的人，真正享受生活在边缘的感觉。",
+            《ESTP》: {
+                name: 《企业家》,
+                nickname: 《充满活力的实干家》,
+                description: 《你是一个聪明的、精力充沛的人，真正享受生活在边缘的感觉。》,
                 cognitiveFunctions: [
-                    { name: "Se", desc: "外倾实感 - 当下体验" },
-                    { name: "Ti", desc: "内倾思考 - 逻辑分析" },
-                    { name: "Fe", desc: "外倾情感 - 人际和谐" },
-                    { name: "Ni", desc: "内倾直觉 - 深层洞察" }
+                    { name: 《Se》, desc: 《外倾实感 - 当下体验》 },
+                    { name: 《Ti》, desc: 《内倾思考 - 逻辑分析》 },
+                    { name: 《Fe》, desc: 《外倾情感 - 人际和谐》 },
+                    { name: 《Ni》, desc: 《内倾直觉 - 深层洞察》 }
                 ],
                 strengths: [
-                    "行动力强",
-                    "适应变化",
-                    "解决危机的能力",
-                    "善于说服他人",
-                    "充满活力"
+                    《行动力强》,
+                    《适应变化》,
+                    《解决危机的能力》,
+                    《善于说服他人》,
+                    《充满活力》
                 ],
                 weaknesses: [
-                    "冲动，缺乏耐心",
-                    "可能忽视他人感受",
-                    "抗拒约束",
-                    "容易感到无聊",
-                    "可能不思考后果"
+                    《冲动，缺乏耐心》,
+                    《可能忽视他人感受》,
+                    《抗拒约束》,
+                    《容易感到无聊》,
+                    《可能不思考后果》
                 ],
-                careers: ["销售", "企业家", "演员", "运动员", "警察", "消防员", "急救人员"],
-                relationship: "你充满活力和魅力，在关系中寻求刺激和冒险。你善于让伴侣感到兴奋，但可能因为过于关注当下而忽略长期承诺。",
-                growth: "学会思考长期后果，不要只顾眼前。培养同理心，关注伴侣的情感需求。学会在必要时克制冲动，三思后行。",
-                famous: "唐纳德·特朗普、麦当娜、杰克·尼科尔森、布鲁斯·威利斯",
-                compatibility: "与 ISFJ 和 ISTJ 最匹配，他们能给你稳定和安全感。与 INFJ 关系最具挑战性。"
+                careers: [《销售》, 《企业家》, 《演员》, 《运动员》, 《警察》, 《消防员》, 《急救人员》],
+                relationship: 《你充满活力和魅力，在关系中寻求刺激和冒险。你善于让伴侣感到兴奋，但可能因为过于关注当下而忽略长期承诺。》,
+                growth: 《学会思考长期后果，不要只顾眼前。培养同理心，关注伴侣的情感需求。学会在必要时克制冲动，三思后行。》,
+                famous: 《唐纳德·特朗普、麦当娜、杰克·尼科尔森、布鲁斯·威利斯》,
+                compatibility: 《与 ISFJ 和 ISTJ 最匹配，他们能给你稳定和安全感。与 INFJ 关系最具挑战性。》
             },
-            "ESFP": {
-                name: "表演者",
-                nickname: "热情的娱乐者",
-                description: "你是一个自发的、精力充沛的人，生活从不无聊。",
+            《ESFP》: {
+                name: 《表演者》,
+                nickname: 《热情的娱乐者》,
+                description: 《你是一个自发的、精力充沛的人，生活从不无聊。》,
                 cognitiveFunctions: [
-                    { name: "Se", desc: "外倾实感 - 当下体验" },
-                    { name: "Fi", desc: "内倾情感 - 核心价值" },
-                    { name: "Te", desc: "外倾思考 - 组织执行" },
-                    { name: "Ni", desc: "内倾直觉 - 深层洞察" }
+                    { name: 《Se》, desc: 《外倾实感 - 当下体验》 },
+                    { name: 《Fi》, desc: 《内倾情感 - 核心价值》 },
+                    { name: 《Te》, desc: 《外倾思考 - 组织执行》 },
+                    { name: 《Ni》, desc: 《内倾直觉 - 深层洞察》 }
                 ],
                 strengths: [
-                    "充满热情和活力",
-                    "出色的社交能力",
-                    "实际解决问题",
-                    "适应力强",
-                    "善于带来欢乐"
+                    《充满热情和活力》,
+                    《出色的社交能力》,
+                    《实际解决问题》,
+                    《适应力强》,
+                    《善于带来欢乐》
                 ],
                 weaknesses: [
-                    "难以做长期规划",
-                    "容易分心",
-                    "对批评敏感",
-                    "可能过于追求刺激",
-                    "可能忽视他人的需求"
+                    《难以做长期规划》,
+                    《容易分心》,
+                    《对批评敏感》,
+                    《可能过于追求刺激》,
+                    《可能忽视他人的需求》
                 ],
-                careers: ["演员", "销售", "活动策划", "导游", "教练", "公关专员", "娱乐行业"],
-                relationship: "你热情、慷慨，在关系中是带来欢乐和刺激的伴侣。你重视当下的快乐，但可能因为过于追求新鲜感而难以面对困难。",
-                growth: "学会面对和处理困难时刻，不要总是逃避。培养长期目标和规划能力。学会关注他人的需求，不要只关注自己的快乐。",
-                famous: "玛丽莲·梦露、杰米·福克斯、凯文·哈特、艾迪·墨菲",
-                compatibility: "与 ISFJ 和 ISTJ 最匹配，他们能给你稳定和安全感。与 INTJ 关系最具挑战性。"
+                careers: [《演员》, 《销售》, 《活动策划》, 《导游》, 《教练》, 《公关专员》, 《娱乐行业》],
+                relationship: 《你热情、慷慨，在关系中是带来欢乐和刺激的伴侣。你重视当下的快乐，但可能因为过于追求新鲜感而难以面对困难。》,
+                growth: 《学会面对和处理困难时刻，不要总是逃避。培养长期目标和规划能力。学会关注他人的需求，不要只关注自己的快乐。》,
+                famous: 《玛丽莲·梦露、杰米·福克斯、凯文·哈特、艾迪·墨菲》,
+                compatibility: 《与 ISFJ 和 ISTJ 最匹配，他们能给你稳定和安全感。与 INTJ 关系最具挑战性。》
             }
         };
 
@@ -1479,11 +1479,9 @@
 
         // ========== 页面切换 ==========
         function showPage(pageId) {
-            alert('DEBUG: 切换到页面 ' + pageId);
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById(pageId).classList.add('active');
             window.scrollTo(0, 0);
-            alert('DEBUG: 页面切换完成');
         }
 
         function showIntro() {
@@ -1503,9 +1501,8 @@
 
         // ========== 测试流程 ==========
         function startTest() {
-            alert('DEBUG: startTest函数开始执行');
             if (loadProgress() && answers.length > 0) {
-                if (confirm('检测到未完成的测试，是否继续？\n点击"取消"开始新测试。')) {
+                if (confirm('检测到未完成的测试，是否继续？\n点击《取消》开始新测试。')) {
                     showPage('test-page');
                     showQuestion();
                     return;
@@ -1538,10 +1535,10 @@
             const container = document.getElementById('question-container');
             
             container.innerHTML = `
-                <div class="question">${question.text}</div>
-                <div class="options">
-                    <div class="option" data-index="0">${question.options[0]}</div>
-                    <div class="option" data-index="1">${question.options[1]}</div>
+                <div class=《question》>${question.text}</div>
+                <div class=《options》>
+                    <div class=《option》 data-index=《0》>${question.options[0]}</div>
+                    <div class=《option》 data-index=《1》>${question.options[1]}</div>
                 </div>
             `;
 
@@ -1701,14 +1698,14 @@
                 const dimDiv = document.createElement('div');
                 dimDiv.className = 'dimension';
                 dimDiv.innerHTML = `
-                    <div class="dimension-label">${dim.label}</div>
-                    <div class="dimension-score">
+                    <div class=《dimension-label》>${dim.label}</div>
+                    <div class=《dimension-score》>
                         <span>${dim.left} (${leftPercent}%)</span>
                         <span>${dim.right} (${rightPercent}%)</span>
                     </div>
-                    <div class="dimension-bar">
-                        <div class="dimension-fill left" style="width: ${leftPercent}%;"></div>
-                        <div class="dimension-fill right" style="width: ${rightPercent}%;"></div>
+                    <div class=《dimension-bar》>
+                        <div class=《dimension-fill left》 style=《width: ${leftPercent}%;》></div>
+                        <div class=《dimension-fill right》 style=《width: ${rightPercent}%;》></div>
                     </div>
                 `;
                 container.appendChild(dimDiv);
@@ -1746,7 +1743,7 @@
             const polygon = points.map(p => `${p.x},${p.y}`).join(' ');
 
             container.innerHTML = `
-                <svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
+                <svg width=《${size}》 height=《${size}》 viewBox=《0 0 ${size} ${size}》>
                     <!-- 网格 -->
                     ${[0.25, 0.5, 0.75, 1].map(scale => {
                         const gridPoints = dimensions.map((_, i) => {
@@ -1754,20 +1751,20 @@
                             const r = radius * scale;
                             return `${center + Math.cos(angle) * r},${center + Math.sin(angle) * r}`;
                         }).join(' ');
-                        return `<polygon points="${gridPoints}" fill="none" stroke="#e0e0e0" stroke-width="1"/>`;
+                        return `<polygon points=《${gridPoints}》 fill=《none》 stroke=《#e0e0e0》 stroke-width=《1》/>`;
                     }).join('')}
                     
                     <!-- 维度轴线 -->
-                    ${points.map(p => `<line x1="${center}" y1="${center}" x2="${p.labelX - Math.cos(Math.atan2(p.labelY - center, p.labelX - center)) * 15}" y2="${p.labelY - Math.sin(Math.atan2(p.labelY - center, p.labelX - center)) * 15}" stroke="#e0e0e0" stroke-width="1"/>`).join('')}
+                    ${points.map(p => `<line x1=《${center}》 y1=《${center}》 x2=《${p.labelX - Math.cos(Math.atan2(p.labelY - center, p.labelX - center)) * 15}》 y2=《${p.labelY - Math.sin(Math.atan2(p.labelY - center, p.labelX - center)) * 15}》 stroke=《#e0e0e0》 stroke-width=《1》/>`).join('')}
                     
                     <!-- 数据多边形 -->
-                    <polygon points="${polygon}" fill="rgba(102, 126, 234, 0.3)" stroke="#667eea" stroke-width="2"/>
+                    <polygon points=《${polygon}》 fill=《rgba(102, 126, 234, 0.3)》 stroke=《#667eea》 stroke-width=《2》/>
                     
                     <!-- 数据点 -->
-                    ${points.map(p => `<circle cx="${p.x}" cy="${p.y}" r="4" fill="#667eea"/>`).join('')}
+                    ${points.map(p => `<circle cx=《${p.x}》 cy=《${p.y}》 r=《4》 fill=《#667eea》/>`).join('')}
                     
                     <!-- 标签 -->
-                    ${points.map(p => `<text x="${p.labelX}" y="${p.labelY}" text-anchor="middle" alignment-baseline="middle" font-size="12" fill="#333">${p.name}<br/>${p.value.toFixed(0)}%</text>`).join('')}
+                    ${points.map(p => `<text x=《${p.labelX}》 y=《${p.labelY}》 text-anchor=《middle》 alignment-baseline=《middle》 font-size=《12》 fill=《#333》>${p.name}<br/>${p.value.toFixed(0)}%</text>`).join('')}
                 </svg>
             `;
         }
@@ -1778,9 +1775,9 @@
             // 认知功能
             const functionsContainer = document.getElementById('cognitive-functions');
             functionsContainer.innerHTML = data.cognitiveFunctions.map(f => `
-                <div class="function-item">
-                    <div class="function-name">${f.name}</div>
-                    <div class="function-desc">${f.desc}</div>
+                <div class=《function-item》>
+                    <div class=《function-name》>${f.name}</div>
+                    <div class=《function-desc》>${f.desc}</div>
                 </div>
             `).join('');
 
@@ -1871,10 +1868,10 @@
 
             if (history.length === 0) {
                 list.innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-state-icon">📋</div>
+                    <div class=《empty-state》>
+                        <div class=《empty-state-icon》>📋</div>
                         <p>还没有测试记录</p>
-                        <p style="font-size: 0.9em; margin-top: 10px;">完成第一次测试后，记录会显示在这里</p>
+                        <p style=《font-size: 0.9em; margin-top: 10px;》>完成第一次测试后，记录会显示在这里</p>
                     </div>
                 `;
                 return;
@@ -1884,12 +1881,12 @@
                 const date = new Date(item.timestamp);
                 const dateStr = `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')} ${String(date.getHours()).padStart(2,'0')}:${String(date.getMinutes()).padStart(2,'0')}`;
                 return `
-                    <div class="history-item" onclick="showHistoryDetail(${index})">
+                    <div class=《history-item》 onclick=《showHistoryDetail(${index})》>
                         <div>
-                            <div class="history-type">${item.type}</div>
-                            <div class="history-name">${item.name}</div>
+                            <div class=《history-type》>${item.type}</div>
+                            <div class=《history-name》>${item.name}</div>
                         </div>
-                        <div class="history-date">${dateStr}</div>
+                        <div class=《history-date》>${dateStr}</div>
                     </div>
                 `;
             }).join('');
@@ -1916,15 +1913,15 @@
                 const leftPercent = (score.left / total * 100).toFixed(1);
                 const rightPercent = (score.right / total * 100).toFixed(1);
                 return `
-                    <div class="dimension" style="margin-bottom: 10px;">
-                        <div class="dimension-label">${dim.label}</div>
-                        <div class="dimension-score">
+                    <div class=《dimension》 style=《margin-bottom: 10px;》>
+                        <div class=《dimension-label》>${dim.label}</div>
+                        <div class=《dimension-score》>
                             <span>${dim.left} (${leftPercent}%)</span>
                             <span>${dim.right} (${rightPercent}%)</span>
                         </div>
-                        <div class="dimension-bar">
-                            <div class="dimension-fill left" style="width: ${leftPercent}%;"></div>
-                            <div class="dimension-fill right" style="width: ${rightPercent}%;"></div>
+                        <div class=《dimension-bar》>
+                            <div class=《dimension-fill left》 style=《width: ${leftPercent}%;》></div>
+                            <div class=《dimension-fill right》 style=《width: ${rightPercent}%;》></div>
                         </div>
                     </div>
                 `;
@@ -1932,12 +1929,12 @@
 
             document.getElementById('modal-title').textContent = `${item.type} - ${item.name}`;
             document.getElementById('modal-body').innerHTML = `
-                <p style="color: #666; margin-bottom: 15px;">测试时间：${dateStr}</p>
-                <p style="margin-bottom: 20px;">${data.description}</p>
-                <h3 style="margin-bottom: 15px;">各维度得分</h3>
+                <p style=《color: #666; margin-bottom: 15px;》>测试时间：${dateStr}</p>
+                <p style=《margin-bottom: 20px;》>${data.description}</p>
+                <h3 style=《margin-bottom: 15px;》>各维度得分</h3>
                 ${dimensionHTML}
-                <div style="margin-top: 20px; display: flex; gap: 10px;">
-                    <button class="danger" onclick="deleteHistory(${index})" style="flex: 1;">删除此记录</button>
+                <div style=《margin-top: 20px; display: flex; gap: 10px;》>
+                    <button class=《danger》 onclick=《deleteHistory(${index})》 style=《flex: 1;》>删除此记录</button>
                 </div>
             `;
             document.getElementById('detail-modal').classList.add('active');
@@ -1964,10 +1961,10 @@
 
             if (history.length < 2) {
                 container.innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-state-icon">📊</div>
+                    <div class=《empty-state》>
+                        <div class=《empty-state-icon》>📊</div>
                         <p>至少需要2条测试记录才能对比</p>
-                        <p style="font-size: 0.9em; margin-top: 10px;">当前有 ${history.length} 条记录</p>
+                        <p style=《font-size: 0.9em; margin-top: 10px;》>当前有 ${history.length} 条记录</p>
                     </div>
                 `;
                 return;
@@ -1996,37 +1993,37 @@
             const oldestDate = new Date(oldest.timestamp).toLocaleDateString('zh-CN');
 
             container.innerHTML = `
-                <div class="comparison-chart">
+                <div class=《comparison-chart》>
                     <h3>类型变化</h3>
-                    <p style="margin: 10px 0;">
+                    <p style=《margin: 10px 0;》>
                         <strong>${oldestDate}：</strong>${oldest.type} (${oldest.name})<br>
                         <strong>${latestDate}：</strong>${latest.type} (${latest.name})
                     </p>
-                    <p style="padding: 10px; background: ${sameType ? '#d4edda' : '#fff3cd'}; border-radius: 8px; color: ${sameType ? '#155724' : '#856404'};">
+                    <p style=《padding: 10px; background: ${sameType ? '#d4edda' : '#fff3cd'}; border-radius: 8px; color: ${sameType ? '#155724' : '#856404'};》>
                         ${sameType ? '✓ 你的核心人格类型保持稳定' : '⚠ 你的核心人格类型发生了变化'}
                     </p>
                 </div>
 
-                <div class="comparison-chart">
+                <div class=《comparison-chart》>
                     <h3>维度变化</h3>
-                    <div class="legend">
-                        <div class="legend-item">
-                            <div class="legend-color old"></div>
+                    <div class=《legend》>
+                        <div class=《legend-item》>
+                            <div class=《legend-color old》></div>
                             <span>${oldestDate}</span>
                         </div>
-                        <div class="legend-item">
-                            <div class="legend-color new"></div>
+                        <div class=《legend-item》>
+                            <div class=《legend-color new》></div>
                             <span>${latestDate}</span>
                         </div>
                     </div>
                     ${changes.map(c => `
-                        <div class="comparison-item">
-                            <div class="comparison-label">${c.label}</div>
-                            <div class="comparison-bars">
-                                <div class="comparison-bar-old" style="left: ${c.oldPercent}%; width: 4px;"></div>
-                                <div class="comparison-bar-new" style="left: ${c.newPercent}%; width: 4px;"></div>
+                        <div class=《comparison-item》>
+                            <div class=《comparison-label》>${c.label}</div>
+                            <div class=《comparison-bars》>
+                                <div class=《comparison-bar-old》 style=《left: ${c.oldPercent}%; width: 4px;》></div>
+                                <div class=《comparison-bar-new》 style=《left: ${c.newPercent}%; width: 4px;》></div>
                             </div>
-                            <div style="display: flex; justify-content: space-between; font-size: 0.85em; color: #666; margin-top: 5px;">
+                            <div style=《display: flex; justify-content: space-between; font-size: 0.85em; color: #666; margin-top: 5px;》>
                                 <span>${c.left}倾向: ${c.oldPercent.toFixed(1)}% → ${c.newPercent.toFixed(1)}%</span>
                                 <span>变化: ${c.change > 0 ? '+' : ''}${c.change.toFixed(1)}%</span>
                             </div>
@@ -2034,15 +2031,15 @@
                     `).join('')}
                 </div>
 
-                <div class="comparison-chart">
+                <div class=《comparison-chart》>
                     <h3>趋势分析</h3>
                     <p>${generateTrendAnalysis(history, changes, sameType)}</p>
                 </div>
 
-                <div class="comparison-chart">
+                <div class=《comparison-chart》>
                     <h3>历史概览（共${history.length}次）</h3>
                     <p>从 <strong>${oldestDate}</strong> 到 <strong>${latestDate}</strong>，你共进行了 <strong>${history.length}</strong> 次测试。</p>
-                    <p style="margin-top: 10px;">各类型出现次数：</p>
+                    <p style=《margin-top: 10px;》>各类型出现次数：</p>
                     ${getTypeFrequency(history)}
                 </div>
             `;
@@ -2081,7 +2078,7 @@
                 .sort((a, b) => b[1] - a[1])
                 .map(([type, count]) => {
                     const percent = (count / history.length * 100).toFixed(0);
-                    return `<div style="margin: 8px 0; padding: 8px; background: #f0f0f0; border-radius: 6px;">
+                    return `<div style=《margin: 8px 0; padding: 8px; background: #f0f0f0; border-radius: 6px;》>
                         <strong>${type}</strong> - ${personalityData[type]?.name || '未知'} - ${count}次 (${percent}%)
                     </div>`;
                 }).join('');
