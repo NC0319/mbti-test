@@ -2154,7 +2154,22 @@
         
         console.log('所有事件已绑定');
     });
-
+    
+    // ========== 暴露函数到全局作用域（script顶层，确保onclick一定能调用）==========
+    window.startTest = startTest;
+    window.showHistory = showHistory;
+    window.showCompare = showCompare;
+    window.resumeTest = resumeTest;
+    window.discardProgress = discardProgress;
+    window.previousQuestion = previousQuestion;
+    window.nextQuestion = nextQuestion;
+    window.shareResult = shareResult;
+    window.clearAllHistory = clearAllHistory;
+    window.closeModal = closeModal;
+    window.showIntro = showIntro;
+    window.switchResultTab = switchResultTab;
+    
+    console.log('✓ 函数已在script顶层暴露到window');
     </script>
 </body>
 </html>
