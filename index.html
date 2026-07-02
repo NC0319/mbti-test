@@ -6,6 +6,22 @@
     <meta name="description" content="专业的MBTI人格测试 - 支持详细数据分析、历史记录留存和多维度对比">
     <meta name="theme-color" content="#667eea">
     <title>MBTI人格测试 - 完整版</title>
+    <script>
+        // 全局错误捕获 - 方便手机调试
+        window.onerror = function(msg, url, lineNo, columnNo, error) {
+            alert('Error: ' + msg + '\nLine: ' + lineNo + '\nCol: ' + columnNo);
+            return false;
+        };
+        
+        // 捕获console.error
+        const originalConsoleError = console.error;
+        console.error = function(...args) {
+            alert('Console Error: ' + args.join(' '));
+            originalConsoleError.apply(console, args);
+        };
+        
+        console.log('Debug mode: Error capturing enabled');
+    </script>
     <style>
         * {
             margin: 0;
@@ -665,6 +681,12 @@
             <div class="action-buttons">
                 <button onclick="window.startTest()">开始测试</button>
                 <button class="secondary" onclick="window.showHistory()">历史记录 (<span id="history-count">0</span>)</button>
+            </div>
+            
+            <!-- 调试按钮（正式发布时可删除） -->
+            <div style="margin-top: 20px; text-align: center;">
+                <button onclick="alert('JavaScript正常工作！\nstartTest函数: ' + (typeof window.startTest === 'function' ? '已定义✓' : '未定义✗') + '\nquestions数量: ' + (typeof questions !== 'undefined' ? questions.length + '题' : '未加载'))" 
+                        style="background: #ccc; font-size: 0.8em; padding: 5px 10px;">调试：检查JS状态</button>
             </div>
         </div>
 
