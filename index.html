@@ -115,7 +115,7 @@
   <div class="container" id="app"></div>
 
   <script>
-    let currentQuestion = 0, answers = {};
+    let currentQuestion = -1, answers = {};
     
     // MBTI 类型详解
     const mbtiInfo = {
@@ -202,43 +202,666 @@
     };
 
     // 加载题目
-    let questions = [];
+    let questions = [
+      {
+            "id": 1,
+            "dimension": "EI",
+            "question": "在社交场合中，您通常：",
+            "options": {
+                  "E": "喜欢与很多人交流，能量来自外部",
+                  "I": "更喜欢与小群体或独处，需要时间充电"
+            }
+      },
+      {
+            "id": 2,
+            "dimension": "EI",
+            "question": "周末您更喜欢：",
+            "options": {
+                  "E": "参加聚会或外出活动",
+                  "I": "在家看书、看电影或做自己喜欢的事"
+            }
+      },
+      {
+            "id": 3,
+            "dimension": "EI",
+            "question": "您认为自己是：",
+            "options": {
+                  "E": "外向的，善于与人交往",
+                  "I": "内向的，更喜欢深度交流"
+            }
+      },
+      {
+            "id": 4,
+            "dimension": "EI",
+            "question": "社交活动后，您通常感觉：",
+            "options": {
+                  "E": "充满活力",
+                  "I": "需要休息和恢复"
+            }
+      },
+      {
+            "id": 5,
+            "dimension": "EI",
+            "question": "当遇到问题时，您通常：",
+            "options": {
+                  "E": "喜欢与人讨论，听取不同意见",
+                  "I": "先自己思考，再考虑是否寻求帮助"
+            }
+      },
+      {
+            "id": 6,
+            "dimension": "EI",
+            "question": "您更喜欢的工作方式是：",
+            "options": {
+                  "E": "团队合作，经常开会讨论",
+                  "I": "独立工作，有时间深度思考"
+            }
+      },
+      {
+            "id": 7,
+            "dimension": "EI",
+            "question": "在聚会中，您通常：",
+            "options": {
+                  "E": "认识很多新朋友",
+                  "I": "只和熟悉的人交谈"
+            }
+      },
+      {
+            "id": 8,
+            "dimension": "EI",
+            "question": "您倾向于：",
+            "options": {
+                  "E": "先说话再思考",
+                  "I": "先思考再说话"
+            }
+      },
+      {
+            "id": 9,
+            "dimension": "EI",
+            "question": "您的朋友圈通常是：",
+            "options": {
+                  "E": "大而广，认识很多人",
+                  "I": "小而精，只有几个深交"
+            }
+      },
+      {
+            "id": 10,
+            "dimension": "EI",
+            "question": "当您一个人独处时，您感觉：",
+            "options": {
+                  "E": "有时会感到无聊",
+                  "I": "感到放松和充能"
+            }
+      },
+      {
+            "id": 11,
+            "dimension": "EI",
+            "question": "在团队讨论中，您通常：",
+            "options": {
+                  "E": "积极发言，表达观点",
+                  "I": "倾听多于表达，但心中有数"
+            }
+      },
+      {
+            "id": 12,
+            "dimension": "EI",
+            "question": "您更喜欢：",
+            "options": {
+                  "E": "边工作边听音乐或有人陪伴",
+                  "I": "安静的环境，独自专注"
+            }
+      },
+      {
+            "id": 13,
+            "dimension": "EI",
+            "question": "当您有好事发生时，您通常：",
+            "options": {
+                  "E": "立即告诉身边的人",
+                  "I": "先自己消化，再选择性分享"
+            }
+      },
+      {
+            "id": 14,
+            "dimension": "EI",
+            "question": "您认为理想的周末是：",
+            "options": {
+                  "E": "和朋友一起出去玩",
+                  "I": "一个人做喜欢的事"
+            }
+      },
+      {
+            "id": 15,
+            "dimension": "EI",
+            "question": "在陌生人面前，您通常：",
+            "options": {
+                  "E": "自然大方，容易打开话题",
+                  "I": "需要时间适应，不太主动"
+            }
+      },
+      {
+            "id": 16,
+            "dimension": "EI",
+            "question": "您更倾向于：",
+            "options": {
+                  "E": "经常打电话给朋友聊天",
+                  "I": "发信息或等对方联系"
+            }
+      },
+      {
+            "id": 17,
+            "dimension": "EI",
+            "question": "当您感到压力时，您通常：",
+            "options": {
+                  "E": "找人倾诉，寻求支持",
+                  "I": "独自消化，自我修复"
+            }
+      },
+      {
+            "id": 18,
+            "dimension": "EI",
+            "question": "您认为自己的能量来源是：",
+            "options": {
+                  "E": "与人在一起，社交活动",
+                  "I": "独处时间，内心世界"
+            }
+      },
+      {
+            "id": 19,
+            "dimension": "SN",
+            "question": "您更信任：",
+            "options": {
+                  "S": "实际经验和已知事实",
+                  "N": "直觉和可能性"
+            }
+      },
+      {
+            "id": 20,
+            "dimension": "SN",
+            "question": "您对新想法的态度是：",
+            "options": {
+                  "S": "需要看到实际应用才会接受",
+                  "N": "容易被创新想法吸引"
+            }
+      },
+      {
+            "id": 21,
+            "dimension": "SN",
+            "question": "您更喜欢的工作方式是：",
+            "options": {
+                  "S": "按部就班，关注细节和步骤",
+                  "N": "关注大局和未来可能性"
+            }
+      },
+      {
+            "id": 22,
+            "dimension": "SN",
+            "question": "您对新想法的态度是：",
+            "options": {
+                  "S": "需要看到实际应用才会接受",
+                  "N": "容易被创新想法吸引"
+            }
+      },
+      {
+            "id": 23,
+            "dimension": "SN",
+            "question": "您认为重要的是：",
+            "options": {
+                  "S": "实用性和可行性",
+                  "N": "创新性和独特性"
+            }
+      },
+      {
+            "id": 24,
+            "dimension": "SN",
+            "question": "您更擅长：",
+            "options": {
+                  "S": "记住具体细节和事实",
+                  "N": "看到整体模式和联系"
+            }
+      },
+      {
+            "id": 25,
+            "dimension": "SN",
+            "question": "当您学习新技能时，您通常：",
+            "options": {
+                  "S": "按步骤练习，注重细节",
+                  "N": "先理解原理，再看整体框架"
+            }
+      },
+      {
+            "id": 26,
+            "dimension": "SN",
+            "question": "您更喜欢的书是：",
+            "options": {
+                  "S": "实用指南类（如菜谱、手册）",
+                  "N": "科幻、哲学或理论类"
+            }
+      },
+      {
+            "id": 27,
+            "dimension": "SN",
+            "question": "当朋友向您描述一个问题时，您通常：",
+            "options": {
+                  "S": "关注具体细节和事实",
+                  "N": "关注背后的模式和原因"
+            }
+      },
+      {
+            "id": 28,
+            "dimension": "SN",
+            "question": "您认为自己是：",
+            "options": {
+                  "S": "务实的，注重现实",
+                  "N": "理想的，注重未来"
+            }
+      },
+      {
+            "id": 29,
+            "dimension": "SN",
+            "question": "在做决定时，您通常：",
+            "options": {
+                  "S": "基于过去的经验",
+                  "N": "基于未来的可能性"
+            }
+      },
+      {
+            "id": 30,
+            "dimension": "SN",
+            "question": "您更倾向于：",
+            "options": {
+                  "S": "喜欢常规和熟悉的环境",
+                  "N": "喜欢变化和新鲜感"
+            }
+      },
+      {
+            "id": 31,
+            "dimension": "SN",
+            "question": "当您进入一个新环境时，您首先注意：",
+            "options": {
+                  "S": "具体的物体、颜色和细节",
+                  "N": "整体的氛围和潜在的可能性"
+            }
+      },
+      {
+            "id": 32,
+            "dimension": "SN",
+            "question": "您认为自己的思维方式更偏向：",
+            "options": {
+                  "S": "具体和实际",
+                  "N": "抽象和理论"
+            }
+      },
+      {
+            "id": 33,
+            "dimension": "SN",
+            "question": "当您计划旅行时，您通常：",
+            "options": {
+                  "S": "制定详细行程，预订所有住宿",
+                  "N": "只定大致方向，保留调整空间"
+            }
+      },
+      {
+            "id": 34,
+            "dimension": "SN",
+            "question": "您更信任哪种信息：",
+            "options": {
+                  "S": "可以直接观察和验证的",
+                  "N": "需要解读和推理的"
+            }
+      },
+      {
+            "id": 35,
+            "dimension": "SN",
+            "question": "您认为自己是：",
+            "options": {
+                  "S": "脚踏实地的人",
+                  "N": "有远见的人"
+            }
+      },
+      {
+            "id": 36,
+            "dimension": "SN",
+            "question": "当您看到一幅画时，您通常：",
+            "options": {
+                  "S": "注意画中的具体物体和细节",
+                  "N": "感受画中的意境和象征"
+            }
+      },
+      {
+            "id": 37,
+            "dimension": "TF",
+            "question": "做决定时，您更依赖：",
+            "options": {
+                  "T": "逻辑分析和客观事实",
+                  "F": "个人价值观和对他人的影响"
+            }
+      },
+      {
+            "id": 38,
+            "dimension": "TF",
+            "question": "当朋友遇到问题时，您通常：",
+            "options": {
+                  "T": "分析问题并提供解决方案",
+                  "F": "倾听并提供情感支持"
+            }
+      },
+      {
+            "id": 39,
+            "dimension": "TF",
+            "question": "在团队中，您认为：",
+            "options": {
+                  "T": "效率和结果最重要",
+                  "F": "团队和谐和成员感受最重要"
+            }
+      },
+      {
+            "id": 40,
+            "dimension": "TF",
+            "question": "面对冲突时，您通常：",
+            "options": {
+                  "T": "直接指出问题，寻求理性解决",
+                  "F": "考虑对方感受，寻求和谐解决"
+            }
+      },
+      {
+            "id": 41,
+            "dimension": "TF",
+            "question": "您更尊重：",
+            "options": {
+                  "T": "真理和公平",
+                  "F": "仁慈和同情"
+            }
+      },
+      {
+            "id": 42,
+            "dimension": "TF",
+            "question": "当您评价一个人时，您通常：",
+            "options": {
+                  "T": "基于能力和成就",
+                  "F": "基于品格和动机"
+            }
+      },
+      {
+            "id": 43,
+            "dimension": "TF",
+            "question": "在做决定时，您通常：",
+            "options": {
+                  "T": "优先考虑逻辑是否合理",
+                  "F": "优先考虑是否伤害他人"
+            }
+      },
+      {
+            "id": 44,
+            "dimension": "TF",
+            "question": "您认为更重要的是：",
+            "options": {
+                  "T": "说真话，即使不中听",
+                  "F": "维护关系，即使需要委婉"
+            }
+      },
+      {
+            "id": 45,
+            "dimension": "TF",
+            "question": "当您看到不公正的事情时，您通常：",
+            "options": {
+                  "T": "分析原委，寻求制度解决",
+                  "F": "感同身受，寻求人文关怀"
+            }
+      },
+      {
+            "id": 46,
+            "dimension": "TF",
+            "question": "您更容易被哪种电影打动：",
+            "options": {
+                  "T": "逻辑严密的悬疑片",
+                  "F": "情感丰富的剧情片"
+            }
+      },
+      {
+            "id": 47,
+            "dimension": "TF",
+            "question": "当您收到批评时，您通常：",
+            "options": {
+                  "T": "分析批评是否合理",
+                  "F": "感受批评背后的情绪"
+            }
+      },
+      {
+            "id": 48,
+            "dimension": "TF",
+            "question": "您认为领导者的首要任务是：",
+            "options": {
+                  "T": "制定清晰的目标和策略",
+                  "F": "激励团队和关心成员"
+            }
+      },
+      {
+            "id": 49,
+            "dimension": "TF",
+            "question": "当您购买产品时，您更看重：",
+            "options": {
+                  "T": "功能和性价比",
+                  "F": "品牌价值和情感共鸣"
+            }
+      },
+      {
+            "id": 50,
+            "dimension": "TF",
+            "question": "您认为自己在做决定时：",
+            "options": {
+                  "T": "过于理性，可能忽略感受",
+                  "F": "过于感性，可能缺乏客观"
+            }
+      },
+      {
+            "id": 51,
+            "dimension": "TF",
+            "question": "当团队意见分歧时，您通常：",
+            "options": {
+                  "T": "推动基于数据的决策",
+                  "F": "推动基于共识的决策"
+            }
+      },
+      {
+            "id": 52,
+            "dimension": "TF",
+            "question": "您认为更有效的沟通方式是：",
+            "options": {
+                  "T": "直接表达观点和逻辑",
+                  "F": "先建立关系再表达观点"
+            }
+      },
+      {
+            "id": 53,
+            "dimension": "TF",
+            "question": "当您学习时，您通常：",
+            "options": {
+                  "T": "关注逻辑结构和因果关系",
+                  "F": "关注案例和情感共鸣"
+            }
+      },
+      {
+            "id": 54,
+            "dimension": "TF",
+            "question": "您认为自己的决策风格是：",
+            "options": {
+                  "T": "冷静理性，基于分析",
+                  "F": "温暖人性化，基于价值"
+            }
+      },
+      {
+            "id": 55,
+            "dimension": "JP",
+            "question": "您的生活方式更偏向：",
+            "options": {
+                  "J": "有计划、有条理",
+                  "P": "随性、灵活"
+            }
+      },
+      {
+            "id": 56,
+            "dimension": "JP",
+            "question": "面对截止日期时，您通常：",
+            "options": {
+                  "J": "提前完成，不喜欢拖延",
+                  "P": "在截止前冲刺，喜欢压力下的效率"
+            }
+      },
+      {
+            "id": 57,
+            "dimension": "JP",
+            "question": "您对工作环境的偏好是：",
+            "options": {
+                  "J": "整洁有序，事物各归其位",
+                  "P": "随意舒适，创意高于秩序"
+            }
+      },
+      {
+            "id": 58,
+            "dimension": "JP",
+            "question": "制定计划时，您：",
+            "options": {
+                  "J": "喜欢详细规划每个步骤",
+                  "P": "只定大致方向，保留调整空间"
+            }
+      },
+      {
+            "id": 59,
+            "dimension": "JP",
+            "question": "您对未知事物的态度是：",
+            "options": {
+                  "J": "感到不安，希望能控制",
+                  "P": "感到兴奋，视其为冒险"
+            }
+      },
+      {
+            "id": 60,
+            "dimension": "JP",
+            "question": "当您有任务时，您通常：",
+            "options": {
+                  "J": "列出清单，按计划执行",
+                  "P": "凭感觉做事，灵活调整"
+            }
+      },
+      {
+            "id": 61,
+            "dimension": "JP",
+            "question": "您更喜欢：",
+            "options": {
+                  "J": "提前预约和安排",
+                  "P": "随兴而至，临时决定"
+            }
+      },
+      {
+            "id": 62,
+            "dimension": "JP",
+            "question": "您的桌面/房间通常：",
+            "options": {
+                  "J": "整洁有序，物品归类",
+                  "P": "杂乱但有自己的逻辑"
+            }
+      },
+      {
+            "id": 63,
+            "dimension": "JP",
+            "question": "当您做决定时，您通常：",
+            "options": {
+                  "J": "希望尽快确定，不再变动",
+                  "P": "保留选项，随时调整"
+            }
+      },
+      {
+            "id": 64,
+            "dimension": "JP",
+            "question": "您认为自己是：",
+            "options": {
+                  "J": "守时的人，不喜欢迟到",
+                  "P": "弹性时间，迟到也无妨"
+            }
+      },
+      {
+            "id": 65,
+            "dimension": "JP",
+            "question": "当您旅行时，您通常：",
+            "options": {
+                  "J": "提前规划好所有细节",
+                  "P": "只定目的地，其他随意"
+            }
+      },
+      {
+            "id": 66,
+            "dimension": "JP",
+            "question": "您更倾向于：",
+            "options": {
+                  "J": "完成一个项目再开始下一个",
+                  "P": "同时开启多个项目"
+            }
+      },
+      {
+            "id": 67,
+            "dimension": "JP",
+            "question": "当您收到新信息时，您通常：",
+            "options": {
+                  "J": "希望先整理分类再处理",
+                  "P": "希望先探索再看如何应用"
+            }
+      },
+      {
+            "id": 68,
+            "dimension": "JP",
+            "question": "您认为自己的工作风格是：",
+            "options": {
+                  "J": "目标导向，追求完成",
+                  "P": "过程导向，追求体验"
+            }
+      },
+      {
+            "id": 69,
+            "dimension": "JP",
+            "question": "当规则不合理时，您通常：",
+            "options": {
+                  "J": "遵守规则，寻求正式修改",
+                  "P": "灵活处理，视情况打破规则"
+            }
+      },
+      {
+            "id": 70,
+            "dimension": "JP",
+            "question": "您更喜欢的工作环境是：",
+            "options": {
+                  "J": "稳定可预测",
+                  "P": "变化有挑战"
+            }
+      },
+      {
+            "id": 71,
+            "dimension": "JP",
+            "question": "当您做决定时，如果新信息出现，您通常：",
+            "options": {
+                  "J": "希望坚持原决定",
+                  "P": "愿意重新考虑"
+            }
+      },
+      {
+            "id": 72,
+            "dimension": "JP",
+            "question": "您认为自己的生活态度是：",
+            "options": {
+                  "J": "凡事预则立，不预则废",
+                  "P": "船到桥头自然直"
+            }
+      }
+];
     
     // 初始化
-    async function init() {
-      try {
-        const response = await fetch('questions.json');
-        questions = await response.json();
-      } catch (e) {
-        // 如果无法加载JSON，使用内置题目（精简版）
-        questions = generateFallbackQuestions();
-      }
+    function init() {
       render();
     }
 
-    function generateFallbackQuestions() {
-      // 生成72题的精简版（实际应该从JSON加载）
-      const dims = ['EI','SN','TF','JP'];
-      let qs = [];
-      for (let i = 1; i <= 72; i++) {
-        const dim = dims[Math.floor((i-1)/18)];
-        qs.push({
-          id: i,
-          dimension: dim,
-          question: `问题 ${i}（${dim}维度）`,
-          options: {
-            [dim[0]]: `选项A - ${dim[0]}倾向`,
-            [dim[1]]: `选项B - ${dim[1]}倾向`
-          }
-        });
-      }
-      return qs;
-    }
-
-    function render() {
+        function render() {
       const app = document.getElementById('app');
       
-      if (currentQuestion === 0 && Object.keys(answers).length === 0) {
+      if (currentQuestion === -1) {
         // 开始界面
         app.innerHTML = `
           <div class="start-screen">
@@ -306,7 +929,7 @@
     }
 
     function prevQuestion() {
-      if (currentQuestion > 0) {
+      if (currentQuestion > -1) {
         currentQuestion--;
         render();
       }
