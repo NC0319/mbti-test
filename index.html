@@ -663,8 +663,8 @@
             </div>
 
             <div class="action-buttons">
-                <button id="btn-start-test">开始测试</button>
-                <button class="secondary" id="btn-show-history">历史记录 (<span id="history-count">0</span>)</button>
+                <button onclick="window.startTest()">开始测试</button>
+                <button class="secondary" onclick="window.showHistory()">历史记录 (<span id="history-count">0</span>)</button>
             </div>
         </div>
 
@@ -750,8 +750,8 @@
 
             <div class="action-buttons">
                 <button class="success" id="btn-share">分享结果</button>
-                <button id="btn-show-history-result">历史记录</button>
-                <button class="secondary" onclick="restartTest()">重新测试</button>
+                <button onclick="window.showHistory()">历史记录</button>
+                <button class="secondary" onclick="window.restartTest()">重新测试</button>
             </div>
         </div>
 
@@ -777,7 +777,7 @@
             <div id="compare-content"></div>
 
             <div class="action-buttons" style="margin-top: 20px;">
-                <button id="btn-show-history-compare">返回记录</button>
+                <button onclick="window.showHistory()">返回记录</button>
                 <button class="secondary" onclick="showIntro()">返回首页</button>
             </div>
         </div>
