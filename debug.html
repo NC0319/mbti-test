@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>MBTI测试 - 调试版</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; }
+        button { padding: 15px 30px; margin: 10px; font-size: 1.1em; cursor: pointer; }
+        .page { display: none; padding: 20px; border: 1px solid #ccc; margin-top: 20px; }
+        .page.active { display: block; }
+    </style>
+</head>
+<body>
+    <h1>MBTI测试 - 调试版</h1>
+    
+    <button onclick="test1()">测试1: 直接切换页面</button>
+    <button onclick="test2()">测试2: 使用getElementById</button>
+    <button onclick="test3()">测试3: 使用showPage函数</button>
+    
+    <div id="page1" class="page">页面1内容</div>
+    <div id="page2" class="page">页面2内容</div>
+    <div id="page3" class="page">页面3内容</div>
+
+    <script>
+        // 测试1: 最直接的方式
+        function test1() {
+            alert('测试1被调用');
+            document.getElementById('page1').style.display = 'block';
+            document.getElementById('page2').style.display = 'none';
+            document.getElementById('page3').style.display = 'none';
+        }
+        
+        // 测试2: 使用classList
+        function test2() {
+            alert('测试2被调用');
+            document.getElementById('page1').classList.remove('active');
+            document.getElementById('page2').classList.add('active');
+        }
+        
+        // 测试3: 使用封装函数
+        function test3() {
+            alert('测试3被调用');
+            showPage('page3');
+        }
+        
+        function showPage(pageId) {
+            console.log('showPage被调用，参数:', pageId);
+            var pages = document.querySelectorAll('.page');
+            for (var i = 0; i < pages.length; i++) {
+                pages[i].classList.remove('active');
+            }
+            document.getElementById(pageId).classList.add('active');
+            console.log('页面切换完成');
+        }
+        
+        // 初始化
+        console.log('调试版已加载');
+    </script>
+</body>
+</html>
