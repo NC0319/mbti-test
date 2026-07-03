@@ -2101,8 +2101,20 @@ function restartFresh(){
 function openShare(){
   const type=curType||'INTJ';
   const db=poeticDB[type];
-  // 优先生成海报图
-  generatePoster(type, db);
+  
+  // 初始化 ShareModule
+  if(typeof ShareModule !== 'undefined') {
+    ShareModule.init({
+      type: type,
+      name: db.name || '未知',
+      desc: db.figure + ' · ' + (db.essence || '').substring(0, 50) + '...',
+      traits: db.talent ? db.talent.slice(0, 4) : ['理想主义', '有深度', '神秘', '有原则']
+    });
+    ShareModule.showShareModal();
+  } else {
+    // 降级：使用原有的海报生成逻辑
+    generatePoster(type, db);
+  }
 }
 
 function generatePoster(type, db){
@@ -2212,6 +2224,9 @@ window.prevQuestion=prevQuestion;
 </div>
 <!-- 屏幕外渲染容器 -->
 <div id="poster-canvas-wrap"></div>
+
+<!-- MBTI古韵人格 - 一键分享模块 -->
+<script src="share-module-v2.js"></script>
 
 </body>
 </html>
