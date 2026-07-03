@@ -522,9 +522,167 @@ html,body{
 }
 
 /* ===== 页面切换 ===== */
-.page{display:none}
-.page.active{display:block;animation:fadeIn 0.4s ease}
-@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.page{display:none;opacity:0}
+.page.active{
+  display:block;
+  animation:pageIn 0.4s cubic-bezier(0.22,1,0.36,1) forwards;
+}
+@keyframes pageIn{
+  from{opacity:0;transform:translateY(16px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* ===== 卡片交错入场 ===== */
+.card{
+  opacity:0;
+  transform:translateY(20px);
+}
+.card.anim-in{
+  animation:cardIn 0.5s cubic-bezier(0.22,1,0.36,1) forwards;
+}
+@keyframes cardIn{
+  from{opacity:0;transform:translateY(20px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* ===== 引导页大字呼吸动画 ===== */
+.intro-char{
+  animation:breathe 3s ease-in-out infinite;
+}
+@keyframes breathe{
+  0%,100%{transform:scale(1);opacity:1}
+  50%{transform:scale(1.04);opacity:0.9}
+}
+
+/* ===== 引导页装饰圆呼吸 ===== */
+.intro-illust{
+  animation:floatIn 0.8s cubic-bezier(0.22,1,0.36,1) forwards, float 4s ease-in-out 0.8s infinite;
+}
+@keyframes floatIn{
+  from{opacity:0;transform:scale(0.7)}
+  to{opacity:1;transform:scale(1)}
+}
+@keyframes float{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-6px)}
+}
+
+/* ===== 按钮呼吸提示 ===== */
+.start-btn{
+  animation:btnPulse 2.5s ease-in-out infinite;
+}
+@keyframes btnPulse{
+  0%,100%{box-shadow:0 4px 16px rgba(45,45,45,0.15)}
+  50%{box-shadow:0 4px 28px rgba(196,92,74,0.3)}
+}
+
+/* ===== 选项涟漪效果 ===== */
+.option{
+  position:relative;
+  overflow:hidden;
+}
+.option::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:var(--accent);
+  opacity:0;
+  transform:scale(0);
+  border-radius:12px;
+  transition:transform 0.4s,opacity 0.4s;
+}
+.option.ripple::after{
+  animation:ripple 0.5s ease-out;
+}
+@keyframes ripple{
+  0%{transform:scale(0);opacity:0.3}
+  100%{transform:scale(1.5);opacity:0}
+}
+
+/* ===== 选项选中 ===== */
+.option.selected{
+  background:var(--card);
+  border-color:var(--accent);
+  animation:selBounce 0.3s cubic-bezier(0.34,1.56,0.64,1);
+}
+@keyframes selBounce{
+  0%{transform:scale(1)}
+  50%{transform:scale(1.03)}
+  100%{transform:scale(1)}
+}
+
+/* ===== 进度条平滑 ===== */
+.dim-bar-fill{
+  transition:width 0.6s cubic-bezier(0.22,1,0.36,1) !important;
+}
+
+/* ===== 结果页揭示 ===== */
+.result-reveal{
+  opacity:0;
+  transform:translateY(12px);
+}
+.result-reveal.do{
+  animation:resultIn 0.5s cubic-bezier(0.22,1,0.36,1) forwards;
+}
+@keyframes resultIn{
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* ===== 四字人格放大揭示 ===== */
+.result-four{
+  animation:charReveal 0.8s cubic-bezier(0.22,1,0.36,1) forwards;
+}
+@keyframes charReveal{
+  0%{opacity:0;transform:scale(0.7)}
+  60%{transform:scale(1.05)}
+  100%{opacity:1;transform:scale(1)}
+}
+
+/* ===== 历史项悬浮 ===== */
+.history-item{
+  transition:transform 0.25s cubic-bezier(0.22,1,0.36,1),
+              box-shadow 0.25s cubic-bezier(0.22,1,0.36,1),
+              background 0.25s;
+}
+@media(hover:hover){
+  .history-item:hover{
+    transform:translateY(-3px);
+    box-shadow:0 6px 24px var(--shadow);
+    background:#FFFEF9;
+  }
+}
+.history-item:active{transform:scale(0.98)}
+
+/* ===== 恢复卡片滑入 ===== */
+#resume-card{
+  animation:slideUp 0.4s cubic-bezier(0.22,1,0.36,1);
+}
+@keyframes slideUp{
+  from{opacity:0;transform:translateY(16px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* ===== 导航项切换动画 ===== */
+.nav-item{
+  position:relative;
+}
+.nav-item::before{
+  content:'';
+  position:absolute;
+  top:50%;
+  left:50%;
+  width:0;
+  height:0;
+  background:var(--accent-soft);
+  border-radius:50%;
+  transform:translate(-50%,-50%);
+  transition:width 0.3s,height 0.3s;
+  z-index:-1;
+}
+.nav-item:active::before{
+  width:40px;
+  height:40px;
+}
 
 /* ===== 空状态 ===== */
 .empty-state{
@@ -869,8 +1027,18 @@ function saveHistory(type){
 function showPage(name){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-  document.getElementById('page-'+name).classList.add('active');
+  const pg=document.getElementById('page-'+name);
+  pg.classList.add('active');
   document.querySelector('.nav-item[data-page="'+name+'"]')?.classList.add('active');
+  // 触发卡片入场动画
+  requestAnimationFrame(()=>{
+    pg.querySelectorAll('.card').forEach((card,i)=>{
+      card.classList.remove('anim-in');
+      void card.offsetWidth; // reflow 触发重绘
+      card.style.animationDelay=i*0.08+'s';
+      card.classList.add('anim-in');
+    });
+  });
 }
 
 // ==================== 测试逻辑 ====================
@@ -917,9 +1085,16 @@ function showQuestion(){
   q.opts.forEach((opt,i)=>{
     const d=document.createElement('div');
     d.className='option';
+    d.style.opacity='0';
+    d.style.transform='translateY(10px)';
     d.innerHTML='<div class="option-text">'+opt+'</div>';
     d.onclick=()=>selectOption(i,q.dim);
     opts.appendChild(d);
+    setTimeout(()=>{
+      d.style.transition='opacity 0.3s ease,transform 0.3s ease';
+      d.style.opacity='1';
+      d.style.transform='translateY(0)';
+    },80+i*60);
   });
   // 如果是恢复的进度，且该题已作答过，显示选中状态
   const prev=answers.find(a=>a.q===curQ);
@@ -953,20 +1128,23 @@ function prevQuestion(){
 }
 
 function selectOption(idx,dim){
-  document.querySelectorAll('.option').forEach((el,i)=>el.classList.toggle('selected',i===idx));
+  const opts=document.querySelectorAll('.option');
+  opts.forEach(el=>el.classList.remove('ripple'));
+  opts[idx].classList.add('ripple','selected');
+  setTimeout(()=>opts[idx].classList.remove('ripple'),500);
   answers.push({q:curQ,choice:idx});
   const first=dim[0],second=dim[1];
   if(idx===0)scores[first]++;else scores[second]++;
-  saveProgress(); // 实时保存
+  saveProgress();
   setTimeout(()=>{
     curQ++;
     if(curQ<questions.length){
       showQuestion();
     }else{
-      clearProgress(); // 全部完成
+      clearProgress();
       showResult();
     }
-  },250);
+  },300);
 }
 
 function calcType(){
@@ -992,28 +1170,54 @@ function renderResult(type){
   ];
   
   document.getElementById('result-card').innerHTML=`
-    <div class="result-type-tag">${type} · ${db.name}</div>
-    <div class="result-four">${db.four}</div>
-    <div class="result-pinyin">${db.pinyin}</div>
-    <div class="result-figure">
-      <div class="result-avatar">人</div>
-      <div class="result-figure-name">${db.figure}</div>
+    <div class="result-reveal" style="animation-delay:0s">
+      <div class="result-type-tag">${type} · ${db.name}</div>
     </div>
-    <div class="result-poem">${db.poem}<br><span style="opacity:0.6">—— ${db.desc}</span></div>
-    <div class="dims-grid">
-      ${dims.map(d=>`
-        <div class="dim-item">
-          <div class="dim-label">${d.label} · ${d.opp}</div>
-          <div class="dim-value">${d.val} : ${d.oppVal}</div>
-          <div class="dim-bar"><div class="dim-bar-fill" style="width:${d.val/(d.val+d.oppVal)*100||50}%"></div></div>
-        </div>
-      `).join('')}
+    <div class="result-reveal" style="animation-delay:0.1s">
+      <div class="result-four">${db.four}</div>
     </div>
-    <div class="result-actions">
-      <button class="result-btn" onclick="showHistory()">历史</button>
-      <button class="result-btn primary" onclick="startTest()">重测</button>
+    <div class="result-reveal" style="animation-delay:0.2s">
+      <div class="result-pinyin">${db.pinyin}</div>
+    </div>
+    <div class="result-reveal" style="animation-delay:0.3s">
+      <div class="result-figure">
+        <div class="result-avatar">人</div>
+        <div class="result-figure-name">${db.figure}</div>
+      </div>
+    </div>
+    <div class="result-reveal" style="animation-delay:0.4s">
+      <div class="result-poem">${db.poem}<br><span style="opacity:0.6">—— ${db.desc}</span></div>
+    </div>
+    <div class="result-reveal" style="animation-delay:0.5s">
+      <div class="dims-grid">
+        ${dims.map(d=>`
+          <div class="dim-item">
+            <div class="dim-label">${d.label} · ${d.opp}</div>
+            <div class="dim-value">${d.val} : ${d.oppVal}</div>
+            <div class="dim-bar"><div class="dim-bar-fill" style="width:0%"></div></div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+    <div class="result-reveal" style="animation-delay:0.65s">
+      <div class="result-actions">
+        <button class="result-btn" onclick="showHistory()">历史</button>
+        <button class="result-btn primary" onclick="startTest()">重测</button>
+      </div>
     </div>
   `;
+  // 触发所有揭示动画
+  requestAnimationFrame(()=>{
+    const reveals=document.querySelectorAll('.result-reveal');
+    reveals.forEach(el=>el.classList.add('do'));
+    // 四维条延迟填充
+    setTimeout(()=>{
+      dims.forEach((d,i)=>{
+        const fill=document.querySelectorAll('.dim-bar-fill')[i];
+        if(fill) fill.style.width=(d.val/(d.val+d.oppVal)*100||50)+'%';
+      });
+    },800);
+  });
 }
 
 // ==================== 历史页 ====================
