@@ -806,6 +806,13 @@ html,body{
   display:block;
   animation:pageIn 0.4s cubic-bezier(0.22,1,0.36,1) forwards;
 }
+/* 结果页面需要独立滚动 */
+#page-result.active{
+  max-height:calc(100vh - 140px);
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+}
+#page-result.active::-webkit-scrollbar{display:none}
 @keyframes pageIn{
   from{opacity:0;transform:translateY(16px)}
   to{opacity:1;transform:translateY(0)}
@@ -1894,11 +1901,17 @@ function showResult(){
 
 function renderResult(type){
   const db=poeticDB[type];
+  // 确保 scores 有默认值，防止 NaN
+  const safeScore = (a, b) => {
+    const sum = (scores[a] || 0) + (scores[b] || 0);
+    return sum === 0 ? 50 : Math.round((scores[a] || 0) / sum * 100);
+  };
+  
   const dims=[
-    {code:'EI',label:'外向',opp:'内向',val:scores.E,oppVal:scores.I,pct:Math.round(scores.E/(scores.E+scores.I)*100)},
-    {code:'SN',label:'实感',opp:'直觉',val:scores.S,oppVal:scores.N,pct:Math.round(scores.S/(scores.S+scores.N)*100)},
-    {code:'TF',label:'思考',opp:'情感',val:scores.T,oppVal:scores.F,pct:Math.round(scores.T/(scores.T+scores.F)*100)},
-    {code:'JP',label:'判断',opp:'知觉',val:scores.J,oppVal:scores.P,pct:Math.round(scores.J/(scores.J+scores.P)*100)}
+    {code:'EI',label:'外向',opp:'内向',val:scores.E||0,oppVal:scores.I||0,pct:safeScore('E','I')},
+    {code:'SN',label:'实感',opp:'直觉',val:scores.S||0,oppVal:scores.N||0,pct:safeScore('S','N')},
+    {code:'TF',label:'思考',opp:'情感',val:scores.T||0,oppVal:scores.F||0,pct:safeScore('T','F')},
+    {code:'JP',label:'判断',opp:'知觉',val:scores.J||0,oppVal:scores.P||0,pct:safeScore('J','P')}
   ];
   
   // 生成 4 维雷达图 SVG
