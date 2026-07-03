@@ -575,8 +575,9 @@ html,body{
       <div class="test-step" id="test-step">1 / 93</div>
       <div class="test-progress" id="test-progress"></div>
     </div>
-    <div style="text-align:right;margin-bottom:8px">
-      <span onclick="pauseTest()" style="font-size:11px;color:var(--ink-muted);letter-spacing:1px;cursor:pointer;opacity:0.6">⏸ 暂停保存</span>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <span id="btn-prev" onclick="prevQuestion()" style="font-size:12px;color:var(--ink-muted);letter-spacing:1px;cursor:pointer;opacity:0.5;transition:all 0.3s">← 上一题</span>
+      <span onclick="pauseTest()" style="font-size:11px;color:var(--ink-muted);letter-spacing:1px;cursor:pointer;opacity:0.6">⏸ 暂停</span>
     </div>
     <div class="question-main">
       <div class="question-dim" id="question-dim">外向 · 内向</div>
@@ -889,7 +890,35 @@ function showQuestion(){
     d.onclick=()=>selectOption(i,q.dim);
     opts.appendChild(d);
   });
+  // 如果是恢复的进度，且该题已作答过，显示选中状态
+  const prev=answers.find(a=>a.q===curQ);
+  if(prev){
+    document.querySelectorAll('.option').forEach((el,i)=>el.classList.toggle('selected',i===prev.choice));
+  }
+  // 上一题按钮状态
+  const prevBtn=document.getElementById('btn-prev');
+  if(curQ===0){
+    prevBtn.style.opacity='0.3';
+    prevBtn.style.cursor='not-allowed';
+  }else{
+    prevBtn.style.opacity='0.7';
+    prevBtn.style.cursor='pointer';
+  }
   updateProgress();
+}
+
+function prevQuestion(){
+  if(curQ===0)return;
+  // 回退：弹出一条已答的记录，扣分
+  const last=answers.pop();
+  if(last){
+    const q=questions[last.q];
+    const first=q.dim[0],second=q.dim[1];
+    if(last.choice===0)scores[first]--;else scores[second]--;
+  }
+  curQ--;
+  saveProgress();
+  showQuestion();
 }
 
 function selectOption(idx,dim){
@@ -994,6 +1023,7 @@ window.rerenderResult=rerenderResult;
 window.resumeTest=resumeTest;
 window.pauseTest=pauseTest;
 window.discardProgress=discardProgress;
+window.prevQuestion=prevQuestion;
 </script>
 </body>
 </html>
