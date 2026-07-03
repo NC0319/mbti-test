@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>识己 · MBTI古韵人格</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Cormorant+Garamond:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
@@ -1019,6 +1020,106 @@ html,body{
   .result-four{font-size:34px}
   .section-title,.poem-list-title{font-size:12px;letter-spacing:3px}
 }
+
+/* ===== 分享海报 ===== */
+#share-poster{
+  position:fixed;top:0;left:0;width:100vw;height:100vh;
+  background:rgba(0,0,0,0.85);display:none;justify-content:center;align-items:center;
+  z-index:9999;padding:20px;box-sizing:border-box;
+}
+#share-poster.active{display:flex}
+#share-poster .poster-wrap{
+  width:min(90vw,400px);background:var(--card);border-radius:16px;
+  overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.3);
+  display:flex;flex-direction:column;max-height:90vh;
+}
+#share-poster .poster-preview{
+  width:100%;object-fit:contain;background:var(--bg);display:block;
+}
+#share-poster .poster-actions{
+  display:flex;gap:10px;padding:16px;
+}
+#share-poster .poster-actions button{
+  flex:1;padding:12px;border:none;border-radius:10px;font-size:15px;
+  font-family:var(--font-cn);cursor:pointer;
+}
+#share-poster .poster-actions .btn-save{background:var(--accent);color:#fff}
+#share-poster .poster-actions .btn-cancel{background:var(--accent-soft);color:var(--ink)}
+#share-poster .poster-loading{
+  padding:60px 20px;text-align:center;color:var(--ink-muted);font-size:14px;
+}
+
+/* 海报画布（屏幕外渲染用） */
+#poster-canvas-wrap{
+  position:fixed;left:-9999px;top:-9999px;width:375px;
+  background:var(--card);overflow:hidden;
+}
+.poster-inner{
+  width:375px;min-height:667px;background:linear-gradient(170deg,#FAF7F2 0%,#F5F0E8 40%,#EDE6D8 100%);
+  padding:32px 24px 28px;display:flex;flex-direction:column;align-items:center;
+  box-sizing:border-box;position:relative;overflow:hidden;
+}
+.poster-inner::before{
+  content:'';position:absolute;top:-60px;right:-60px;
+  width:200px;height:200px;border-radius:50%;
+  background:radial-gradient(circle,rgba(196,92,74,0.08) 0%,transparent 70%);
+}
+.poster-inner::after{
+  content:'';position:absolute;bottom:-40px;left:-40px;
+  width:160px;height:160px;border-radius:50%;
+  background:radial-gradient(circle,rgba(184,160,122,0.12) 0%,transparent 70%);
+}
+.poster-brand{
+  font-size:11px;letter-spacing:4px;color:var(--gold);margin-bottom:18px;
+  font-family:var(--font-en);text-transform:uppercase;
+}
+.poster-type{
+  font-size:52px;font-weight:700;color:var(--ink);letter-spacing:6px;
+  font-family:var(--font-en);line-height:1;margin-bottom:6px;
+}
+.poster-four{
+  font-size:20px;color:var(--accent);font-weight:600;
+  letter-spacing:8px;margin-bottom:4px;
+}
+.poster-name{
+  font-size:13px;color:var(--ink-muted);margin-bottom:22px;
+  letter-spacing:2px;
+}
+.poster-divider{
+  width:60px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  margin-bottom:22px;
+}
+.poster-poem{
+  font-size:16px;color:var(--ink);line-height:2;
+  text-align:center;margin-bottom:18px;
+  font-style:italic;max-width:280px;
+}
+.poster-figure{
+  font-size:12px;color:var(--gold);margin-bottom:20px;
+  letter-spacing:2px;
+}
+.poster-interpret{
+  font-size:12px;color:var(--ink-light);line-height:1.8;
+  text-align:center;max-width:300px;margin-bottom:24px;
+  padding:0 10px;
+}
+.poster-qr-area{
+  display:flex;align-items:center;gap:14px;
+  padding:16px 20px;background:rgba(255,255,255,0.7);
+  border-radius:12px;margin-top:auto;width:100%;box-sizing:border-box;
+}
+.poster-qr-code{
+  width:72px;height:72px;flex-shrink:0;
+  background:#fff;border-radius:8px;display:flex;
+  align-items:center;justify-content:center;
+  border:1px solid var(--accent-soft);
+}
+.poster-qr-code canvas,.poster-qr-code img{width:64px!important;height:64px!important}
+.poster-url-text{
+  font-size:11px;color:var(--ink-muted);line-height:1.6;
+}
+.poster-url-text strong{color:var(--accent);font-size:12px}
+
 </style>
 </head>
 <body>
@@ -2000,22 +2101,85 @@ function restartFresh(){
 function openShare(){
   const type=curType||'INTJ';
   const db=poeticDB[type];
-  const text=`我在《识己·知人》测出自己是【${db.four}】·${type}（${db.name}）
-${db.poem}
-—— 与我最同频的是 ${db.best.join('、')}
-测一下你是哪种人格：https://nc0319.github.io/mbti-test/`;
-  if(navigator.share){
-    navigator.share({title:'识己·知人',text:text}).catch(()=>copyShare(text));
-  }else{
-    copyShare(text);
-  }
+  // 优先生成海报图
+  generatePoster(type, db);
 }
 
-function copyShare(text){
+function generatePoster(type, db){
+  const wrap=document.getElementById('poster-canvas-wrap');
+  // 构建海报内部 HTML
+  wrap.innerHTML='<div class="poster-inner" id="poster-inner">'+
+    '<div class="poster-brand">SHI JI · ZHI REN</div>'+
+    '<div class="poster-type">'+type+'</div>'+
+    '<div class="poster-four">'+db.four+'</div>'+
+    '<div class="poster-name">'+db.name+'</div>'+
+    '<div class="poster-divider"></div>'+
+    '<div class="poster-poem">'+db.poem+'</div>'+
+    '<div class="poster-figure">—— '+db.figure+'</div>'+
+    '<div class="poster-interpret">'+(db.essence||'').substring(0,80)+'…</div>'+
+    '<div class="poster-qr-area">'+
+      '<div class="poster-qr-code" id="poster-qr"></div>'+
+      '<div class="poster-url-text">'+
+        '<strong>识己 · 知人</strong><br>测测你的诗词人格<br>nc0319.github.io/mbti-test</div>'+
+    '</div>'+
+  '</div>';
+  // 生成 QR 码
+  try{
+    var qrDiv=document.getElementById('poster-qr');
+    qrDiv.innerHTML='';
+    // 用 API 生成 QR，转为 img
+    var qrUrl='https://api.qrserver.com/v1/create-qr-code/?size=128x128&data='+encodeURIComponent('https://nc0319.github.io/mbti-test/');
+    var img=document.createElement('img');
+    img.src=qrUrl;
+    img.style='width:64px;height:64px;border-radius:6px';
+    img.crossOrigin='anonymous';
+    qrDiv.appendChild(img);
+  }catch(e){}
+  // 显示 loading
+  document.getElementById('share-poster').classList.add('active');
+  document.getElementById('poster-loading').style.display='block';
+  document.getElementById('poster-preview').style.display='none';
+  document.getElementById('poster-actions').style.display='none';
+  // 等 DOM + QR 图加载
+  setTimeout(function(){
+    var inner=document.getElementById('poster-inner');
+    html2canvas(inner,{
+      scale:2,useCORS:true,backgroundColor:null,
+      width:375,windowWidth:375
+    }).then(function(canvas){
+      var dataUrl=canvas.toDataURL('image/png');
+      var preview=document.getElementById('poster-preview');
+      preview.src=dataUrl;
+      preview.style.display='block';
+      document.getElementById('poster-loading').style.display='none';
+      document.getElementById('poster-actions').style.display='flex';
+      window._posterDataUrl=dataUrl;
+    }).catch(function(){
+      // 降级：复制文字
+      document.getElementById('share-poster').classList.remove('active');
+      copyShareFallback(type, db);
+    });
+  },800);
+}
+
+function savePoster(){
+  if(!window._posterDataUrl) return;
+  var a=document.createElement('a');
+  a.href=window._posterDataUrl;
+  a.download='我的MBTI诗词人格_'+curType+'.png';
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+}
+
+function closePoster(){
+  document.getElementById('share-poster').classList.remove('active');
+}
+
+function copyShareFallback(type, db){
+  var text='我在《识己·知人》测出自己是【'+(db.four||'')+'】·'+type+'（'+(db.name||'')+'）\n'+(db.poem||'')+'\n测一下你是哪种人格：https://nc0319.github.io/mbti-test/';
   if(navigator.clipboard){
-    navigator.clipboard.writeText(text).then(()=>alert('结果已复制，去分享给朋友吧'));
+    navigator.clipboard.writeText(text).then(function(){alert('结果已复制，去分享给朋友吧');});
   }else{
-    const ta=document.createElement('textarea');
+    var ta=document.createElement('textarea');
     ta.value=text;ta.style.position='fixed';ta.style.opacity='0';
     document.body.appendChild(ta);ta.select();
     try{document.execCommand('copy');alert('结果已复制，去分享给朋友吧');}catch(e){}
@@ -2034,5 +2198,20 @@ window.pauseTest=pauseTest;
 window.discardProgress=discardProgress;
 window.prevQuestion=prevQuestion;
 </script>
+
+<!-- 海报弹窗 -->
+<div id="share-poster">
+  <div class="poster-wrap">
+    <div class="poster-loading" id="poster-loading">正在生成海报…</div>
+    <img class="poster-preview" id="poster-preview" style="display:none" alt="分享海报">
+    <div class="poster-actions" id="poster-actions" style="display:none">
+      <button class="btn-cancel" onclick="closePoster()">取消</button>
+      <button class="btn-save" onclick="savePoster()">保存图片</button>
+    </div>
+  </div>
+</div>
+<!-- 屏幕外渲染容器 -->
+<div id="poster-canvas-wrap"></div>
+
 </body>
 </html>
