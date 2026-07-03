@@ -1,0 +1,2240 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>识己 · MBTI古韵人格</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Cormorant+Garamond:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#F5F0E8;
+  --bg-warm:#FAF7F2;
+  --card:#FFFFFF;
+  --ink:#2D2D2D;
+  --ink-light:#6B6B6B;
+  --ink-muted:#9B9B9B;
+  --accent:#C45C4A;
+  --accent-soft:#E8D5D2;
+  --gold:#B8A07A;
+  --shadow:rgba(0,0,0,0.06);
+  --shadow-soft:rgba(0,0,0,0.04);
+}
+
+html,body{
+  min-height:100vh;
+  min-height:100dvh; /* 动态视口高度，覆盖地址栏 */
+  font-family:'Noto Serif SC','STSong','SimSun',serif;
+  background:var(--bg);
+  color:var(--ink);
+  overflow:hidden;
+  /* iPhone 刘海屏 */
+  padding-top:env(safe-area-inset-top);
+  padding-left:env(safe-area-inset-left);
+  padding-right:env(safe-area-inset-right);
+  /* 禁止双击缩放 */
+  touch-action:manipulation;
+  -webkit-text-size-adjust:100%;
+}
+
+/* ===== 页面容器 ===== */
+.app{
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  max-width:480px;
+  margin:0 auto;
+  position:relative;
+}
+
+/* ===== 顶部标题区 ===== */
+.header{
+  text-align:center;
+  padding:24px 20px 16px;
+}
+.app-title{
+  font-size:13px;
+  letter-spacing:8px;
+  color:var(--ink-light);
+  font-weight:500;
+}
+
+/* ===== 主内容区（可滚动） ===== */
+.main{
+  flex:1;
+  overflow-y:auto;
+  padding:0 20px 20px;
+  -webkit-overflow-scrolling:touch;
+}
+.main::-webkit-scrollbar{display:none}
+
+/* ===== 卡片 ===== */
+.card{
+  background:var(--card);
+  border-radius:20px;
+  box-shadow:0 4px 24px var(--shadow),0 1px 4px var(--shadow-soft);
+  padding:28px;
+  margin-bottom:16px;
+  position:relative;
+}
+
+/* ===== 引导页 ===== */
+.intro-card{
+  text-align:center;
+  padding:40px 28px;
+}
+.intro-step{
+  font-size:12px;
+  color:var(--ink-muted);
+  letter-spacing:2px;
+  margin-bottom:20px;
+}
+.intro-char{
+  font-size:72px;
+  font-weight:700;
+  color:var(--ink);
+  line-height:1;
+  margin-bottom:8px;
+  font-family:'Noto Serif SC',serif;
+}
+.intro-pinyin{
+  font-size:14px;
+  color:var(--ink-muted);
+  letter-spacing:4px;
+  font-family:'Cormorant Garamond',serif;
+  margin-bottom:24px;
+}
+.intro-illust{
+  width:120px;
+  height:120px;
+  margin:0 auto 24px;
+  background:linear-gradient(135deg,var(--accent-soft) 0%,var(--bg-warm) 100%);
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:48px;
+}
+.intro-poem{
+  font-size:13px;
+  color:var(--ink-light);
+  line-height:2;
+  letter-spacing:1px;
+  margin-bottom:8px;
+}
+.intro-poem-vertical{
+  writing-mode:vertical-rl;
+  text-orientation:upright;
+  height:80px;
+  margin:0 auto;
+  font-size:12px;
+  color:var(--ink-muted);
+  letter-spacing:4px;
+}
+
+/* ===== 开始按钮 ===== */
+.start-btn{
+  display:block;
+  width:100%;
+  margin-top:28px;
+  padding:16px;
+  background:var(--ink);
+  color:var(--card);
+  border:none;
+  border-radius:12px;
+  font-family:'Noto Serif SC',serif;
+  font-size:15px;
+  letter-spacing:6px;
+  cursor:pointer;
+  transition:all 0.3s ease;
+}
+.start-btn:hover{background:var(--accent);transform:translateY(-2px)}
+.start-btn:active{transform:translateY(0)}
+
+/* ===== 测试页 ===== */
+.test-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:20px;
+}
+.test-step{
+  font-size:12px;
+  color:var(--ink-muted);
+  letter-spacing:2px;
+}
+.test-progress{
+  display:flex;
+  gap:6px;
+}
+.progress-dot{
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:var(--accent-soft);
+  transition:all 0.3s;
+}
+.progress-dot.active{background:var(--accent);transform:scale(1.2)}
+
+.question-main{
+  text-align:center;
+  padding:20px 0;
+}
+.question-dim{
+  font-size:11px;
+  color:var(--accent);
+  letter-spacing:3px;
+  margin-bottom:16px;
+}
+.question-text{
+  font-size:18px;
+  line-height:1.8;
+  color:var(--ink);
+  font-weight:500;
+}
+.question-sub{
+  font-size:12px;
+  color:var(--ink-muted);
+  margin-top:12px;
+  letter-spacing:1px;
+}
+
+/* 选项 */
+.options{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  margin-top:8px;
+}
+.option{
+  background:var(--bg-warm);
+  border:1px solid transparent;
+  border-radius:12px;
+  padding:16px 20px;
+  text-align:left;
+  cursor:pointer;
+  transition:all 0.25s ease;
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.option::before{
+  content:'';
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:var(--accent-soft);
+  flex-shrink:0;
+  transition:all 0.25s;
+}
+.option:hover{
+  background:var(--card);
+  border-color:var(--accent-soft);
+  transform:translateX(4px);
+}
+.option:hover::before{background:var(--accent)}
+.option.selected{
+  background:var(--card);
+  border-color:var(--accent);
+}
+.option.selected::before{
+  background:var(--accent);
+  box-shadow:0 0 0 4px var(--accent-soft);
+}
+.option-text{
+  font-size:14px;
+  line-height:1.6;
+  color:var(--ink);
+}
+
+/* ===== 结果页 ===== */
+.result-card{
+  text-align:center;
+  padding:32px 24px;
+}
+.result-type-tag{
+  font-size:12px;
+  color:var(--ink-muted);
+  letter-spacing:3px;
+  margin-bottom:16px;
+}
+.result-four{
+  font-size:64px;
+  font-weight:700;
+  color:var(--ink);
+  letter-spacing:8px;
+  line-height:1;
+  margin-bottom:8px;
+}
+.result-pinyin{
+  font-size:13px;
+  color:var(--ink-muted);
+  letter-spacing:6px;
+  font-family:'Cormorant Garamond',serif;
+  margin-bottom:20px;
+}
+.result-figure{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  margin-bottom:20px;
+}
+.result-avatar{
+  width:48px;
+  height:48px;
+  border-radius:50%;
+  background:linear-gradient(135deg,var(--accent-soft),var(--bg));
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:20px;
+}
+.result-figure-name{
+  font-size:16px;
+  font-weight:600;
+  color:var(--ink);
+  letter-spacing:4px;
+}
+.result-poem{
+  font-size:13px;
+  color:var(--ink-light);
+  font-style:italic;
+  line-height:1.8;
+  margin-bottom:20px;
+  padding:0 20px;
+}
+
+/* 四维 */
+.dims-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin:20px 0;
+}
+.dim-item{
+  background:var(--bg-warm);
+  border-radius:12px;
+  padding:14px;
+  text-align:center;
+}
+.dim-label{
+  font-size:10px;
+  color:var(--ink-muted);
+  letter-spacing:2px;
+  margin-bottom:6px;
+}
+.dim-value{
+  font-size:14px;
+  color:var(--ink);
+  font-weight:500;
+}
+.dim-bar{
+  height:3px;
+  background:var(--accent-soft);
+  border-radius:2px;
+  margin-top:8px;
+  overflow:hidden;
+}
+.dim-bar-fill{
+  height:100%;
+  background:var(--accent);
+  border-radius:2px;
+}
+
+/* ===== 详情 ===== */
+.detail-section{
+  text-align:left;
+  margin-bottom:16px;
+}
+.detail-section:last-child{margin-bottom:0}
+.detail-title{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-size:11px;
+  color:var(--accent);
+  letter-spacing:3px;
+  margin-bottom:8px;
+}
+.detail-title::before{
+  content:'';
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:var(--accent);
+}
+.detail-text{
+  font-size:clamp(12px,3.5vw,13px);
+  color:var(--ink-light);
+  line-height:1.8;
+  padding-left:14px;
+  border-left:1px solid var(--accent-soft);
+}
+
+/* ===== 按钮组 ===== */
+.result-actions{
+  display:flex;
+  gap:10px;
+  margin-top:20px;
+}
+.result-btn{
+  flex:1;
+  padding:clamp(12px,3.5vw,14px);
+  background:var(--bg-warm);
+  border:1px solid transparent;
+  border-radius:10px;
+  font-family:'Noto Serif SC',serif;
+  font-size:clamp(12px,3.5vw,13px);
+  color:var(--ink);
+  letter-spacing:2px;
+  cursor:pointer;
+  transition:all 0.3s;
+  -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;
+}
+.result-btn:active{transform:scale(0.97)}
+@media(hover:hover){
+  .result-btn:hover{background:var(--card);border-color:var(--accent-soft)}
+}
+.result-btn.primary{background:var(--ink);color:var(--card)}
+.result-btn.primary:hover{background:var(--accent)}
+
+/* ===== 雷达图 ===== */
+.radar-wrap{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  margin:24px 0 16px;
+  padding:10px;
+  background:rgba(255,255,255,0.3);
+  border-radius:16px;
+  border:1px solid rgba(196,92,74,0.12);
+}
+.radar-svg{
+  width:100%;
+  max-width:240px;
+  height:auto;
+  display:block;
+}
+.radar-grid{
+  stroke:var(--ink-muted);
+  stroke-width:0.5;
+  stroke-opacity:0.3;
+  stroke-dasharray:2 2;
+}
+.radar-axis{
+  stroke:var(--ink-muted);
+  stroke-width:0.5;
+  stroke-opacity:0.4;
+}
+.radar-shape{
+  fill:rgba(196,92,74,0.18);
+  stroke:var(--accent);
+  stroke-width:1.5;
+  stroke-linejoin:round;
+  animation:radar-draw 1.2s ease-out forwards;
+  transform-origin:110px 110px;
+  stroke-dasharray:600;
+  stroke-dashoffset:600;
+}
+@keyframes radar-draw{
+  to{stroke-dashoffset:0;fill-opacity:1}
+}
+.radar-label{
+  font-family:serif;
+  font-size:9px;
+  fill:var(--ink-light);
+  letter-spacing:1px;
+}
+.radar-pct{
+  font-family:serif;
+  font-size:11px;
+  fill:var(--accent);
+  font-weight:bold;
+  letter-spacing:0.5px;
+}
+
+/* ===== 区块标题 ===== */
+.section-title{
+  text-align:center;
+  font-family:serif;
+  font-size:14px;
+  color:var(--ink);
+  letter-spacing:6px;
+  margin:28px 0 12px;
+  font-weight:normal;
+}
+.section-content{
+  font-family:serif;
+  font-size:14px;
+  line-height:1.95;
+  color:var(--ink-light);
+  text-align:left;
+  letter-spacing:1.2px;
+  text-indent:2em;
+  padding:0 4px;
+}
+.essence{
+  font-style:italic;
+  text-align:left;
+}
+
+/* ===== 双列天赋/成长 ===== */
+.dual-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin-top:8px;
+}
+.dual-item{
+  background:rgba(255,255,255,0.35);
+  border:1px solid rgba(196,92,74,0.15);
+  border-radius:12px;
+  padding:14px 12px;
+}
+.dual-label{
+  font-family:serif;
+  font-size:12px;
+  color:var(--ink);
+  letter-spacing:3px;
+  margin-bottom:10px;
+  text-align:center;
+}
+.dual-list{display:flex;flex-direction:column;gap:6px}
+.dual-line{
+  font-family:serif;
+  font-size:12px;
+  color:var(--ink-light);
+  line-height:1.6;
+  letter-spacing:0.5px;
+}
+
+/* ===== 诗单 ===== */
+.poem-list-title{
+  font-family:serif;
+  font-size:14px;
+  color:var(--ink);
+  letter-spacing:6px;
+  text-align:center;
+  margin:28px 0 12px;
+  font-weight:normal;
+}
+.poem-list{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+.poem-card{
+  background:rgba(255,255,255,0.4);
+  border-left:3px solid var(--accent);
+  border-radius:8px;
+  padding:12px 14px;
+}
+.poem-card-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+  margin-bottom:6px;
+  padding-bottom:6px;
+  border-bottom:1px dashed rgba(196,92,74,0.15);
+}
+.poem-card-title{
+  font-family:serif;
+  font-size:13px;
+  color:var(--ink);
+  font-weight:bold;
+  letter-spacing:2px;
+}
+.poem-card-author{
+  font-family:serif;
+  font-size:11px;
+  color:var(--ink-muted);
+  letter-spacing:1px;
+}
+.poem-card-body{
+  font-family:serif;
+  font-size:13px;
+  color:var(--ink-light);
+  line-height:1.8;
+  letter-spacing:1.5px;
+}
+
+/* ===== 同类古人 ===== */
+.figures-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:8px;
+}
+.figure-card{
+  background:rgba(255,255,255,0.35);
+  border:1px solid rgba(196,92,74,0.12);
+  border-radius:12px;
+  padding:12px 10px;
+  text-align:center;
+}
+.figure-avatar{
+  width:36px;height:36px;
+  border-radius:50%;
+  background:var(--ink);
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:serif;
+  font-size:16px;
+  margin:0 auto 8px;
+  letter-spacing:0;
+}
+.figure-name{
+  font-family:serif;
+  font-size:13px;
+  color:var(--ink);
+  font-weight:bold;
+  letter-spacing:2px;
+  margin-bottom:4px;
+}
+.figure-desc{
+  font-family:serif;
+  font-size:11px;
+  color:var(--ink-muted);
+  line-height:1.5;
+  letter-spacing:0.5px;
+}
+
+/* ===== 关系匹配 ===== */
+.match-wrap{margin-top:8px}
+.match-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+.match-col{
+  background:rgba(255,255,255,0.4);
+  border:1px solid rgba(196,92,74,0.15);
+  border-radius:12px;
+  padding:14px 12px;
+}
+.match-col.good{border-color:rgba(122,139,108,0.3)}
+.match-tag{
+  font-family:serif;
+  font-size:12px;
+  color:var(--ink);
+  letter-spacing:3px;
+  text-align:center;
+  margin-bottom:10px;
+}
+.match-types{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  margin-bottom:10px;
+}
+.match-type{
+  display:block;
+  font-family:serif;
+  font-size:12px;
+  color:var(--ink-light);
+  background:rgba(196,92,74,0.08);
+  padding:6px 8px;
+  border-radius:6px;
+  letter-spacing:1px;
+  text-align:center;
+  cursor:pointer;
+  transition:all 0.2s;
+}
+.match-type:active{background:var(--accent);color:#fff}
+.match-desc{
+  font-family:serif;
+  font-size:11px;
+  color:var(--ink-muted);
+  line-height:1.6;
+  text-align:center;
+  letter-spacing:0.5px;
+}
+
+/* ===== 静夜思 ===== */
+.flaw-box{
+  font-family:serif;
+  text-align:center;
+  font-size:13px;
+  color:var(--ink);
+  letter-spacing:3px;
+  margin:32px 0 20px;
+  padding:20px 16px;
+  background:rgba(196,92,74,0.04);
+  border-top:1px solid var(--accent-soft);
+  border-bottom:1px solid var(--accent-soft);
+  line-height:1.8;
+}
+.flaw-box span{
+  display:block;
+  font-size:13px;
+  color:var(--ink-light);
+  margin-top:10px;
+  letter-spacing:1px;
+  line-height:2;
+  font-weight:normal;
+}
+
+/* ===== 底部导航 ===== */
+.nav{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:32px;
+  padding:16px 20px 24px;
+  background:var(--bg);
+}
+.nav-item{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:6px;
+  cursor:pointer;
+  opacity:0.4;
+  transition:all 0.3s;
+}
+.nav-item.active{opacity:1}
+.nav-item:hover{opacity:0.8}
+.nav-char{
+  font-size:16px;
+  color:var(--ink);
+  font-weight:500;
+}
+.nav-dot{
+  width:4px;
+  height:4px;
+  border-radius:50%;
+  background:var(--accent);
+  opacity:0;
+  transition:all 0.3s;
+}
+.nav-item.active .nav-dot{opacity:1}
+.nav-label{
+  font-size:9px;
+  color:var(--ink-muted);
+  letter-spacing:1px;
+}
+
+/* ===== 历史页 ===== */
+.history-list{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+.history-item{
+  background:var(--card);
+  border-radius:16px;
+  padding:16px 20px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  cursor:pointer;
+  transition:all 0.3s;
+  box-shadow:0 2px 8px var(--shadow-soft);
+}
+.history-item:hover{transform:translateY(-2px);box-shadow:0 4px 16px var(--shadow)}
+.history-left{display:flex;align-items:center;gap:16px}
+.history-type{
+  font-size:20px;
+  font-weight:600;
+  color:var(--ink);
+  font-family:'Cormorant Garamond',serif;
+}
+.history-name{
+  font-size:13px;
+  color:var(--ink-light);
+  letter-spacing:2px;
+}
+.history-date{
+  font-size:11px;
+  color:var(--ink-muted);
+}
+
+/* ===== 分享弹窗 ===== */
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.5);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  padding:env(safe-area-inset-top,20px) env(safe-area-inset-right,20px) env(safe-area-inset-bottom,20px) env(safe-area-inset-left,20px);
+  z-index:100;
+  backdrop-filter:blur(2px);
+  -webkit-backdrop-filter:blur(2px);
+}
+.modal.active{display:flex}
+.modal-card{
+  background:var(--card);
+  border-radius:20px;
+  padding:clamp(20px,6vw,28px);
+  max-width:clamp(280px,85vw,320px);
+  width:100%;
+  text-align:center;
+}
+.modal-title{
+  font-size:16px;
+  color:var(--ink);
+  letter-spacing:4px;
+  margin-bottom:16px;
+}
+.modal-text{
+  font-size:13px;
+  color:var(--ink-light);
+  line-height:2;
+  margin-bottom:20px;
+}
+.modal-close{
+  padding:12px 32px;
+  background:var(--bg-warm);
+  border:none;
+  border-radius:10px;
+  font-family:'Noto Serif SC',serif;
+  font-size:13px;
+  color:var(--ink);
+  cursor:pointer;
+}
+
+/* ===== 页面切换 ===== */
+.page{display:none;opacity:0}
+.page.active{
+  display:block;
+  animation:pageIn 0.4s cubic-bezier(0.22,1,0.36,1) forwards;
+}
+@keyframes pageIn{
+  from{opacity:0;transform:translateY(16px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* ===== 卡片交错入场 ===== */
+.card{
+  opacity:0;
+  transform:translateY(20px);
+}
+.card.anim-in{
+  animation:cardIn 0.5s cubic-bezier(0.22,1,0.36,1) forwards;
+}
+@keyframes cardIn{
+  from{opacity:0;transform:translateY(20px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* ===== 引导页大字呼吸动画 ===== */
+.intro-char{
+  animation:breathe 3s ease-in-out infinite;
+}
+@keyframes breathe{
+  0%,100%{transform:scale(1);opacity:1}
+  50%{transform:scale(1.04);opacity:0.9}
+}
+
+/* ===== 引导页装饰圆呼吸 ===== */
+.intro-illust{
+  animation:floatIn 0.8s cubic-bezier(0.22,1,0.36,1) forwards, float 4s ease-in-out 0.8s infinite;
+}
+@keyframes floatIn{
+  from{opacity:0;transform:scale(0.7)}
+  to{opacity:1;transform:scale(1)}
+}
+@keyframes float{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-6px)}
+}
+
+/* ===== 按钮呼吸提示 ===== */
+.start-btn{
+  animation:btnPulse 2.5s ease-in-out infinite;
+}
+@keyframes btnPulse{
+  0%,100%{box-shadow:0 4px 16px rgba(45,45,45,0.15)}
+  50%{box-shadow:0 4px 28px rgba(196,92,74,0.3)}
+}
+
+/* ===== 选项涟漪效果 ===== */
+.option{
+  position:relative;
+  overflow:hidden;
+}
+.option::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:var(--accent);
+  opacity:0;
+  transform:scale(0);
+  border-radius:12px;
+  transition:transform 0.4s,opacity 0.4s;
+}
+.option.ripple::after{
+  animation:ripple 0.5s ease-out;
+}
+@keyframes ripple{
+  0%{transform:scale(0);opacity:0.3}
+  100%{transform:scale(1.5);opacity:0}
+}
+
+/* ===== 选项选中 ===== */
+.option.selected{
+  background:var(--card);
+  border-color:var(--accent);
+  animation:selBounce 0.3s cubic-bezier(0.34,1.56,0.64,1);
+}
+@keyframes selBounce{
+  0%{transform:scale(1)}
+  50%{transform:scale(1.03)}
+  100%{transform:scale(1)}
+}
+
+/* ===== 进度条平滑 ===== */
+.dim-bar-fill{
+  transition:width 0.6s cubic-bezier(0.22,1,0.36,1) !important;
+}
+
+/* ===== 结果页揭示 ===== */
+.result-reveal{
+  opacity:0;
+  transform:translateY(12px);
+}
+.result-reveal.do{
+  animation:resultIn 0.5s cubic-bezier(0.22,1,0.36,1) forwards;
+}
+@keyframes resultIn{
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* ===== 四字人格放大揭示 ===== */
+.result-four{
+  animation:charReveal 0.8s cubic-bezier(0.22,1,0.36,1) forwards;
+}
+@keyframes charReveal{
+  0%{opacity:0;transform:scale(0.7)}
+  60%{transform:scale(1.05)}
+  100%{opacity:1;transform:scale(1)}
+}
+
+/* ===== 历史项悬浮 ===== */
+.history-item{
+  transition:transform 0.25s cubic-bezier(0.22,1,0.36,1),
+              box-shadow 0.25s cubic-bezier(0.22,1,0.36,1),
+              background 0.25s;
+}
+@media(hover:hover){
+  .history-item:hover{
+    transform:translateY(-3px);
+    box-shadow:0 6px 24px var(--shadow);
+    background:#FFFEF9;
+  }
+}
+.history-item:active{transform:scale(0.98)}
+
+/* ===== 恢复卡片滑入 ===== */
+#resume-card{
+  animation:slideUp 0.4s cubic-bezier(0.22,1,0.36,1);
+}
+@keyframes slideUp{
+  from{opacity:0;transform:translateY(16px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* ===== 导航项切换动画 ===== */
+.nav-item{
+  position:relative;
+}
+.nav-item::before{
+  content:'';
+  position:absolute;
+  top:50%;
+  left:50%;
+  width:0;
+  height:0;
+  background:var(--accent-soft);
+  border-radius:50%;
+  transform:translate(-50%,-50%);
+  transition:width 0.3s,height 0.3s;
+  z-index:-1;
+}
+.nav-item:active::before{
+  width:40px;
+  height:40px;
+}
+
+/* ===== 空状态 ===== */
+.empty-state{
+  text-align:center;
+  padding:clamp(40px,12vw,60px) 20px;
+  color:var(--ink-muted);
+}
+.empty-icon{
+  font-size:clamp(36px,10vw,48px);
+  margin-bottom:14px;
+  opacity:0.3;
+}
+.empty-text{
+  font-size:12px;
+  letter-spacing:2px;
+}
+
+/* ===== 平板/桌面适配 ===== */
+@media (min-width:600px){
+  .card{
+    border-radius:20px;
+    padding:clamp(24px,4vw,32px);
+    margin-bottom:16px;
+  }
+  .header{padding-top:clamp(20px,4vw,32px)}
+  .result-four{letter-spacing:12px}
+}
+
+/* ===== 大屏居中+背景 ===== */
+@media (min-width:768px){
+  body{background:#EDE8DF}
+  .app{
+    box-shadow:0 0 60px rgba(0,0,0,0.08);
+    border-left:1px solid rgba(0,0,0,0.04);
+    border-right:1px solid rgba(0,0,0,0.04);
+  }
+}
+
+/* 结果页响应式：手机小屏用单列 */
+@media (max-width:520px){
+  .dual-grid{grid-template-columns:1fr;gap:10px}
+  .figures-grid{grid-template-columns:1fr 1fr;gap:8px}
+  .match-row{grid-template-columns:1fr;gap:10px}
+  .figure-card{padding:10px 6px}
+  .figure-avatar{width:30px;height:30px;font-size:14px}
+  .section-title,.poem-list-title{font-size:13px;letter-spacing:4px}
+  .section-content{font-size:13.5px;line-height:1.9}
+  .poem-card-body{font-size:12.5px;line-height:1.7}
+  .flaw-box{font-size:12px;letter-spacing:2px;padding:16px 12px}
+  .flaw-box span{font-size:12.5px}
+}
+
+/* 极小屏进一步压缩 */
+@media (max-width:380px){
+  .figures-grid{grid-template-columns:1fr}
+  .result-four{font-size:34px}
+  .section-title,.poem-list-title{font-size:12px;letter-spacing:3px}
+}
+
+/* ===== 分享海报 ===== */
+#share-poster{
+  position:fixed;top:0;left:0;width:100vw;height:100vh;
+  background:rgba(0,0,0,0.85);display:none;justify-content:center;align-items:center;
+  z-index:9999;padding:20px;box-sizing:border-box;
+}
+#share-poster.active{display:flex}
+#share-poster .poster-wrap{
+  width:min(90vw,400px);background:var(--card);border-radius:16px;
+  overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.3);
+  display:flex;flex-direction:column;max-height:90vh;
+}
+#share-poster .poster-preview{
+  width:100%;object-fit:contain;background:var(--bg);display:block;
+}
+#share-poster .poster-actions{
+  display:flex;gap:10px;padding:16px;
+}
+#share-poster .poster-actions button{
+  flex:1;padding:12px;border:none;border-radius:10px;font-size:15px;
+  font-family:var(--font-cn);cursor:pointer;
+}
+#share-poster .poster-actions .btn-save{background:var(--accent);color:#fff}
+#share-poster .poster-actions .btn-cancel{background:var(--accent-soft);color:var(--ink)}
+#share-poster .poster-loading{
+  padding:60px 20px;text-align:center;color:var(--ink-muted);font-size:14px;
+}
+
+/* 海报画布（屏幕外渲染用） */
+#poster-canvas-wrap{
+  position:fixed;left:-9999px;top:-9999px;width:375px;
+  background:var(--card);overflow:hidden;
+}
+.poster-inner{
+  width:375px;min-height:667px;background:linear-gradient(170deg,#FAF7F2 0%,#F5F0E8 40%,#EDE6D8 100%);
+  padding:32px 24px 28px;display:flex;flex-direction:column;align-items:center;
+  box-sizing:border-box;position:relative;overflow:hidden;
+}
+.poster-inner::before{
+  content:'';position:absolute;top:-60px;right:-60px;
+  width:200px;height:200px;border-radius:50%;
+  background:radial-gradient(circle,rgba(196,92,74,0.08) 0%,transparent 70%);
+}
+.poster-inner::after{
+  content:'';position:absolute;bottom:-40px;left:-40px;
+  width:160px;height:160px;border-radius:50%;
+  background:radial-gradient(circle,rgba(184,160,122,0.12) 0%,transparent 70%);
+}
+.poster-brand{
+  font-size:11px;letter-spacing:4px;color:var(--gold);margin-bottom:18px;
+  font-family:var(--font-en);text-transform:uppercase;
+}
+.poster-type{
+  font-size:52px;font-weight:700;color:var(--ink);letter-spacing:6px;
+  font-family:var(--font-en);line-height:1;margin-bottom:6px;
+}
+.poster-four{
+  font-size:20px;color:var(--accent);font-weight:600;
+  letter-spacing:8px;margin-bottom:4px;
+}
+.poster-name{
+  font-size:13px;color:var(--ink-muted);margin-bottom:22px;
+  letter-spacing:2px;
+}
+.poster-divider{
+  width:60px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  margin-bottom:22px;
+}
+.poster-poem{
+  font-size:16px;color:var(--ink);line-height:2;
+  text-align:center;margin-bottom:18px;
+  font-style:italic;max-width:280px;
+}
+.poster-figure{
+  font-size:12px;color:var(--gold);margin-bottom:20px;
+  letter-spacing:2px;
+}
+.poster-interpret{
+  font-size:12px;color:var(--ink-light);line-height:1.8;
+  text-align:center;max-width:300px;margin-bottom:24px;
+  padding:0 10px;
+}
+.poster-qr-area{
+  display:flex;align-items:center;gap:14px;
+  padding:16px 20px;background:rgba(255,255,255,0.7);
+  border-radius:12px;margin-top:auto;width:100%;box-sizing:border-box;
+}
+.poster-qr-code{
+  width:72px;height:72px;flex-shrink:0;
+  background:#fff;border-radius:8px;display:flex;
+  align-items:center;justify-content:center;
+  border:1px solid var(--accent-soft);
+}
+.poster-qr-code canvas,.poster-qr-code img{width:64px!important;height:64px!important}
+.poster-url-text{
+  font-size:11px;color:var(--ink-muted);line-height:1.6;
+}
+.poster-url-text strong{color:var(--accent);font-size:12px}
+
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- 顶部 -->
+<div class="header">
+  <div class="app-title">识己 · 知人</div>
+</div>
+
+<!-- 主内容 -->
+<div class="main">
+
+<!-- 引导页 -->
+<div class="page active" id="page-intro">
+  <div class="card intro-card">
+    <div class="intro-step">MBTI 古韵人格探索</div>
+    <div class="intro-char">心</div>
+    <div class="intro-pinyin">XIN</div>
+    <div class="intro-illust">🌸</div>
+    <div class="intro-poem">天地之大，知己难觅<br>然识己者，方能知人</div>
+    <div class="intro-poem-vertical">以诗为镜照见本心</div>
+
+    <!-- 恢复测试提示 -->
+    <div id="resume-card" style="display:none;background:rgba(196,92,74,0.08);border:1px solid var(--accent-soft);border-radius:14px;padding:16px;margin-top:20px;text-align:left">
+      <div style="font-size:12px;color:var(--accent);letter-spacing:2px;margin-bottom:8px">◇ 检测到未完成的测试</div>
+      <div style="font-size:13px;color:var(--ink-light);line-height:1.6;margin-bottom:12px" id="resume-info">已作答 <span id="resume-count"></span> 题</div>
+      <div style="display:flex;gap:10px">
+        <button onclick="resumeTest()" style="flex:1;padding:10px;background:var(--accent);color:#fff;border:none;border-radius:8px;font-family:inherit;font-size:13px;letter-spacing:2px;cursor:pointer">继续测试</button>
+        <button onclick="discardProgress()" style="flex:1;padding:10px;background:transparent;color:var(--ink-muted);border:1px solid var(--ink-muted);border-radius:8px;font-family:inherit;font-size:13px;letter-spacing:2px;cursor:pointer">重新开始</button>
+      </div>
+    </div>
+
+    <button class="start-btn" onclick="startTest()" id="start-btn-main">开启测试</button>
+  </div>
+</div>
+
+<!-- 测试页 -->
+<div class="page" id="page-test">
+  <div class="card">
+    <div class="test-header">
+      <div class="test-step" id="test-step">1 / 93</div>
+      <div class="test-progress" id="test-progress"></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <span id="btn-prev" onclick="prevQuestion()" style="font-size:12px;color:var(--ink-muted);letter-spacing:1px;cursor:pointer;opacity:0.5;transition:all 0.3s">← 上一题</span>
+      <span onclick="pauseTest()" style="font-size:11px;color:var(--ink-muted);letter-spacing:1px;cursor:pointer;opacity:0.6">⏸ 暂停</span>
+    </div>
+    <div class="question-main">
+      <div class="question-dim" id="question-dim">外向 · 内向</div>
+      <div class="question-text" id="question-text">加载中…</div>
+      <div class="question-sub" id="question-sub"></div>
+    </div>
+    <div class="options" id="options"></div>
+  </div>
+</div>
+
+<!-- 结果页 -->
+<div class="page" id="page-result">
+  <div class="card result-card" id="result-card"></div>
+</div>
+
+<!-- 历史页 -->
+<div class="page" id="page-history">
+  <div class="history-list" id="history-list"></div>
+</div>
+
+</div><!-- /main -->
+
+<!-- 底部导航 -->
+<div class="nav">
+  <div class="nav-item active" onclick="showPage('intro')" data-page="intro">
+    <div class="nav-char">始</div>
+    <div class="nav-dot"></div>
+    <div class="nav-label">首页</div>
+  </div>
+  <div class="nav-item" onclick="startTest()" data-page="test">
+    <div class="nav-char">测</div>
+    <div class="nav-dot"></div>
+    <div class="nav-label">测试</div>
+  </div>
+  <div class="nav-item" onclick="showHistory()" data-page="history">
+    <div class="nav-char">往</div>
+    <div class="nav-dot"></div>
+    <div class="nav-label">历史</div>
+  </div>
+</div>
+
+</div><!-- /app -->
+
+<!-- 分享弹窗 -->
+<div class="modal" id="modal-share">
+  <div class="modal-card">
+    <div class="modal-title">分享你的心声</div>
+    <div class="modal-text" id="share-content"></div>
+    <button class="modal-close" onclick="closeModal()">关闭</button>
+  </div>
+</div>
+
+<script>
+// ==================== 诗词人格数据 ====================
+const poeticDB={
+  "INTJ":{
+    four:"孤雁排云",pinyin:"GU YAN PAI YUN",name:"孤高清峻",
+    poem:"「众鸟高飞尽，孤云独去闲」",figure:"李 白",
+    desc:"诗仙，太白星落凡尘，独坐敬亭，孤高绝尘",
+    essence:"你心如鸿鹄，眼藏星图。常于众人喧嚣处静默，于无人在意处深谋。脑中常有一盘大棋，对世界有自己的解构与重建。",
+    talent:["远见卓识","系统架构","独立决断"],
+    growth:["倾听比说服更省力","完美主义会拖垮行动","接纳“不完美”的过程"],
+    social:"不喜泛泛之交，宁缺毋滥。深入交谈时方显神采，浅交则克制疏离。",
+    career:"战略咨询 / 学术研究 / 系统架构 / 产品哲学",
+    poems:[
+      {t:"独坐敬亭山",a:"李白",p:"相看两不厌，只有敬亭山。"},
+      {t:"行路难",a:"李白",p:"长风破浪会有时，直挂云帆济沧海。"},
+      {t:"登幽州台歌",a:"陈子昂",p:"前不见古人，后不见来者。"}
+    ],
+    figures:[{n:"诸葛亮",d:"隆中定策，三分天下，运筹帷幄之中"},{n:"王阳明",d:"龙场悟道，知行合一，立德立功立言"},{n:"达尔文",d:"十年一船，物种起源，撼动神学"},{n:"乔布斯",d:"非黑即白，颠覆式创新，重塑时代"}],
+    best:["ENFP","ENTP"],worst:["ESFP","ESFJ"],
+    flaw:"冷过于高，智过于亲。常以绝对标准要求人己，忘了世间本无完美之局。"
+  },
+  "INTP":{
+    four:"秋水悟禅",pinyin:"QIU SHUI WU CHAN",name:"思辨空灵",
+    poem:"「明月松间照，清泉石上流」",figure:"王 维",
+    desc:"诗佛，行到水穷处，坐看云起时",
+    essence:"你脑中有座永不关门的图书馆。万物可被解构，又可在解构后重组出新世界。你不急于表达，只在智识的边界处安然独行。",
+    talent:["逻辑思辨","概念创新","本质洞察"],
+    growth:["想法变现需要先动手","完美逻辑抵不过一次尝试","情感是另一种真理"],
+    social:"以思想之火择友，聊得投机者神采飞扬，不入眼者视若无物。",
+    career:"哲学研究 / 软件架构 / 理论物理 / 文学批评",
+    poems:[
+      {t:"山居秋暝",a:"王维",p:"明月松间照，清泉石上流。"},
+      {t:"终南别业",a:"王维",p:"行到水穷处，坐看云起时。"},
+      {t:"饮酒·其五",a:"陶渊明",p:"此中有真意，欲辨已忘言。"}
+    ],
+    figures:[{n:"苏东坡",d:"一蓑烟雨，词文双绝，悟透人生真味"},{n:"朱熹",d:"格物致知，理学集大成者"},{n:"康德",d:"散步如仪，纯粹理性三大批判"},{n:"爱因斯坦",d:"相对时空，质能方程E=mc²"}],
+    best:["ENTJ","ENFJ"],worst:["ESFJ","ESTJ"],
+    flaw:"想得太多，动了太少。深陷分析瘫痪，错失人间烟火里那些无法被证明的美好。"
+  },
+  "ENTJ":{
+    four:"长风万里",pinyin:"CHANG FENG WAN LI",name:"豪迈凌云",
+    poem:"「日月之行，若出其中」",figure:"曹 操",
+    desc:"魏武挥鞭，一代枭雄，气吞山河",
+    essence:"你是天生的执棋者。志在千里，胸有丘壑，遇事不慌，遇人不惧。常以战略眼光俯瞰全局，以铁腕手腕推动事情。",
+    talent:["战略思维","领导决断","效率至上"],
+    growth:["输也是一种赢","柔软是另一种力量","允许自己偶尔迷路"],
+    social:"广交天下，但有所筛选。圈子不必多，个个能扛事。",
+    career:"企业管理 / 投资决策 / 政治军事 / 创业开拓",
+    poems:[
+      {t:"观沧海",a:"曹操",p:"日月之行，若出其中；星汉灿烂，若出其里。"},
+      {t:"龟虽寿",a:"曹操",p:"老骥伏枥，志在千里；烈士暮年，壮心不已。"},
+      {t:"大风歌",a:"刘邦",p:"大风云起兮，威加海内兮，归故乡。"}
+    ],
+    figures:[{n:"曹操",d:"治世之能臣，乱世之奸雄，文武兼资"},{n:"李世民",d:"贞观之治，天可汗，文治武功盖世"},{n:"拿破仑",d:"加冕称帝，纵横欧陆，英雄与独裁者"},{n:"撒切尔",d:"铁娘子，鏖战工会，重塑英国"}],
+    best:["INTP","INFP"],worst:["ISFP","INFP"],
+    flaw:"目标至上，效率为先。不知不觉把人当棋子，忘了人心是算不清的账。"
+  },
+  "ENTP":{
+    four:"鲲鹏振翅",pinyin:"KUN PENG ZHEN CHI",name:"灵动飞扬",
+    poem:"「大鹏一日同风起，扶摇直上九万里」",figure:"庄 子",
+    desc:"逍遥游者，无拘无束，物我两忘",
+    essence:"你是脑洞永动机。思维跳跃，视角刁钻，把不可能变成可能只是日常。在辩论中闪亮，在死板处发笑。",
+    talent:["概念创新","辩证思维","化腐朽为神奇"],
+    growth:["坚持做完比开始重要","细节里有上帝","他人感受不是干扰"],
+    social:"朋友遍天下，话题永不断。能在高朋满座时调动气氛，也能在观点交锋时泰然自若。",
+    career:"创业 / 战略咨询 / 创意策划 / 媒体传播",
+    poems:[
+      {t:"上李邕",a:"李白",p:"大鹏一日同风起，扶摇直上九万里。"},
+      {t:"逍遥游",a:"庄子",p:"鹏之徙于南冥也，水击三千里，抟扶摇而上者九万里。"},
+      {t:"将进酒",a:"李白",p:"天生我材必有用，千金散尽还复来。"}
+    ],
+    figures:[{n:"庄子",d:"齐物我，逍遥游，蝴蝶梦里忘物我"},{n:"李白",d:"绣口一吐就是半个盛唐"},{n:"苏格拉底",d:"产婆术，雅典街头追问一切"},{n:"乔布斯",d:"不同凡想，现实扭曲力场"}],
+    best:["INFJ","INTJ"],worst:["ISFJ","ISTJ"],
+    flaw:"聪明是天赋，玩世是陷阱。多智近乎妖，妖则易孤。深度有时比广度更动人。"
+  },
+  "INFJ":{
+    four:"幽兰空谷",pinyin:"YOU LAN KONG GU",name:"温润高洁",
+    poem:"「无人亦自芳，幽谷藏清音」",figure:"陶渊明",
+    desc:"五柳先生，采菊东篱，悠然见山",
+    essence:"你是外表平静、内心风云的人。感知细微，常在他人未觉处洞察幽微。理想主义深深镌刻在骨子里，对人对己都求真。",
+    talent:["深度共情","精神洞察","创造性表达"],
+    growth:["世界不会因你变好，但不要为此放弃","不完美的人也有资格被爱","先照顾自己再照亮他人"],
+    social:"真诚之交极少，深度之交极深。常被误解为冷淡，实则内心炽热得不敢轻示。",
+    career:"心理咨询 / 文学艺术 / 教育 / 哲学神学",
+    poems:[
+      {t:"饮酒·其五",a:"陶渊明",p:"采菊东篱下，悠然见南山。"},
+      {t:"春夜",a:"苏轼",p:"春宵一刻值千金，花有清香月有阴。"},
+      {t:"题都城南庄",a:"崔护",p:"人面桃花相映红，人面不知何处去。"}
+    ],
+    figures:[{n:"陶渊明",d:"不为五斗米折腰，回归田园真意"},{n:"曹雪芹",d:"批阅十载，增删五次，著一本红楼"},{n:"马丁·路德·金",d:"我有一个梦想，撼动种族隔离"},{n:"特蕾莎修女",d:"穷其一生服侍最贫穷的人"}],
+    best:["ENTP","ENFP"],worst:["ESTP","ESTJ"],
+    flaw:"精神内耗严重，理想常被现实刺伤。过度共情会失去自己的边界。"
+  },
+  "INFP":{
+    four:"落梅如雪",pinyin:"LUO MEI RU XUE",name:"纯粹孤绝",
+    poem:"「零落成泥碾作尘，只有香如故」",figure:"林 逋",
+    desc:"梅妻鹤子，孤山隐士，香远益清",
+    essence:"你是人间稀有品。内心有一片不容践踏的净土，对美与真有近乎偏执的坚持。常被世界碰伤，却仍相信温柔的力量。",
+    talent:["诗意表达","价值守护","深度共情"],
+    growth:["不与不值得的人和事纠缠","拖延是温柔的杀手","现实也值得被认真对待"],
+    social:"圈子小而真。在懂你的人面前可以卸下所有盔甲，在喧嚣处则迅速内收。",
+    career:"文学创作 / 心理咨询 / 艺术设计 / 公益事业",
+    poems:[
+      {t:"山园小梅",a:"林逋",p:"疏影横斜水清浅，暗香浮动月黄昏。"},
+      {t:"卜算子·咏梅",a:"陆游",p:"零落成泥碾作尘，只有香如故。"},
+      {t:"虞美人",a:"李煜",p:"问君能有几多愁，恰似一江春水向东流。"}
+    ],
+    figures:[{n:"林逋",d:"梅妻鹤子，终身不入仕途"},{n:"李清照",d:"千古第一才女，婉约词宗"},{n:"梵高",d:"星空下燃烧的灵魂，生前无人识"},{n:"卡夫卡",d:"格里高尔的早晨，梦魇般的清醒"}],
+    best:["ENFJ","ENTJ"],worst:["ESTJ","ESTP"],
+    flaw:"敏感近乎自我消耗，理想主义易成逃避主义。世界没你想的那么糟，也没你想的那么美。"
+  },
+  "ENFJ":{
+    four:"春风化雨",pinyin:"CHUN FENG HUA YU",name:"润物无声",
+    poem:"「随风潜入夜，润物细无声」",figure:"孔 子",
+    desc:"万世师表，杏坛讲学，有教无类",
+    essence:"你是人群中的暖阳。善于看见每个人的独特性，耐心引导，循循善诱。在人群中自然成为凝聚点，自己却常常忘了被照亮。",
+    talent:["人际洞察","启发式引导","价值塑造"],
+    growth:["先是自己，再是别人的灯","拒绝也是一种善良","你不必拯救所有人"],
+    social:"朋友多且深，擅于记住每个朋友的小细节。在人际中游刃有余，也常为之所累。",
+    career:"教育 / 心理咨询 / 人力资源 / 社会工作",
+    poems:[
+      {t:"春雨",a:"杜甫",p:"随风潜入夜，润物细无声。"},
+      {t:"春夜喜雨",a:"杜甫",p:"好雨知时节，当春乃发生。"},
+      {t:"师说",a:"韩愈",p:"师者，所以传道受业解惑也。"}
+    ],
+    figures:[{n:"孔子",d:"有教无类，弟子三千，七十二贤"},{n:"孟子",d:"性善之说，养浩然之气"},{n:"德蕾莎修女",d:"以微末之身，担天下之苦"},{n:"曼德拉",d:"二十七载牢狱，出来仍是宽恕"}],
+    best:["INFP","INTP"],worst:["ISTP","ESTP"],
+    flaw:"过度卷入他人情绪，常忘自身边界。救世主情结会让你疲惫不堪。"
+  },
+  "ENFP":{
+    four:"江海余生",pinyin:"JIANG HAI YU SHENG",name:"洒脱不羁",
+    poem:"「小舟从此逝，江海寄余生」",figure:"苏 轼",
+    desc:"东坡居士，一蓑烟雨任平生",
+    essence:"你是人间的惊喜制造机。热情如春，灵感如潮，能把平淡日子过成诗。常被误解为浅，实则有一颗温暖、敏锐、又不断重启的赤子心。",
+    talent:["创意联想","人际联结","热情感染"],
+    growth:["深度比广度稀缺","坚持一件事比开始十件事更酷","情绪不是你的主人"],
+    social:"走到哪里都是焦点，话题永不枯竭。容易获得好感，难得深度之交。",
+    career:"营销创意 / 心理咨询 / 媒体艺术 / 公共关系",
+    poems:[
+      {t:"定风波",a:"苏轼",p:"竹杖芒鞋轻胜马，谁怕？一蓑烟雨任平生。"},
+      {t:"临江仙",a:"苏轼",p:"小舟从此逝，江海寄余生。"},
+      {t:"将进酒",a:"李白",p:"君不见，黄河之水天上来，奔流到海不复回。"}
+    ],
+    figures:[{n:"苏轼",d:"一蓑烟雨，贬谪不羁，词文双绝"},{n:"李白",d:"绣口一吐就是半个盛唐"},{n:"达·芬奇",d:"画家、科学家、工程师、哲学家于一身"},{n:"特蕾莎修女",d:"微小身躯，担天下之苦"}],
+    best:["INTJ","INFJ"],worst:["ISTJ","ISFJ"],
+    flaw:"三分钟热度是常事，新鲜感过后是漫长的平原。专注力是你终身课题。"
+  },
+  "ISTJ":{
+    four:"松柏后凋",pinyin:"SONG BAI HOU DIAO",name:"沉稳持重",
+    poem:"「岁寒，然后知松柏之后凋也」",figure:"杜 甫",
+    desc:"诗圣，沉郁顿挫，忧国忧民",
+    essence:"你是世界的压舱石。一诺千金，行事严谨，从不轻易许诺，许诺便不食言。在浮躁年代，你像一棵沉默的青松，根深叶茂。",
+    talent:["可靠执行","细节把控","长线守候"],
+    growth:["规则之外还有人情","改变不是背叛","放手是另一种承担"],
+    social:"不善言辞但最值得托付。慢热，深交，在你最需要的时候从不缺席。",
+    career:"会计审计 / 行政管理 / 法律 / 工程实施",
+    poems:[
+      {t:"茅屋为秋风所破歌",a:"杜甫",p:"安得广厦千万间，大庇天下寒士俱欢颜。"},
+      {t:"春望",a:"杜甫",p:"国破山河在，城春草木深。"},
+      {t:"论语·为政",a:"孔子",p:"为政以德，譬如北辰，居其所而众星共之。"}
+    ],
+    figures:[{n:"杜甫",d:"诗圣，忧国忧民，颠沛一生守文心"},{n:"曾国藩",d:"日日省身，屡败屡战，平定太平天国"},{n:"华盛顿",d:"开创而不恋栈，连任两届即退"},{n:"乔治六世",d:"口吃却演讲，激励整国二战"}],
+    best:["ESFP","ESTP"],worst:["ENFP","ENTP"],
+    flaw:"稳成不变易成固执，责任感会压垮自己。世界在变，你的原则也要允许微调。"
+  },
+  "ISFJ":{
+    four:"润物无声",pinyin:"RUN WU WU SHENG",name:"温厚绵长",
+    poem:"「随风潜入夜，润物细无声」",figure:"孟浩然",
+    desc:"春眠不觉晓，处处闻啼鸟",
+    essence:"你是人间最柔软的依靠。记忆力惊人，默默记下每个在意之人的喜好与习惯。付出从不需要掌声，只求看见所爱之人安好。",
+    talent:["情感记忆","细致关怀","默默托底"],
+    growth:["被照顾不是负债","你的需求同样重要","拒绝也是爱自己"],
+    social:"不抢风头，默默付出。朋友有难第一个到，喜事临门甘居幕后。",
+    career:"医护护理 / 教育 / 社工 / 客户服务",
+    poems:[
+      {t:"春晓",a:"孟浩然",p:"春眠不觉晓，处处闻啼鸟。"},
+      {t:"游子吟",a:"孟郊",p:"谁言寸草心，报得三春晖。"},
+      {t:"静夜思",a:"李白",p:"举头望明月，低头思故乡。"}
+    ],
+    figures:[{n:"孟浩然",d:"隐逸诗人，田园风骨"},{n:"孟母",d:"三迁择邻，断机教子，养出亚圣孟子"},{n:"南丁格尔",d:"提灯女神，近代护理事业奠基者"},{n:"特蕾莎修女",d:"服侍最贫穷的人，微小身躯担天下"}],
+    best:["ESFP","ESTP"],worst:["ENTP","ENTJ"],
+    flaw:"过于牺牲自己，忘记索取也正常。照顾别人之前，请先填满自己的杯子。"
+  },
+  "ESTJ":{
+    four:"山岳巍然",pinyin:"SHAN YUE WEI RAN",name:"刚健笃定",
+    poem:"「泰山崩于前而色不变，麋鹿兴于左而目不瞬」",figure:"诸葛亮",
+    desc:"卧龙先生，出师一表，真名世",
+    essence:"你是天生的组织者与执行者。立场坚定，行动迅速，最恨空谈与拖延。能在乱局中迅速立规整序，扛得住事也敢做决断。",
+    talent:["组织管理","果断执行","责任担当"],
+    growth:["柔能克刚，柔是另一种刚","听比说更有力量","人心不能只靠规则管"],
+    social:"不喜空谈，只与行动者同行。朋友不在多，个个能扛事。",
+    career:"企业管理 / 行政司法 / 军事指挥 / 项目管理",
+    poems:[
+      {t:"出师表",a:"诸葛亮",p:"鞠躬尽瘁，死而后已。"},
+      {t:"短歌行",a:"曹操",p:"对酒当歌，人生几何。"},
+      {t:"沁园春·雪",a:"毛泽东",p:"数风流人物，还看今朝。"}
+    ],
+    figures:[{n:"诸葛亮",d:"隆中一对，奠定三分天下"},{n:"秦始皇",d:"书同文车同轨，奠定两千年格局"},{n:"丘吉尔",d:"热血、泪眼、烟斗，扛住至暗时刻"},{n:"撒切尔",d:"铁娘子，鏖战工会，重塑英国"}],
+    best:["INTP","ISTP"],worst:["INFP","INFJ"],
+    flaw:"强权易伤情，规则易压人。最坚固的城堡，往往最先从人心塌陷。"
+  },
+  "ESFJ":{
+    four:"兰桂齐芳",pinyin:"LAN GUI QI FANG",name:"和煦如春",
+    poem:"「兰有秀兮菊有芳，怀佳人兮不能忘」",figure:"白居易",
+    desc:"琵琶行主，关怀民间疾苦",
+    essence:"你是人际关系的润滑剂与暖场人。真心实意，关怀入微，最擅长把疏离变亲近。传统而务实，最能感知他人的不易。",
+    talent:["人际协调","关怀照料","传统维护"],
+    growth:["讨好是另一种压力","不是你负责所有人的情绪","界限内才有自由"],
+    social:"人缘极好，走到哪都是熟人。喜热闹，擅经营关系，是朋友圈的黏合剂。",
+    career:"教育护理 / 销售服务 / 行政管理 / 医疗护理",
+    poems:[
+      {t:"琵琶行",a:"白居易",p:"同是天涯沦落人，相逢何必曾相识。"},
+      {t:"长恨歌",a:"白居易",p:"在天愿作比翼鸟，在地愿为连理枝。"},
+      {t:"采莲曲",a:"王昌龄",p:"乱入池中看不见，闻歌始觉有人来。"}
+    ],
+    figures:[{n:"白居易",d:"诗王，歌诗合为事而作，关怀民间疾苦"},{n:"武则天",d:"唯一女帝，文治武功冠绝古今"},{n:"特蕾莎修女",d:"微小身躯担天下之苦"},{n:"奥黛丽·赫本",d:"天使在人间的形象，晚年致力公益"}],
+    best:["ISFP","ISTP"],worst:["INTP","INTJ"],
+    flaw:"太在意外界评价，常为维持关系委屈自己。最稳定的关系是允许冲突存在的。"
+  },
+  "ISTP":{
+    four:"明月松间",pinyin:"MING YUE SONG JIAN",name:"静观自得",
+    poem:"「明月松间照，清泉石上流」",figure:"王 维",
+    desc:"诗佛，行到水穷处，坐看云起时",
+    essence:"你是冷静的解题者。处变不惊，应对灵活，最擅长在危机中找出最短路径。言语不多，行动说话，喜欢用手和脑理解世界。",
+    talent:["冷静分析","工具驾驭","临场应变"],
+    growth:["感情不是逻辑的反面","长期主义有长期主义的甜","留白是另一种表达"],
+    social:"独处自在，群处不争。需要时精准出手，不需要时退居幕后。",
+    career:"工程技师 / 应急救援 / 外科医生 / 投资分析",
+    poems:[
+      {t:"山居秋暝",a:"王维",p:"明月松间照，清泉石上流。"},
+      {t:"终南别业",a:"王维",p:"行到水穷处，坐看云起时。"},
+      {t:"枫桥夜泊",a:"张继",p:"月落乌啼霜满天，江枫渔火对愁眠。"}
+    ],
+    figures:[{n:"王维",d:"诗佛，画中有诗，参透禅意"},{n:"墨子",d:"兼爱非攻，工匠精神传千古"},{n:"爱迪生",d:"一千次失败，发明改变世界"},{n:"阿汤哥",d:"演军人不用替身，戏里戏外冷峻"}],
+    best:["ESFJ","ENFJ"],worst:["ENFJ","ENFP"],
+    flaw:"情感表达欠奉，常让身边人猜不透。深水静流，岸上人需要你给个信号。"
+  },
+  "ISFP":{
+    four:"流水落花",pinyin:"LIU SHUI LUO HUA",name:"柔韧从容",
+    poem:"「流水落花春去也，天上人间」",figure:"李清照",
+    desc:"千古第一才女，如梦令里",
+    essence:"你是静水深流的人。表面温柔，骨子里有不容侵犯的审美与价值。常用自己的节奏生活，不被外界喧嚣带偏。",
+    talent:["审美表达","柔中带刚","瞬间捕捉"],
+    growth:["不为他人审美而活","冲突是必要的","你的感受很重要"],
+    social:"慢热、深交。在懂你的人面前才显真性情，群体中常居角落安静。",
+    career:"艺术设计 / 手工创作 / 音乐舞蹈 / 心理咨询",
+    poems:[
+      {t:"如梦令",a:"李清照",p:"昨夜雨疏风骤，浓睡不消残酒。"},
+      {t:"声声慢",a:"李清照",p:"寻寻觅觅，冷冷清清，凄凄惨惨戚戚。"},
+      {t:"饮酒·其五",a:"陶渊明",p:"采菊东篱下，悠然见南山。"}
+    ],
+    figures:[{n:"李清照",d:"千古第一才女，婉约词宗"},{n:"王冕",d:"画梅神手，淡墨野梅不求售"},{n:"大卫·鲍伊",d:"Ziggy Stardust，摇滚变色龙"},{n:"宫崎骏",d:"动画诗人，每一帧都是童年"}],
+    best:["ESFJ","ENFJ"],worst:["ENTJ","ESTJ"],
+    flaw:"过柔易委屈，过敏易消耗。学会说不，是温柔者的第一课。"
+  },
+  "ESTP":{
+    four:"大江东去",pinyin:"DA JIANG DONG QU",name:"豪迈奔放",
+    poem:"「大江东去，浪淘尽，千古风流人物」",figure:"辛弃疾",
+    desc:"词中之龙，挑灯看剑",
+    essence:"你是当下的弄潮儿。反应快，行动更快的现实主义者。在变化中找机会，在机会中直接出手。一身胆气，潇洒不拘。",
+    talent:["临场反应","危机处理","资源整合"],
+    growth:["不是所有事都要即兴","深度思考不是浪费时间","他人感受不是负担"],
+    social:"自带聚光效应，社交场上的气氛担当。朋友多而广，铁关系也不少。",
+    career:"销售谈判 / 创业 / 应急管理 / 投资交易",
+    poems:[
+      {t:"永遇乐",a:"辛弃疾",p:"想当年，金戈铁马，气吞万里如虎。"},
+      {t:"破阵子",a:"辛弃疾",p:"醉里挑灯看剑，梦回吹角连营。"},
+      {t:"凉州词",a:"王翰",p:"醉卧沙场君莫笑，古来征战几人回。"}
+    ],
+    figures:[{n:"辛弃疾",d:"词中之龙，金戈铁马，文武双全"},{n:"项羽",d:"力拔山兮气盖世，英雄末路乌江"},{n:"亚历山大大帝",d:"二十岁出征，征服已知世界"},{n:"特朗普",d:"谈判桌上无败将，推特治国"}],
+    best:["ISFJ","ISTJ"],worst:["INFJ","INFP"],
+    flaw:"快意恩仇易翻车，直觉也常踩坑。停下来三秒，世界会更清晰。"
+  },
+  "ESFP":{
+    four:"花间一壶",pinyin:"HUA JIAN YI HU",name:"风流旖旎",
+    poem:"「花间一壶酒，独酌无相亲」",figure:"李 白",
+    desc:"诗仙，将进酒，杯莫停",
+    essence:"你是人间的花火。感染力强，享受当下，最能把平淡日子过成盛宴。常以乐观照亮身边人，是真正的开心果。",
+    talent:["气氛感染","即时表达","美的生活化"],
+    growth:["独处不是惩罚","深度比广度稀缺","延迟满足是种能力"],
+    social:"走到哪里都是C位。朋友最多，话题最热，最擅长的就是把陌生变熟悉。",
+    career:"演艺娱乐 / 销售 / 活动主持 / 时尚行业",
+    poems:[
+      {t:"将进酒",a:"李白",p:"人生得意须尽欢，莫使金樽空对月。"},
+      {t:"月下独酌",a:"李白",p:"花间一壶酒，独酌无相亲。"},
+      {t:"清平调",a:"李白",p:"云想衣裳花想容，春风拂槛露华浓。"}
+    ],
+    figures:[{n:"李白",d:"绣口一吐就是半个盛唐，醉卧长安"},{n:"杨贵妃",d:"回眸一笑百媚生，六宫粉黛无颜色"},{n:"卓别林",d:"默片时代的笑匠，悲喜两重天"},{n:"玛丽莲·梦露",d:"性感符号，永恒的烟火"}],
+    best:["ISFJ","ISTJ"],worst:["INTJ","INTP"],
+    flaw:"逃避深度是代价。欢乐易得，深情难求，记得给灵魂也留一席之地。"
+  }
+};
+
+const dimInfo={
+  EI:{name:"外向 · 内向",labels:["朝堂济世","山林归隐"]},
+  SN:{name:"感知 · 直觉",labels:["烟火人间","诗意苍穹"]},
+  TF:{name:"思考 · 情感",labels:["冷眼观潮","柔肠济世"]},
+  JP:{name:"判断 · 知觉",labels:["循法守正","逍遥任运"]}
+};
+
+// ==================== 93题 ====================
+const questions=[
+  {id:1,text:"你通常更喜欢：",dim:"EI",opts:["与他人一起度过时光","独自度过时光"]},
+  {id:2,text:"在社交场合中，你通常：",dim:"EI",opts:["主动与陌生人交谈","等待别人来与你交谈"]},
+  {id:3,text:"你更倾向于：",dim:"EI",opts:["通过与人讨论来理清思路","通过独自思考来理清思路"]},
+  {id:4,text:"你觉得自己是：",dim:"EI",opts:["外向的","内向的"]},
+  {id:5,text:"在聚会中，你通常：",dim:"EI",opts:["认识很多新朋友并乐在其中","只与几个熟悉的朋友交谈"]},
+  {id:6,text:"你更喜欢：",dim:"EI",opts:["多个人一起工作","独自工作"]},
+  {id:7,text:"你通常：",dim:"EI",opts:["说话多于倾听","倾听多于说话"]},
+  {id:8,text:"你更容易被什么「充电」：",dim:"EI",opts:["与他人相处","独处"]},
+  {id:9,text:"你倾向于：",dim:"EI",opts:["广泛交友，朋友很多","深交几个好友"]},
+  {id:10,text:"在团队中，你通常：",dim:"EI",opts:["主动表达自己的观点","先听听别人的观点"]},
+  {id:11,text:"你更喜欢的工作环境是：",dim:"EI",opts:["开放、热闹的空间","安静、私密的空间"]},
+  {id:12,text:"你通常：",dim:"EI",opts:["先做再说","先想再做"]},
+  {id:13,text:"你更容易注意：",dim:"EI",opts:["外部世界的活动和变化","自己内心的想法和感受"]},
+  {id:14,text:"你觉得自己：",dim:"EI",opts:["容易接近和交谈","需要时间才能打开心扉"]},
+  {id:15,text:"在解决问题时，你倾向于：",dim:"EI",opts:["与他人讨论获得不同视角","自己独立思考"]},
+  {id:16,text:"你更喜欢：",dim:"EI",opts:["经常变化的活动","稳定规律的活动"]},
+  {id:17,text:"面对大型社交活动，你的感受是：",dim:"EI",opts:["兴奋且精力充沛","感到疲惫需要独处恢复"]},
+  {id:18,text:"你更愿意在哪种场合发言：",dim:"EI",opts:["有许多观众的场合","只有几个熟人的场合"]},
+  {id:19,text:"你的能量获取方式：",dim:"EI",opts:["与人互动给我力量","独处沉思给我力量"]},
+  {id:20,text:"当需要做决定时，你更倾向于：",dim:"EI",opts:["先询问他人意见","自己思考后做决定"]},
+  {id:21,text:"你更关注：",dim:"SN",opts:["具体的事实和细节","事物背后的含义和可能性"]},
+  {id:22,text:"你更喜欢：",dim:"SN",opts:["遵循已有的方法和流程","探索新的可能性"]},
+  {id:23,text:"你更容易记住：",dim:"SN",opts:["具体的日期、数字、事实","整体的概念和印象"]},
+  {id:24,text:"当学习新东西时，你更喜欢：",dim:"SN",opts:["一步一步按部就班","先了解整体框架"]},
+  {id:25,text:"你更注重：",dim:"SN",opts:["眼前实际的问题","未来的可能性"]},
+  {id:26,text:"你更容易被：",dim:"SN",opts:["具体、实际的东西吸引","抽象、理论的东西吸引"]},
+  {id:27,text:"在阅读时，你更倾向于：",dim:"SN",opts:["关注事实描述和细节","关注隐喻和深层含义"]},
+  {id:28,text:"你更喜欢：",dim:"SN",opts:["按照计划行事","随性而为"]},
+  {id:29,text:"当你描述一件事时，你通常会：",dim:"SN",opts:["详细描述具体细节","概括描述整体情况"]},
+  {id:30,text:"你更感兴趣的是：",dim:"SN",opts:["已经存在并可验证的","可能但尚未发生的"]},
+  {id:31,text:"你更信任：",dim:"SN",opts:["经验和方法","直觉和灵感"]},
+  {id:32,text:"在学习中，你更注重：",dim:"SN",opts:["掌握具体的技能","理解抽象的原理"]},
+  {id:33,text:"你更倾向于：",dim:"SN",opts:["脚踏实地","仰望星空"]},
+  {id:34,text:"你更喜欢听的故事是：",dim:"SN",opts:["基于真实事件的","充满想象力的"]},
+  {id:35,text:"当别人描述未来时，你的反应通常是：",dim:"SN",opts:["关心具体如何实现","享受想象的可能性"]},
+  {id:36,text:"你更容易相信：",dim:"SN",opts:["五官能感受到的","心中所感受到的"]},
+  {id:37,text:"处理问题时，你更依赖：",dim:"SN",opts:["过去的经验","新的想法"]},
+  {id:38,text:"你更欣赏：",dim:"SN",opts:["务实、有用的事物","美观、有创意的事物"]},
+  {id:39,text:"你更倾向于：",dim:"SN",opts:["现实主义","理想主义"]},
+  {id:40,text:"你更喜欢的工作内容是：",dim:"SN",opts:["处理具体的数据和流程","探索新项目新方向"]},
+  {id:41,text:"在做决定时，你更看重：",dim:"TF",opts:["逻辑和客观因素","情感和人际关系"]},
+  {id:42,text:"当朋友向你倾诉烦恼时，你通常：",dim:"TF",opts:["提供解决方案","给予情感支持"]},
+  {id:43,text:"你更倾向于：",dim:"TF",opts:["公平对待每个人","照顾到你关心的人"]},
+  {id:44,text:"在争论中，你更关心：",dim:"TF",opts:["什么是对的","如何让双方都感到好受"]},
+  {id:45,text:"你做决定时：",dim:"TF",opts:["主要依据逻辑分析","主要考虑人的感受"]},
+  {id:46,text:"你更认同：",dim:"TF",opts:["「对的事就该坚持」","「让人开心的方式才是好的」"]},
+  {id:47,text:"当你给别人反馈时，你倾向于：",dim:"TF",opts:["直接指出问题","委婉表达，照顾感受"]},
+  {id:48,text:"你更在意：",dim:"TF",opts:["规则和公正","和谐与关系"]},
+  {id:49,text:"在帮助他人时，你更看重：",dim:"TF",opts:["提供有效的帮助","给予真诚的关怀"]},
+  {id:50,text:"你更敏感于：",dim:"TF",opts:["逻辑上的漏洞","情感上的伤害"]},
+  {id:51,text:"你觉得「批评」：",dim:"TF",opts:["如果对，就是有价值的","应该尽量委婉表达"]},
+  {id:52,text:"你处理冲突的方式：",dim:"TF",opts:["直面问题，分析对错","调解情感，化解矛盾"]},
+  {id:53,text:"你认为成功的人生更重要在于：",dim:"TF",opts:["做出了不起的成就","影响了身边的人"]},
+  {id:54,text:"你更容易被什么打动：",dim:"TF",opts:["一个有说服力的论点","一个感人的故事"]},
+  {id:55,text:"当朋友做了不智的决定时，你会：",dim:"TF",opts:["坦诚指出潜在问题","先安慰再提建议"]},
+  {id:56,text:"你做选择时：",dim:"TF",opts:["理性权衡利弊","考虑对人的影响"]},
+  {id:57,text:"你更容易对什么产生共鸣：",dim:"TF",opts:["一个严密的论证","一个动人的情感表达"]},
+  {id:58,text:"你倾向于：",dim:"TF",opts:["追求真理哪怕伤害感情","维护和谐哪怕妥协事实"]},
+  {id:59,text:"你更喜欢的工作环境是：",dim:"TF",opts:["任务导向、效率优先","人际导向、氛围融洽"]},
+  {id:60,text:"你对自己在意的人：",dim:"TF",opts:["坦诚直接","温和体贴"]},
+  {id:61,text:"你更喜欢：",dim:"JP",opts:["有计划、有组织","灵活随性、顺其自然"]},
+  {id:62,text:"你更倾向于：",dim:"JP",opts:["提前规划行程","随时改变计划"]},
+  {id:63,text:"在截止日期前，你的状态通常是：",dim:"JP",opts:["提前完成","最后一刻赶工"]},
+  {id:64,text:"你更喜欢：",dim:"JP",opts:["按清单做事","保持开放选择"]},
+  {id:65,text:"你的房间/办公桌通常：",dim:"JP",opts:["整洁有序","随意自在"]},
+  {id:66,text:"你更害怕：",dim:"JP",opts:["最后期限临近","失去可能性"]},
+  {id:67,text:"你做事的方式：",dim:"JP",opts:["先列计划再行动","边做边调整"]},
+  {id:68,text:"你更认同：",dim:"JP",opts:["「早起的鸟儿有虫吃」","「船到桥头自然直」"]},
+  {id:69,text:"面对突发事件，你：",dim:"JP",opts:["迅速制定应对计划","先观察情况再说"]},
+  {id:70,text:"你更喜欢的生活节奏：",dim:"JP",opts:["有规律、可预测","自由、随性"]},
+  {id:71,text:"当别人邀请你临时参加活动时，你通常：",dim:"JP",opts:["很乐意参加","需要考虑安排"]},
+  {id:72,text:"你更倾向于：",dim:"JP",opts:["说到做到，严格遵守","随机应变，顺势而为"]},
+  {id:73,text:"你的日程表：",dim:"JP",opts:["提前几周就安排好了","通常只提前一两天"]},
+  {id:74,text:"你更享受：",dim:"JP",opts:["完成任务的那一刻","探索未知的过程"]},
+  {id:75,text:"面对多项任务时，你：",dim:"JP",opts:["按优先级逐项完成","同时处理多项任务"]},
+  {id:76,text:"你更欣赏：",dim:"JP",opts:["有条不紊的人","灵活应变的人"]},
+  {id:77,text:"旅行时，你更喜欢：",dim:"JP",opts:["提前订好行程和酒店","走到哪算哪，随遇而安"]},
+  {id:78,text:"你的工作风格：",dim:"JP",opts:["计划周全再动手","先做起来再说"]},
+  {id:79,text:"你更害怕：",dim:"JP",opts:["意外打乱计划","过于死板无趣"]},
+  {id:80,text:"约会时你通常：",dim:"JP",opts:["提前很久定好时间地点","临时商量去哪"]},
+  {id:81,text:"你如何面对变化：",dim:"JP",opts:["调整计划适应变化","尝试抗拒或推迟变化"]},
+  {id:82,text:"你更倾向于：",dim:"JP",opts:["有明确的短期目标","保持开放的可能性"]},
+  {id:83,text:"在压力下，你：",dim:"JP",opts:["更努力按计划执行","放弃计划，随性应对"]},
+  {id:84,text:"你更喜欢：",dim:"JP",opts:["按部就班的生活","充满惊喜的生活"]},
+  {id:85,text:"当你制定计划时，你：",dim:"JP",opts:["严格遵守","随时调整"]},
+  {id:86,text:"你更享受：",dim:"JP",opts:["把事情做完的满足感","保持各种可能性的自由感"]},
+  {id:87,text:"你倾向于：",dim:"JP",opts:["遵守日程和安排","保持弹性和适应性"]},
+  {id:88,text:"在开始一个新项目前，你：",dim:"JP",opts:["先制定详细的计划","先做起来再说"]},
+  {id:89,text:"你更喜欢哪种生活方式：",dim:"JP",opts:["有目标、有方向","自由、随缘"]},
+  {id:90,text:"当有人说「计划赶不上变化」时，你：",dim:"JP",opts:["同意，计划本来就需要灵活","不认同，好的计划能应对变化"]},
+  {id:91,text:"你的生活哲学接近：",dim:"JP",opts:["「谋事在人，成事在天」","「顺其自然，无为而治」"]},
+  {id:92,text:"你更倾向于是：",dim:"JP",opts:["一个组织者","一个探索者"]},
+  {id:93,text:"最终，你认为：",dim:"JP",opts:["有计划的人生更有意义","活在当下，随遇而安更自在"]}
+];
+
+// ==================== 状态 ====================
+let curQ=0,answers=[],scores={E:0,I:0,S:0,N:0,T:0,F:0,J:0,P:0},history=[];
+const PROGRESS_KEY='mbti-progress-v2';
+const EXPIRE_MS=7*24*60*60*1000; // 7天过期
+
+// ==================== 初始化 ====================
+window.onload=function(){
+  loadData();
+  initProgressDots();
+  // 先显示 intro 页，再检查恢复（确保 resume-card DOM 已渲染）
+  showPage('intro');
+  requestAnimationFrame(()=>{
+    checkResume();
+    // 触发初始页面卡片入场
+    document.querySelectorAll('.page.active .card').forEach((card,i)=>{
+      card.style.animationDelay=i*0.08+'s';
+      card.classList.add('anim-in');
+    });
+  });
+  // 离开页面时自动保存进度（pagehide 比 beforeunload 更可靠）
+  window.addEventListener('pagehide',()=>{
+    if(answers.length>0&&answers.length<questions.length){
+      try{saveProgress();}catch(e){}
+    }
+  });
+  // beforeunload 作为备用
+  window.addEventListener('beforeunload',()=>{
+    if(answers.length>0&&answers.length<questions.length){
+      try{saveProgress();}catch(e){}
+    }
+  });
+};
+
+function loadData(){
+  try{
+    const h=localStorage.getItem('mbti-history');
+    if(h)history=JSON.parse(h);
+  }catch(e){history=[];}
+}
+
+function checkResume(){
+  try{
+    const raw=localStorage.getItem(PROGRESS_KEY);
+    if(!raw){console.log('[checkResume] no raw');return;}
+    const p=JSON.parse(raw);
+    // 过期检查
+    if(Date.now()-p.savedAt>EXPIRE_MS){
+      localStorage.removeItem(PROGRESS_KEY);
+      console.log('[checkResume] expired');
+      return;
+    }
+    // 有效进度
+    if(p.answers&&p.answers.length>0&&p.answers.length<questions.length){
+      const card=document.getElementById('resume-card');
+      if(card) card.style.display='block';
+      const cnt=document.getElementById('resume-count');
+      if(cnt) cnt.textContent=p.answers.length;
+      window._savedProgress=p;
+      console.log('[checkResume] found',p.answers.length,'answers, curQ=',p.curQ);
+    }else{
+      console.log('[checkResume] answers invalid',p.answers);
+    }
+  }catch(e){console.error('[checkResume] error',e);}
+}
+
+function discardProgress(){
+  clearProgress();
+  const card=document.getElementById('resume-card');
+  if(card) card.style.display='none';
+  window._savedProgress=null;
+}
+
+function resumeTest(){
+  const p=window._savedProgress;
+  if(!p)return;
+  curQ=p.curQ;
+  answers=p.answers;
+  scores=p.scores;
+  // 如果恢复的 curQ 对应的题已作答过（说明保存的是已答题目的索引），自动跳到下一题
+  while(curQ<questions.length&&answers.find(a=>a.q===curQ)){
+    curQ++;
+  }
+  if(curQ>=questions.length){
+    clearProgress();
+    showResult();
+    return;
+  }
+  showQuestion();
+  showPage('test');
+}
+
+function saveProgress(){
+  try{
+    const data={curQ,answers,scores,savedAt:Date.now()};
+    localStorage.setItem(PROGRESS_KEY,JSON.stringify(data));
+  }catch(e){console.error(e);}
+}
+
+function clearProgress(){
+  try{localStorage.removeItem(PROGRESS_KEY);}catch(e){}
+  curQ=0;answers=[];scores={E:0,I:0,S:0,N:0,T:0,F:0,J:0,P:0};
+}
+
+function pauseTest(){
+  saveProgress();
+  // 提示用户已保存
+  const btn=document.querySelector('.start-btn');
+  // 简单提示
+  if(confirm('进度已保存，下次进来会自动询问是否继续。\n\n确定要退出吗？')){
+    clearProgress();
+    showPage('intro');
+  }
+}
+
+function saveHistory(type){
+  const now=new Date();
+  // 同时保存 scores，以便历史记录可以恢复雷达图
+  const scoresCopy={E:scores.E,I:scores.I,S:scores.S,N:scores.N,T:scores.T,F:scores.F,J:scores.J,P:scores.P};
+  history.unshift({type,date:now.toLocaleDateString('zh-CN'),time:now.toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'}),scores:scoresCopy});
+  if(history.length>20)history=history.slice(0,20);
+  try{localStorage.setItem('mbti-history',JSON.stringify(history));}catch(e){}
+}
+
+// ==================== 页面切换 ====================
+function showPage(name){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  const pg=document.getElementById('page-'+name);
+  pg.classList.add('active');
+  const navItem=document.querySelector('.nav-item[data-page="'+name+'"]');
+  if(navItem) navItem.classList.add('active');
+  // 触发卡片入场动画
+  requestAnimationFrame(()=>{
+    pg.querySelectorAll('.card').forEach((card,i)=>{
+      card.classList.remove('anim-in');
+      void card.offsetWidth; // reflow 触发重绘
+      card.style.animationDelay=i*0.08+'s';
+      card.classList.add('anim-in');
+    });
+  });
+}
+
+// ==================== 测试逻辑 ====================
+function initProgressDots(){
+  const wrap=document.getElementById('test-progress');
+  wrap.innerHTML='';
+  for(let i=0;i<5;i++){
+    const d=document.createElement('div');
+    d.className='progress-dot'+(i===0?' active':'');
+    wrap.appendChild(d);
+  }
+}
+
+function updateProgress(){
+  const pct=Math.floor((curQ/questions.length)*5);
+  document.querySelectorAll('.progress-dot').forEach((d,i)=>{
+    d.classList.toggle('active',i<=pct);
+  });
+  document.getElementById('test-step').textContent=(curQ+1)+' / '+questions.length;
+}
+
+function startTest(){
+  // 优先使用 _savedProgress（由 checkResume 设置）
+  const saved=window._savedProgress;
+  if(saved&&saved.answers&&saved.answers.length>0&&saved.answers.length<questions.length){
+    const label=saved.answers.length+1;
+    if(!confirm('检测到未完成的测试（第 '+label+' 题）。\n\n确定要重新开始吗？\n点击「取消」继续上次的测试。')){
+      resumeTest();
+      return;
+    }
+  }
+  discardProgress();
+  curQ=0;answers=[];scores={E:0,I:0,S:0,N:0,T:0,F:0,J:0,P:0};
+  showQuestion();
+  showPage('test');
+}
+
+function showQuestion(){
+  const q=questions[curQ];
+  document.getElementById('question-dim').textContent=dimInfo[q.dim].name;
+  document.getElementById('question-text').textContent=q.text;
+  document.getElementById('question-sub').textContent='「'+dimInfo[q.dim].labels[0]+' ←→ '+dimInfo[q.dim].labels[1]+'」';
+  
+  const opts=document.getElementById('options');
+  opts.innerHTML='';
+  q.opts.forEach((opt,i)=>{
+    const d=document.createElement('div');
+    d.className='option';
+    d.style.opacity='0';
+    d.style.transform='translateY(10px)';
+    d.innerHTML='<div class="option-text">'+opt+'</div>';
+    d.onclick=()=>selectOption(i,q.dim);
+    opts.appendChild(d);
+    setTimeout(()=>{
+      d.style.transition='opacity 0.3s ease,transform 0.3s ease';
+      d.style.opacity='1';
+      d.style.transform='translateY(0)';
+    },80+i*60);
+  });
+  // 如果是恢复的进度，且该题已作答过，显示选中状态
+  const prev=answers.find(a=>a.q===curQ);
+  if(prev){
+    document.querySelectorAll('.option').forEach((el,i)=>el.classList.toggle('selected',i===prev.choice));
+  }
+  // 上一题按钮状态
+  const prevBtn=document.getElementById('btn-prev');
+  if(curQ===0){
+    prevBtn.style.opacity='0.3';
+    prevBtn.style.cursor='not-allowed';
+  }else{
+    prevBtn.style.opacity='0.7';
+    prevBtn.style.cursor='pointer';
+  }
+  updateProgress();
+  // 每次翻题都保存进度，防止用户未作答就退出
+  saveProgress();
+}
+
+function prevQuestion(){
+  if(curQ===0)return;
+  curQ--;
+  // 移除当前题的记录（回退后允许重新选择）
+  answers=answers.filter(a=>a.q!==curQ);
+  // 重新计算 scores
+  scores={E:0,I:0,S:0,N:0,T:0,F:0,J:0,P:0};
+  answers.forEach(a=>{
+    const qDim=questions[a.q].dim;
+    const f=qDim[0],s=qDim[1];
+    if(a.choice===0)scores[f]++;else scores[s]++;
+  });
+  saveProgress();
+  showQuestion();
+}
+
+function selectOption(idx,dim){
+  const opts=document.querySelectorAll('.option');
+  opts.forEach(el=>el.classList.remove('ripple'));
+  opts[idx].classList.add('ripple','selected');
+  setTimeout(()=>opts[idx].classList.remove('ripple'),500);
+  // 先移除该题的旧记录（防止回退后再前进产生重复 q）
+  answers=answers.filter(a=>a.q!==curQ);
+  answers.push({q:curQ,choice:idx});
+  const first=dim[0],second=dim[1];
+  // 重新计算 scores（从 answers 完整重算，避免累加误差）
+  scores={E:0,I:0,S:0,N:0,T:0,F:0,J:0,P:0};
+  answers.forEach(a=>{
+    const qDim=questions[a.q].dim;
+    const f=qDim[0],s=qDim[1];
+    if(a.choice===0)scores[f]++;else scores[s]++;
+  });
+  curQ++;
+  saveProgress();
+  setTimeout(()=>{
+    if(curQ<questions.length){
+      showQuestion();
+    }else{
+      clearProgress();
+      showResult();
+    }
+  },300);
+}
+
+function calcType(){
+  return (scores.E>=scores.I?'E':'I')+(scores.S>=scores.N?'S':'N')+(scores.T>=scores.F?'T':'F')+(scores.J>=scores.P?'J':'P');
+}
+
+let curType='';
+
+// ==================== 结果页 ====================
+function showResult(){
+  const type=calcType();
+  curType=type;
+  saveHistory(type);
+  clearProgress(); // 清进度
+  renderResult(type);
+  showPage('result');
+}
+
+function renderResult(type){
+  const db=poeticDB[type];
+  // 确保 scores 有效，防止 NaN
+  const safeScore=(v)=>isNaN(v)||v===undefined||v===null?50:Math.max(0,v);
+  const sE=safeScore(scores.E),sI=safeScore(scores.I),sS=safeScore(scores.S),sN=safeScore(scores.N);
+  const sT=safeScore(scores.T),sF=safeScore(scores.F),sJ=safeScore(scores.J),sP=safeScore(scores.P);
+  const calcPct=(a,b)=>{
+    const sum=a+b;
+    return sum>0?Math.round(a/sum*100):50;
+  };
+  const dims=[
+    {code:'EI',label:'外向',opp:'内向',val:sE,oppVal:sI,pct:calcPct(sE,sI)},
+    {code:'SN',label:'实感',opp:'直觉',val:sS,oppVal:sN,pct:calcPct(sS,sN)},
+    {code:'TF',label:'思考',opp:'情感',val:sT,oppVal:sF,pct:calcPct(sT,sF)},
+    {code:'JP',label:'判断',opp:'知觉',val:sJ,oppVal:sP,pct:calcPct(sJ,sP)}
+  ];
+  
+  // 生成 4 维雷达图 SVG
+  function buildRadar(){
+    const cx=110,cy=110,R=85;
+    const points=dims.map((d,i)=>{
+      const angle=-Math.PI/2 + i*Math.PI/2;
+      const r=R*(d.pct/100);
+      return [cx+r*Math.cos(angle),cy+r*Math.sin(angle)];
+    });
+    const poly=points.map(p=>p.join(',')).join(' ');
+    const gridLevels=[0.25,0.5,0.75,1];
+    const axes=dims.map((d,i)=>{
+      const angle=-Math.PI/2 + i*Math.PI/2;
+      return {
+        x1:cx,y1:cy,
+        x2:cx+R*Math.cos(angle),y2:cy+R*Math.sin(angle),
+        lx:cx+(R+18)*Math.cos(angle),ly:cy+(R+18)*Math.sin(angle),
+        label:d.label+'\n'+d.opp,
+        pct:d.pct
+      };
+    });
+    return `
+      <svg viewBox="0 0 220 220" class="radar-svg">
+        ${gridLevels.map(lv=>{
+          const pts=axes.map(a=>{
+            const r=R*lv;
+            return (cx+r*Math.cos(-Math.PI/2+axes.indexOf(a)*Math.PI/2))+','+
+                   (cy+r*Math.sin(-Math.PI/2+axes.indexOf(a)*Math.PI/2));
+          }).join(' ');
+          return `<polygon points="${pts}" class="radar-grid" fill="none"/>`;
+        }).join('')}
+        ${axes.map(a=>`<line x1="${a.x1}" y1="${a.y1}" x2="${a.x2}" y2="${a.y2}" class="radar-axis"/>`).join('')}
+        <polygon points="${poly}" class="radar-shape" style="--final-poly:${poly}"/>
+        ${axes.map((a,i)=>{
+          const ta=i===0?'middle':i===2?'middle':(a.lx<cx?'end':'start');
+          return `<text x="${a.lx}" y="${a.ly}" class="radar-label" text-anchor="${ta}">${a.label}</text>`;
+        }).join('')}
+        ${axes.map((a,i)=>{
+          const ta=i===0?'middle':i===2?'middle':(a.lx<cx?'end':'start');
+          return `<text x="${a.lx}" y="${a.ly+12}" class="radar-pct" text-anchor="${ta}">${a.pct}%</text>`;
+        }).join('')}
+      </svg>
+    `;
+  }
+  
+  document.getElementById('result-card').innerHTML=`
+    <div class="result-reveal" style="animation-delay:0s">
+      <div class="result-type-tag">${type} · ${db.name}</div>
+    </div>
+    <div class="result-reveal" style="animation-delay:0.1s">
+      <div class="result-four">${db.four}</div>
+    </div>
+    <div class="result-reveal" style="animation-delay:0.2s">
+      <div class="result-pinyin">${db.pinyin}</div>
+    </div>
+    <div class="result-reveal" style="animation-delay:0.3s">
+      <div class="result-figure">
+        <div class="result-avatar">${db.figure.charAt(0)}</div>
+        <div class="result-figure-name">${db.figure}</div>
+        <div class="result-figure-desc">${db.desc}</div>
+      </div>
+    </div>
+    <div class="result-reveal" style="animation-delay:0.4s">
+      <div class="result-poem">${db.poem}</div>
+    </div>
+    
+    <div class="result-reveal" style="animation-delay:0.5s">
+      <div class="radar-wrap">${buildRadar()}</div>
+    </div>
+    
+    <div class="result-reveal" style="animation-delay:0.6s">
+      <div class="section-title">「 性格底色 」</div>
+      <div class="section-content essence">${db.essence}</div>
+    </div>
+    
+    <div class="result-reveal" style="animation-delay:0.7s">
+      <div class="dual-grid">
+        <div class="dual-item">
+          <div class="dual-label">「 天赋之能 」</div>
+          <div class="dual-list">${db.talent.map(t=>`<div class="dual-line">· ${t}</div>`).join('')}</div>
+        </div>
+        <div class="dual-item">
+          <div class="dual-label" style="color:var(--accent)">「 成长之阶 」</div>
+          <div class="dual-list">${db.growth.map(t=>`<div class="dual-line">· ${t}</div>`).join('')}</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="result-reveal" style="animation-delay:0.8s">
+      <div class="section-title">「 人际风向 」</div>
+      <div class="section-content">${db.social}</div>
+    </div>
+    
+    <div class="result-reveal" style="animation-delay:0.85s">
+      <div class="section-title">「 适配之境 」</div>
+      <div class="section-content">${db.career}</div>
+    </div>
+    
+    <div class="result-reveal" style="animation-delay:0.9s">
+      <div class="poem-list-title">「 推荐诗单 」</div>
+      <div class="poem-list">
+        ${db.poems.map(p=>`
+          <div class="poem-card">
+            <div class="poem-card-head">
+              <span class="poem-card-title">${p.t}</span>
+              <span class="poem-card-author">${p.a}</span>
+            </div>
+            <div class="poem-card-body">${p.p}</div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+    
+    <div class="result-reveal" style="animation-delay:1.0s">
+      <div class="section-title">「 同类古人 」</div>
+      <div class="figures-grid">
+        ${db.figures.map(f=>`
+          <div class="figure-card">
+            <div class="figure-avatar">${f.n.charAt(0)}</div>
+            <div class="figure-name">${f.n}</div>
+            <div class="figure-desc">${f.d}</div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+    
+    <div class="result-reveal" style="animation-delay:1.1s">
+      <div class="match-wrap">
+        <div class="match-row">
+          <div class="match-col good">
+            <div class="match-tag">「 心有灵犀 」</div>
+            <div class="match-types">${db.best.map(t=>`<span class="match-type" onclick="rerenderResult('${t}')">${t} · ${(poeticDB[t]&&poeticDB[t].four)||''}</span>`).join('')}</div>
+            <div class="match-desc">与此类人相处，你感到被理解、被看见。</div>
+          </div>
+          <div class="match-col bad">
+            <div class="match-tag" style="color:var(--accent)">「 擦出火花 」</div>
+            <div class="match-types">${db.worst.map(t=>`<span class="match-type" onclick="rerenderResult('${t}')">${t} · ${(poeticDB[t]&&poeticDB[t].four)||''}</span>`).join('')}</div>
+            <div class="match-desc">与此类人相处，需要更多耐心与倾听。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="result-reveal" style="animation-delay:1.2s">
+      <div class="flaw-box">「 静夜思 」<br><span>${db.flaw}</span></div>
+    </div>
+    
+    <div class="result-reveal" style="animation-delay:1.3s">
+      <div class="result-actions">
+        <button class="result-btn" onclick="showHistory()">历史</button>
+        <button class="result-btn" onclick="restartFresh()">重测</button>
+        <button class="result-btn primary" onclick="openShare()">分享结果</button>
+      </div>
+    </div>
+  `;
+  // 触发所有揭示动画
+  requestAnimationFrame(()=>{
+    document.querySelectorAll('.result-reveal').forEach(el=>el.classList.add('do'));
+  });
+}
+
+// ==================== 历史页 ====================
+function showHistory(){
+  const list=document.getElementById('history-list');
+  if(history.length===0){
+    list.innerHTML='<div class="empty-state"><div class="empty-icon">◈</div><div class="empty-text">暂无记录</div></div>';
+  }else{
+    list.innerHTML=history.map((h,idx)=>`
+      <div class="history-item" onclick="rerenderResult('${h.type}', ${h.scores?JSON.stringify(h.scores).replace(/"/g,'&quot;'):'null'})">
+        <div class="history-left">
+          <div class="history-type">${h.type}</div>
+          <div class="history-name">${(poeticDB[h.type]&&poeticDB[h.type].four)||''}</div>
+        </div>
+        <div class="history-date">${h.date}</div>
+      </div>
+    `).join('');
+  }
+  showPage('history');
+}
+
+function rerenderResult(type, savedScores){
+  curType=type;
+  // 恢复 scores，如果没有则使用默认值（50%）
+  if(savedScores){
+    scores=savedScores;
+  }else{
+    // 从历史记录中查找
+    const h=history.find(item=>item.type===type);
+    if(h&&h.scores){
+      scores=h.scores;
+    }else{
+      // 默认中间值
+      scores={E:50,I:50,S:50,N:50,T:50,F:50,J:50,P:50};
+    }
+  }
+  renderResult(type);
+  showPage('result');
+}
+
+// ==================== 弹窗 ====================
+function closeModal(){
+  document.getElementById('modal-share').classList.remove('active');
+}
+
+function restartFresh(){
+  if(confirm('重新测试？当前进度将被清除。')){
+    try{localStorage.removeItem(PROGRESS_KEY);}catch(e){}
+    startTest();
+  }
+}
+
+function openShare(){
+  const type=curType||'INTJ';
+  const db=poeticDB[type];
+  // 优先生成海报图
+  generatePoster(type, db);
+}
+
+function generatePoster(type, db){
+  const wrap=document.getElementById('poster-canvas-wrap');
+  // 构建海报内部 HTML
+  wrap.innerHTML='<div class="poster-inner" id="poster-inner">'+
+    '<div class="poster-brand">SHI JI · ZHI REN</div>'+
+    '<div class="poster-type">'+type+'</div>'+
+    '<div class="poster-four">'+db.four+'</div>'+
+    '<div class="poster-name">'+db.name+'</div>'+
+    '<div class="poster-divider"></div>'+
+    '<div class="poster-poem">'+db.poem+'</div>'+
+    '<div class="poster-figure">—— '+db.figure+'</div>'+
+    '<div class="poster-interpret">'+(db.essence||'').substring(0,80)+'…</div>'+
+    '<div class="poster-qr-area">'+
+      '<div class="poster-qr-code" id="poster-qr"></div>'+
+      '<div class="poster-url-text">'+
+        '<strong>识己 · 知人</strong><br>测测你的诗词人格<br>nc0319.github.io/mbti-test</div>'+
+    '</div>'+
+  '</div>';
+  // 生成 QR 码
+  try{
+    var qrDiv=document.getElementById('poster-qr');
+    qrDiv.innerHTML='';
+    // 用 API 生成 QR，转为 img
+    var qrUrl='https://api.qrserver.com/v1/create-qr-code/?size=128x128&data='+encodeURIComponent('https://nc0319.github.io/mbti-test/');
+    var img=document.createElement('img');
+    img.src=qrUrl;
+    img.style='width:64px;height:64px;border-radius:6px';
+    img.crossOrigin='anonymous';
+    qrDiv.appendChild(img);
+  }catch(e){}
+  // 显示 loading
+  document.getElementById('share-poster').classList.add('active');
+  document.getElementById('poster-loading').style.display='block';
+  document.getElementById('poster-preview').style.display='none';
+  document.getElementById('poster-actions').style.display='none';
+  // 等 DOM + QR 图加载
+  setTimeout(function(){
+    var inner=document.getElementById('poster-inner');
+    html2canvas(inner,{
+      scale:2,useCORS:true,backgroundColor:null,
+      width:375,windowWidth:375
+    }).then(function(canvas){
+      var dataUrl=canvas.toDataURL('image/png');
+      var preview=document.getElementById('poster-preview');
+      preview.src=dataUrl;
+      preview.style.display='block';
+      document.getElementById('poster-loading').style.display='none';
+      document.getElementById('poster-actions').style.display='flex';
+      window._posterDataUrl=dataUrl;
+    }).catch(function(){
+      // 降级：复制文字
+      document.getElementById('share-poster').classList.remove('active');
+      copyShareFallback(type, db);
+    });
+  },800);
+}
+
+function savePoster(){
+  if(!window._posterDataUrl) return;
+  var a=document.createElement('a');
+  a.href=window._posterDataUrl;
+  a.download='我的MBTI诗词人格_'+curType+'.png';
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+}
+
+function closePoster(){
+  document.getElementById('share-poster').classList.remove('active');
+}
+
+function copyShareFallback(type, db){
+  var text='我在《识己·知人》测出自己是【'+(db.four||'')+'】·'+type+'（'+(db.name||'')+'）\n'+(db.poem||'')+'\n测一下你是哪种人格：https://nc0319.github.io/mbti-test/';
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(text).then(function(){alert('结果已复制，去分享给朋友吧');});
+  }else{
+    var ta=document.createElement('textarea');
+    ta.value=text;ta.style.position='fixed';ta.style.opacity='0';
+    document.body.appendChild(ta);ta.select();
+    try{document.execCommand('copy');alert('结果已复制，去分享给朋友吧');}catch(e){}
+    document.body.removeChild(ta);
+  }
+}
+
+// ==================== 暴露 ====================
+window.startTest=startTest;
+window.showPage=showPage;
+window.showHistory=showHistory;
+window.closeModal=closeModal;
+window.rerenderResult=rerenderResult;
+window.resumeTest=resumeTest;
+window.pauseTest=pauseTest;
+window.discardProgress=discardProgress;
+window.prevQuestion=prevQuestion;
+</script>
+
+<!-- 海报弹窗 -->
+<div id="share-poster">
+  <div class="poster-wrap">
+    <div class="poster-loading" id="poster-loading">正在生成海报…</div>
+    <img class="poster-preview" id="poster-preview" style="display:none" alt="分享海报">
+    <div class="poster-actions" id="poster-actions" style="display:none">
+      <button class="btn-cancel" onclick="closePoster()">取消</button>
+      <button class="btn-save" onclick="savePoster()">保存图片</button>
+    </div>
+  </div>
+</div>
+<!-- 屏幕外渲染容器 -->
+<div id="poster-canvas-wrap"></div>
+
+</body>
+</html>
