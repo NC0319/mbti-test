@@ -553,7 +553,18 @@ html,body{
     <div class="intro-illust">🌸</div>
     <div class="intro-poem">天地之大，知己难觅<br>然识己者，方能知人</div>
     <div class="intro-poem-vertical">以诗为镜照见本心</div>
-    <button class="start-btn" onclick="startTest()">开启测试</button>
+
+    <!-- 恢复测试提示 -->
+    <div id="resume-card" style="display:none;background:rgba(196,92,74,0.08);border:1px solid var(--accent-soft);border-radius:14px;padding:16px;margin-top:20px;text-align:left">
+      <div style="font-size:12px;color:var(--accent);letter-spacing:2px;margin-bottom:8px">◇ 检测到未完成的测试</div>
+      <div style="font-size:13px;color:var(--ink-light);line-height:1.6;margin-bottom:12px" id="resume-info">已作答 <span id="resume-count"></span> 题</div>
+      <div style="display:flex;gap:10px">
+        <button onclick="resumeTest()" style="flex:1;padding:10px;background:var(--accent);color:#fff;border:none;border-radius:8px;font-family:inherit;font-size:13px;letter-spacing:2px;cursor:pointer">继续测试</button>
+        <button onclick="discardProgress()" style="flex:1;padding:10px;background:transparent;color:var(--ink-muted);border:1px solid var(--ink-muted);border-radius:8px;font-family:inherit;font-size:13px;letter-spacing:2px;cursor:pointer">重新开始</button>
+      </div>
+    </div>
+
+    <button class="start-btn" onclick="startTest()" id="start-btn-main">开启测试</button>
   </div>
 </div>
 
@@ -563,6 +574,9 @@ html,body{
     <div class="test-header">
       <div class="test-step" id="test-step">1 / 93</div>
       <div class="test-progress" id="test-progress"></div>
+    </div>
+    <div style="text-align:right;margin-bottom:8px">
+      <span onclick="pauseTest()" style="font-size:11px;color:var(--ink-muted);letter-spacing:1px;cursor:pointer;opacity:0.6">⏸ 暂停保存</span>
     </div>
     <div class="question-main">
       <div class="question-dim" id="question-dim">外向 · 内向</div>
@@ -742,11 +756,14 @@ const questions=[
 
 // ==================== 状态 ====================
 let curQ=0,answers=[],scores={E:0,I:0,S:0,N:0,T:0,F:0,J:0,P:0},history=[];
+const PROGRESS_KEY='mbti-progress-v2';
+const EXPIRE_MS=7*24*60*60*1000; // 7天过期
 
 // ==================== 初始化 ====================
 window.onload=function(){
   loadData();
   initProgressDots();
+  checkResume();
 };
 
 function loadData(){
@@ -754,6 +771,59 @@ function loadData(){
     const h=localStorage.getItem('mbti-history');
     if(h)history=JSON.parse(h);
   }catch(e){history=[];}
+}
+
+function checkResume(){
+  try{
+    const raw=localStorage.getItem(PROGRESS_KEY);
+    if(!raw)return;
+    const p=JSON.parse(raw);
+    // 过期检查
+    if(Date.now()-p.savedAt>EXPIRE_MS){
+      localStorage.removeItem(PROGRESS_KEY);
+      return;
+    }
+    // 有效进度
+    if(p.answers&&p.answers.length>0&&p.answers.length<questions.length){
+      document.getElementById('resume-card').style.display='block';
+      document.getElementById('resume-count').textContent=p.answers.length;
+      window._savedProgress=p;
+    }
+  }catch(e){console.error(e);}
+}
+
+function resumeTest(){
+  const p=window._savedProgress;
+  if(!p)return;
+  curQ=p.curQ;
+  answers=p.answers;
+  scores=p.scores;
+  showQuestion();
+  showPage('test');
+  // 不删除进度，下次会再次提示
+}
+
+function saveProgress(){
+  try{
+    const data={curQ,answers,scores,savedAt:Date.now()};
+    localStorage.setItem(PROGRESS_KEY,JSON.stringify(data));
+  }catch(e){console.error(e);}
+}
+
+function clearProgress(){
+  try{localStorage.removeItem(PROGRESS_KEY);}catch(e){}
+  curQ=0;answers=[];scores={E:0,I:0,S:0,N:0,T:0,F:0,J:0,P:0};
+}
+
+function pauseTest(){
+  saveProgress();
+  // 提示用户已保存
+  const btn=document.querySelector('.start-btn');
+  // 简单提示
+  if(confirm('进度已保存，下次进来会自动询问是否继续。\n\n确定要退出吗？')){
+    clearProgress();
+    showPage('intro');
+  }
 }
 
 function saveHistory(type){
@@ -791,6 +861,14 @@ function updateProgress(){
 }
 
 function startTest(){
+  // 如果有保存的进度，让用户选择恢复或重开
+  if(window._savedProgress){
+    if(!confirm('检测到未完成的测试（第 '+(window._savedProgress.answers.length+1)+' 题）。\n\n确定要重新开始吗？\n点击「取消」继续上次的测试。')){
+      resumeTest();
+      return;
+    }
+  }
+  clearProgress();
   curQ=0;answers=[];scores={E:0,I:0,S:0,N:0,T:0,F:0,J:0,P:0};
   showQuestion();
   showPage('test');
@@ -819,10 +897,15 @@ function selectOption(idx,dim){
   answers.push({q:curQ,choice:idx});
   const first=dim[0],second=dim[1];
   if(idx===0)scores[first]++;else scores[second]++;
+  saveProgress(); // 实时保存
   setTimeout(()=>{
     curQ++;
-    if(curQ<questions.length)showQuestion();
-    else showResult();
+    if(curQ<questions.length){
+      showQuestion();
+    }else{
+      clearProgress(); // 全部完成
+      showResult();
+    }
   },250);
 }
 
@@ -834,6 +917,7 @@ function calcType(){
 function showResult(){
   const type=calcType();
   saveHistory(type);
+  clearProgress(); // 清进度
   renderResult(type);
   showPage('result');
 }
@@ -907,6 +991,9 @@ window.showPage=showPage;
 window.showHistory=showHistory;
 window.closeModal=closeModal;
 window.rerenderResult=rerenderResult;
+window.resumeTest=resumeTest;
+window.pauseTest=pauseTest;
+window.discardProgress=discardProgress;
 </script>
 </body>
 </html>
