@@ -1,2175 +1,1033 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="description" content="专业的MBTI人格测试 - 支持详细数据分析、历史记录留存和多维度对比">
-    <meta name="theme-color" content="#667eea">
-    <title>MBTI人格测试 - 完整版</title>
-    <script>
-        // 全局错误捕获 - 方便手机调试
-        window.onerror = function(msg, url, lineNo, columnNo, error) {
-            alert('Error: ' + msg + '\nLine: ' + lineNo + '\nCol: ' + columnNo);
-            return false;
-        };
-        
-        // 捕获console.error
-        const originalConsoleError = console.error;
-        console.error = function(...args) {
-            alert('Console Error: ' + args.join(' '));
-            originalConsoleError.apply(console, args);
-        };
-        
-        console.log('Debug mode: Error capturing enabled');
-    </script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 10px;
-            overflow-x: hidden;
-        }
-
-        .container {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            max-width: 800px;
-            width: 100%;
-            padding: 30px 20px;
-            animation: fadeIn 0.5s ease-in;
-            position: relative;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        h1 {
-            color: #667eea;
-            text-align: center;
-            margin-bottom: 10px;
-            font-size: 2em;
-            font-weight: 700;
-        }
-
-        h2 {
-            color: #667eea;
-            text-align: center;
-            margin-bottom: 20px;
-            font-size: 1.5em;
-        }
-
-        h3 {
-            color: #667eea;
-            margin-bottom: 12px;
-            font-size: 1.2em;
-        }
-
-        .subtitle {
-            text-align: center;
-            color: #666;
-            margin-bottom: 25px;
-            font-size: 1em;
-        }
-
-        .intro {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 25px;
-            line-height: 1.8;
-            color: #555;
-            font-size: 0.95em;
-        }
-
-        .intro ul {
-            margin-top: 15px;
-            padding-left: 20px;
-        }
-
-        .intro li {
-            margin-bottom: 8px;
-        }
-
-        .page {
-            display: none;
-        }
-
-        .page.active {
-            display: block;
-        }
-
-        .progress-bar {
-            background: #e0e0e0;
-            height: 8px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            overflow: hidden;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-        }
-
-        .progress-fill {
-            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
-            height: 100%;
-            transition: width 0.3s ease;
-            border-radius: 10px;
-        }
-
-        .question-counter {
-            text-align: center;
-            color: #999;
-            margin-bottom: 20px;
-            font-size: 0.9em;
-        }
-
-        .question {
-            font-size: 1.2em;
-            color: #333;
-            margin-bottom: 25px;
-            font-weight: 500;
-            line-height: 1.6;
-        }
-
-        .options {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .option {
-            background: #f8f9fa;
-            border: 2px solid transparent;
-            padding: 16px 18px;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 1em;
-            line-height: 1.6;
-            user-select: none;
-            touch-action: manipulation;
-        }
-
-        .option:hover {
-            background: #e9ecef;
-            transform: translateX(5px);
-        }
-
-        .option:active {
-            transform: scale(0.98);
-        }
-
-        .option.selected {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border-color: #5568d3;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-        }
-
-        .navigation {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 25px;
-            gap: 15px;
-        }
-
-        button {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            padding: 14px 30px;
-            border-radius: 25px;
-            font-size: 1em;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 500;
-            flex: 1;
-            touch-action: manipulation;
-        }
-
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-        }
-
-        button:active {
-            transform: scale(0.98);
-        }
-
-        button:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
-        button.secondary {
-            background: #6c757d;
-        }
-
-        button.danger {
-            background: #dc3545;
-        }
-
-        button.success {
-            background: linear-gradient(135deg, #56ab2f 0%, #a8e063 100%);
-        }
-
-        .personality-type {
-            font-size: 3em;
-            font-weight: bold;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin: 20px 0;
-            text-align: center;
-            animation: typeGlow 2s ease-in-out infinite;
-        }
-
-        @keyframes typeGlow {
-            0%, 100% { filter: brightness(1); }
-            50% { filter: brightness(1.2); }
-        }
-
-        .personality-name {
-            font-size: 1.5em;
-            color: #333;
-            margin-bottom: 20px;
-            text-align: center;
-            font-weight: 600;
-        }
-
-        .dimension-scores {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            margin: 25px 0;
-        }
-
-        .dimension {
-            background: #f8f9fa;
-            padding: 18px;
-            border-radius: 10px;
-            text-align: left;
-        }
-
-        .dimension-label {
-            font-weight: bold;
-            color: #667eea;
-            margin-bottom: 10px;
-            font-size: 0.95em;
-        }
-
-        .dimension-score {
-            display: flex;
-            justify-content: space-between;
-            margin: 8px 0;
-            font-size: 0.9em;
-        }
-
-        .dimension-bar {
-            background: #e0e0e0;
-            height: 18px;
-            border-radius: 10px;
-            overflow: hidden;
-            margin-top: 8px;
-        }
-
-        .dimension-fill {
-            height: 100%;
-            transition: width 0.8s ease;
-            border-radius: 10px;
-        }
-
-        .dimension-fill.left {
-            background: #667eea;
-            float: left;
-        }
-
-        .dimension-fill.right {
-            background: #764ba2;
-            float: right;
-        }
-
-        .analysis-section {
-            text-align: left;
-            line-height: 1.8;
-            color: #555;
-            margin: 20px 0;
-            padding: 20px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            font-size: 0.95em;
-        }
-
-        .analysis-section h3 {
-            color: #667eea;
-            margin-bottom: 12px;
-            border-bottom: 2px solid #667eea;
-            padding-bottom: 8px;
-        }
-
-        .analysis-section ul {
-            margin: 10px 0 10px 20px;
-        }
-
-        .analysis-section li {
-            margin-bottom: 8px;
-        }
-
-        .radar-chart {
-            display: flex;
-            justify-content: center;
-            margin: 20px 0;
-        }
-
-        .cognitive-functions {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin: 15px 0;
-        }
-
-        .function-item {
-            background: white;
-            padding: 12px;
-            border-radius: 8px;
-            text-align: center;
-            border: 1px solid #e0e0e0;
-        }
-
-        .function-name {
-            font-weight: bold;
-            color: #667eea;
-            font-size: 1.1em;
-        }
-
-        .function-desc {
-            font-size: 0.85em;
-            color: #666;
-            margin-top: 4px;
-        }
-
-        .history-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin: 20px 0;
-        }
-
-        .history-item {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .history-item:hover {
-            background: #e9ecef;
-            transform: translateX(5px);
-        }
-
-        .history-type {
-            font-size: 1.5em;
-            font-weight: bold;
-            color: #667eea;
-        }
-
-        .history-name {
-            font-size: 0.9em;
-            color: #666;
-            margin-top: 2px;
-        }
-
-        .history-date {
-            font-size: 0.85em;
-            color: #999;
-        }
-
-        .comparison-chart {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 10px;
-            margin: 20px 0;
-        }
-
-        .comparison-item {
-            margin: 15px 0;
-        }
-
-        .comparison-label {
-            font-size: 0.9em;
-            color: #666;
-            margin-bottom: 5px;
-        }
-
-        .comparison-bars {
-            position: relative;
-            height: 30px;
-            background: #e0e0e0;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-
-        .comparison-bar-old {
-            position: absolute;
-            top: 0;
-            height: 12px;
-            background: rgba(102, 126, 234, 0.5);
-            border-radius: 6px;
-        }
-
-        .comparison-bar-new {
-            position: absolute;
-            bottom: 0;
-            height: 12px;
-            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
-            border-radius: 6px;
-        }
-
-        .legend {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            margin: 10px 0;
-            font-size: 0.85em;
-            color: #666;
-        }
-
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .legend-color {
-            width: 16px;
-            height: 8px;
-            border-radius: 4px;
-        }
-
-        .legend-color.old {
-            background: rgba(102, 126, 234, 0.5);
-        }
-
-        .legend-color.new {
-            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
-        }
-
-        .tab-bar {
-            display: flex;
-            background: #f8f9fa;
-            border-radius: 10px;
-            margin: 20px 0;
-            overflow: hidden;
-        }
-
-        .tab {
-            flex: 1;
-            padding: 12px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            color: #666;
-            font-size: 0.9em;
-        }
-
-        .tab.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-
-        .action-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-            flex-wrap: wrap;
-        }
-
-        .action-buttons button {
-            flex: 1;
-            min-width: 140px;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 40px 20px;
-            color: #999;
-        }
-
-        .empty-state-icon {
-            font-size: 3em;
-            margin-bottom: 15px;
-            opacity: 0.3;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 100;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .modal.active {
-            display: flex;
-        }
-
-        .modal-content {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            max-width: 500px;
-            width: 100%;
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .modal-close {
-            background: none;
-            color: #999;
-            font-size: 1.5em;
-            padding: 0;
-            width: 30px;
-            height: 30px;
-            flex: none;
-        }
-
-        .loading {
-            display: none;
-            text-align: center;
-            padding: 20px;
-        }
-
-        .loading.active {
-            display: block;
-        }
-
-        .spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #667eea;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        @media (max-width: 768px) {
-            body {
-                padding: 5px;
-            }
-
-            .container {
-                padding: 20px 15px;
-                border-radius: 15px;
-            }
-
-            h1 {
-                font-size: 1.6em;
-            }
-
-            .dimension-scores,
-            .cognitive-functions {
-                grid-template-columns: 1fr;
-            }
-
-            .personality-type {
-                font-size: 2.5em;
-            }
-
-            .question {
-                font-size: 1.1em;
-            }
-
-            .option {
-                padding: 14px 16px;
-                font-size: 0.95em;
-            }
-
-            button {
-                padding: 12px 20px;
-                font-size: 0.95em;
-            }
-
-            .navigation {
-                flex-direction: column;
-            }
-
-            .navigation button {
-                width: 100%;
-            }
-
-            .action-buttons button {
-                min-width: 100%;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>识己·知人 — MBTI古韵人格测试</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+--ink:#1a1a2e;--ink-mid:#2d2d2d;--ink-light:#5a5a5a;
+--paper:#f5f0e8;--paper-dark:#e8e0d0;
+--celadon:#7fa89a;--cinnabar:#b8403a;--bamboo:#6b8e6b;
+--jade:#5a8a7a;--gold:#c9a84c;--mist:#d4cfc7;
+}
+body{font-family:'Noto Serif SC','STSong','SimSun',serif;background:var(--ink);color:var(--ink-mid);min-height:100vh;overflow-x:hidden}
+
+/* ===== 水墨山水背景 ===== */
+.mountain-bg{
+position:fixed;inset:0;z-index:0;overflow:hidden;
+}
+.mountain-bg::before{
+content:'';position:absolute;inset:0;
+background:
+  /* 远山淡影 */
+  radial-gradient(ellipse 120% 40% at 50% 90%,#1e2a3a 0%,transparent 70%),
+  /* 天际微光 */
+  radial-gradient(ellipse 80% 30% at 50% 10%,#2a3a4a 0%,transparent 80%),
+  /* 主背景 */
+  linear-gradient(175deg,#0d1117 0%,#1a2332 40%,#1e2a3a 100%);
+}
+.mountain-bg::after{
+content:'';position:absolute;bottom:0;left:0;right:0;height:60%;
+background:
+  /* 第一层远山 */
+  radial-gradient(ellipse 200% 25% at 20% 100%,#243040 0%,transparent 60%),
+  radial-gradient(ellipse 180% 30% at 80% 100%,#1e2a38 0%,transparent 55%),
+  /* 第二层中山 */
+  radial-gradient(ellipse 160% 22% at 35% 100%,#1a2830 0%,transparent 50%),
+  radial-gradient(ellipse 140% 20% at 65% 100%,#162230 0%,transparent 48%),
+  /* 前景 */
+  radial-gradient(ellipse 100% 15% at 50% 100%,#0f1a22 0%,transparent 40%);
+animation: mountainDrift 20s ease-in-out infinite alternate;
+}
+@keyframes mountainDrift{
+0%{opacity:0.85;transform:scaleX(1)}
+50%{opacity:1;transform:scaleX(1.02)}
+100%{opacity:0.9;transform:scaleX(0.98)}
+}
+
+/* 宣纸纹理叠加 */
+.paper-texture{
+position:fixed;inset:0;z-index:1;pointer-events:none;
+background-image:
+  repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(245,240,232,0.015) 2px,rgba(245,240,232,0.015) 4px),
+  repeating-linear-gradient(90deg,transparent,transparent 2px,rgba(245,240,232,0.008) 2px,rgba(245,240,232,0.008) 4px);
+}
+
+/* ===== 页面通用 ===== */
+.page{display:none;position:relative;z-index:2;min-height:100vh}
+.page.active{display:flex;flex-direction:column;align-items:center;justify-content:center;animation:fadeIn 0.5s ease}
+
+/* 通用装饰边框 */
+.ornament-border{
+border:1px solid rgba(200,180,150,0.2);
+position:relative;
+}
+.ornament-border::before,.ornament-border::after{
+content:'◈';position:absolute;color:rgba(200,180,150,0.4);font-size:12px;
+}
+.ornament-border::before{top:-7px;left:50%;transform:translateX(-50%);background:var(--ink);padding:0 8px;}
+.ornament-border::after{bottom:-7px;left:50%;transform:translateX(-50%);background:var(--ink);padding:0 8px;}
+
+/* ===== 引导页 ===== */
+#intro-page{
+padding:40px 20px;
+justify-content:center;
+}
+.intro-seal{
+width:90px;height:90px;border-radius:50%;
+background:linear-gradient(135deg,var(--cinnabar),#8b2e28);
+display:flex;align-items:center;justify-content:center;
+margin-bottom:28px;
+box-shadow:0 0 30px rgba(184,64,58,0.4),0 0 60px rgba(184,64,58,0.15);
+animation: sealPulse 3s ease-in-out infinite;
+}
+@keyframes sealPulse{
+0%,100%{box-shadow:0 0 30px rgba(184,64,58,0.4),0 0 60px rgba(184,64,58,0.15)}
+50%{box-shadow:0 0 40px rgba(184,64,58,0.6),0 0 80px rgba(184,64,58,0.25)}
+}
+.seal-char{
+font-size:36px;color:#f5f0e8;
+font-family:'Noto Serif SC',serif;font-weight:700;
+writing-mode:vertical-rl;letter-spacing:4px;
+}
+.intro-title{
+font-size:clamp(28px,6vw,48px);color:var(--paper);
+letter-spacing:12px;margin-bottom:12px;
+text-shadow:0 2px 20px rgba(0,0,0,0.5);
+}
+.intro-subtitle{
+font-size:15px;color:var(--mist);letter-spacing:4px;
+margin-bottom:8px;opacity:0.8;
+}
+.intro-poem{
+font-size:13px;color:var(--celadon);letter-spacing:2px;
+margin-bottom:48px;font-style:italic;opacity:0.7;
+max-width:320px;text-align:center;line-height:1.8;
+}
+.ornament-divider{
+width:60px;height:1px;
+background:linear-gradient(90deg,transparent,var(--celadon),transparent);
+margin:20px auto;
+}
+
+/* 毛笔按钮 */
+.brush-btn{
+background:transparent;
+border:1px solid rgba(200,180,150,0.5);
+color:var(--paper);font-family:'Noto Serif SC',serif;
+font-size:16px;letter-spacing:6px;padding:14px 48px;
+cursor:pointer;position:relative;overflow:hidden;
+transition:all 0.4s ease;
+}
+.brush-btn::before{
+content:'';position:absolute;inset:0;
+background:radial-gradient(ellipse at center,rgba(127,168,154,0.3) 0%,transparent 70%);
+opacity:0;transition:opacity 0.4s ease;
+}
+.brush-btn:hover{
+border-color:var(--celadon);
+color:var(--celadon);
+box-shadow:0 0 30px rgba(127,168,154,0.3),0 0 60px rgba(127,168,154,0.1);
+}
+.brush-btn:hover::before{opacity:1;}
+.brush-btn:active{transform:scale(0.98);}
+
+/* ===== 测试页 ===== */
+#test-page{
+padding:20px;justify-content:flex-start;padding-top:40px;
+}
+.test-header{
+width:100%;max-width:600px;margin-bottom:20px;
+}
+.dimension-tag{
+display:inline-block;font-size:12px;color:var(--celadon);
+border:1px solid rgba(127,168,154,0.4);
+padding:3px 12px;border-radius:20px;
+letter-spacing:3px;margin-bottom:20px;
+}
+.dim-EI{color:var(--celadon);border-color:rgba(127,168,154,0.5)}
+.dim-SN{color:var(--gold);border-color:rgba(201,168,76,0.5)}
+.dim-TF{color:var(--cinnabar);border-color:rgba(184,64,58,0.5)}
+.dim-JP{color:var(--bamboo);border-color:rgba(107,142,107,0.5)}
+
+.question-card{
+width:100%;max-width:600px;
+background:rgba(245,240,232,0.06);
+backdrop-filter:blur(10px);
+border:1px solid rgba(200,180,150,0.15);
+padding:clamp(24px,5vw,40px);
+margin-bottom:24px;
+}
+.question-text{
+font-size:clamp(16px,4vw,20px);color:var(--paper);
+line-height:1.8;margin-bottom:8px;letter-spacing:1px;
+}
+.question-hint{
+font-size:12px;color:var(--mist);opacity:0.6;letter-spacing:1px;
+}
+
+/* 选项 */
+.options-list{width:100%;max-width:600px;display:flex;flex-direction:column;gap:10px;}
+.option-item{
+background:rgba(245,240,232,0.04);
+border:1px solid rgba(200,180,150,0.2);
+color:var(--paper);font-family:'Noto Serif SC',serif;
+font-size:15px;padding:14px 20px;text-align:left;
+cursor:pointer;transition:all 0.3s ease;
+display:flex;align-items:center;gap:12px;
+line-height:1.6;
+}
+.option-item::before{
+content:'';width:20px;height:20px;border-radius:50%;
+border:1px solid rgba(200,180,150,0.4);
+flex-shrink:0;transition:all 0.3s ease;
+}
+.option-item:hover{
+background:rgba(127,168,154,0.12);
+border-color:rgba(127,168,154,0.5);
+}
+.option-item:hover::before{
+border-color:var(--celadon);background:rgba(127,168,154,0.3);
+}
+.option-item.selected{
+background:rgba(127,168,154,0.18);
+border-color:var(--celadon);color:var(--celadon);
+}
+.option-item.selected::before{
+border-color:var(--celadon);background:var(--celadon);
+box-shadow:0 0 10px rgba(127,168,154,0.5);
+}
+
+/* 进度条 */
+.progress-wrap{width:100%;max-width:600px;margin-top:auto;padding:20px 0 40px;}
+.progress-bar{
+height:3px;background:rgba(200,180,150,0.15);border-radius:2px;overflow:hidden;
+}
+.progress-fill{
+height:100%;background:linear-gradient(90deg,var(--celadon),var(--jade));
+border-radius:2px;transition:width 0.5s ease;
+}
+.progress-text{
+text-align:center;font-size:12px;color:var(--mist);opacity:0.5;
+margin-top:12px;letter-spacing:3px;
+}
+
+/* ===== 结果页 ===== */
+#result-page{
+padding:40px 20px;overflow-y:auto;align-items:center;
+}
+.result-inner{width:100%;max-width:640px;}
+
+/* 四字标题 */
+.result-title-block{
+text-align:center;margin-bottom:32px;
+}
+.result-four-char{
+font-size:clamp(48px,12vw,80px);color:var(--paper);
+letter-spacing:16px;line-height:1.2;
+font-weight:700;
+text-shadow:0 4px 30px rgba(0,0,0,0.4);
+animation:titleReveal 0.8s ease-out;
+}
+@keyframes titleReveal{
+0%{opacity:0;transform:translateY(20px) scale(0.95)}
+100%{opacity:1;transform:translateY(0) scale(1)}
+}
+.result-type-line{
+margin-top:16px;display:flex;align-items:center;justify-content:center;gap:20px;
+}
+.result-mbti{
+font-family:'Cormorant Garamond',serif;font-size:24px;
+color:var(--gold);letter-spacing:4px;font-weight:600;
+}
+.result-sep{color:rgba(200,180,150,0.3);font-size:20px;}
+.result-poetic-name{
+font-size:16px;color:var(--celadon);letter-spacing:4px;
+}
+.result-poem{
+font-size:13px;color:var(--mist);opacity:0.6;
+font-style:italic;margin-top:8px;letter-spacing:1px;
+max-width:400px;margin-left:auto;margin-right:auto;
+line-height:1.8;
+}
+
+/* 历史人物 */
+.figure-block{
+text-align:center;margin:24px 0;
+padding:16px;
+border-top:1px solid rgba(200,180,150,0.1);
+border-bottom:1px solid rgba(200,180,150,0.1);
+}
+.figure-name{
+font-size:18px;color:var(--gold);letter-spacing:4px;margin-bottom:4px;
+}
+.figure-desc{
+font-size:13px;color:var(--mist);opacity:0.6;letter-spacing:1px;
+}
+
+/* 四维解析 */
+.dimension-results{
+display:grid;grid-template-columns:1fr 1fr;gap:12px;
+margin:24px 0;
+}
+.dim-result{
+background:rgba(245,240,232,0.04);
+border:1px solid rgba(200,180,150,0.12);
+padding:12px 16px;
+}
+.dim-result-label{
+font-size:11px;color:var(--mist);opacity:0.5;letter-spacing:3px;margin-bottom:6px;
+}
+.dim-result-value{
+font-size:15px;color:var(--paper);letter-spacing:2px;margin-bottom:2px;
+}
+.dim-result-sub{
+font-size:12px;color:var(--celadon);opacity:0.7;
+}
+
+/* 长描述 */
+.result-detail-card{
+background:rgba(245,240,232,0.04);
+border:1px solid rgba(200,180,150,0.1);
+padding:clamp(20px,4vw,32px);
+margin:20px 0;
+}
+.detail-section{margin-bottom:20px;}
+.detail-section:last-child{margin-bottom:0;}
+.detail-title{
+font-size:13px;color:var(--celadon);letter-spacing:4px;
+margin-bottom:10px;padding-bottom:8px;
+border-bottom:1px solid rgba(200,180,150,0.1);
+}
+.detail-text{
+font-size:14px;color:var(--paper);line-height:2;
+opacity:0.85;letter-spacing:0.5px;
+}
+
+/* 分享/重测按钮 */
+.result-actions{
+display:flex;gap:16px;justify-content:center;flex-wrap:wrap;
+margin-top:32px;
+}
+.action-btn{
+background:transparent;border:1px solid rgba(200,180,150,0.3);
+color:var(--paper);font-family:'Noto Serif SC',serif;
+font-size:13px;letter-spacing:3px;padding:10px 28px;
+cursor:pointer;transition:all 0.3s ease;
+}
+.action-btn:hover{
+border-color:var(--celadon);color:var(--celadon);
+box-shadow:0 0 20px rgba(127,168,154,0.2);
+}
+
+/* ===== 动画 ===== */
+@keyframes fadeIn{
+0%{opacity:0;transform:translateY(10px)}
+100%{opacity:1;transform:translateY(0)}
+}
+.fade-in{animation:fadeIn 0.5s ease}
+
+/* ===== 历史记录 ===== */
+#history-page{
+padding:40px 20px;align-items:center;
+}
+.history-inner{width:100%;max-width:500px;}
+.history-title{
+font-size:20px;color:var(--paper);letter-spacing:6px;text-align:center;
+margin-bottom:24px;
+}
+.history-item{
+background:rgba(245,240,232,0.04);
+border:1px solid rgba(200,180,150,0.12);
+padding:14px 20px;margin-bottom:10px;
+display:flex;align-items:center;justify-content:space-between;
+cursor:pointer;transition:all 0.3s;
+}
+.history-item:hover{
+border-color:rgba(127,168,154,0.4);background:rgba(127,168,154,0.08);
+}
+.history-type{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--gold);letter-spacing:2px;}
+.history-name{font-size:13px;color:var(--celadon);letter-spacing:2px;}
+.history-date{font-size:11px;color:var(--mist);opacity:0.4;letter-spacing:1px;}
+.history-empty{
+text-align:center;color:var(--mist);opacity:0.4;
+font-size:14px;letter-spacing:3px;padding:40px;
+}
+
+/* ===== 加载中 ===== */
+.loading-overlay{
+position:fixed;inset:0;z-index:100;
+background:var(--ink);display:flex;flex-direction:column;
+align-items:center;justify-content:center;
+}
+.loading-text{
+font-size:16px;color:var(--mist);letter-spacing:6px;margin-top:20px;
+}
+.loading-seal{font-size:48px;color:var(--cinnabar);animation:sealPulse 1.5s ease-in-out infinite;}
+
+/* ===== 手机适配 ===== */
+@media(max-width:480px){
+.result-four-char{letter-spacing:10px;}
+.dimension-results{grid-template-columns:1fr;}
+.result-type-line{flex-direction:column;gap:8px;}
+.result-actions{flex-direction:column;align-items:center;}
+}
+
+/* 历史人物头像装饰 */
+.figure-avatar{
+width:48px;height:48px;border-radius:50%;
+background:linear-gradient(135deg,var(--celadon),var(--jade));
+display:inline-flex;align-items:center;justify-content:center;
+font-size:22px;margin-bottom:10px;
+opacity:0.8;
+}
+
+/* 分享模态框 */
+.modal-overlay{
+position:fixed;inset:0;z-index:50;
+background:rgba(10,15,20,0.85);display:none;
+align-items:center;justify-content:center;padding:20px;
+}
+.modal-overlay.active{display:flex;}
+.modal-box{
+background:#1a2332;border:1px solid rgba(200,180,150,0.2);
+padding:32px;max-width:400px;width:100%;
+text-align:center;
+}
+.modal-title{font-size:16px;color:var(--paper);letter-spacing:4px;margin-bottom:16px;}
+.modal-text{font-size:13px;color:var(--mist);opacity:0.7;line-height:1.8;margin-bottom:24px;letter-spacing:1px;}
+.modal-close{
+background:transparent;border:1px solid rgba(200,180,150,0.3);
+color:var(--paper);font-family:'Noto Serif SC',serif;
+font-size:13px;letter-spacing:3px;padding:8px 24px;cursor:pointer;
+}
+</style>
 </head>
 <body>
-    <div class="container">
-        <!-- 介绍页面 -->
-        <div id="intro-page" class="page active">
-            <h1>MBTI人格测试</h1>
-            <p class="subtitle">完整版 · 93道题 · 数据分析 · 历史对比</p>
-            
-            <div class="intro">
-                <h3>关于本测试</h3>
-                <p>本测试基于迈尔斯-布里格斯类型指标(MBTI)理论，包含93道精心设计的题目，从四个核心维度全面评估你的人格特质。</p>
-                
-                <p style="margin-top: 15px;"><strong>四个核心维度：</strong></p>
-                <ul>
-                    <li><strong>E/I</strong> - 外向 vs 内向（能量来源）</li>
-                    <li><strong>S/N</strong> - 实感 vs 直觉（信息处理）</li>
-                    <li><strong>T/F</strong> - 思考 vs 情感（决策方式）</li>
-                    <li><strong>J/P</strong> - 判断 vs 感知（生活方式）</li>
-                </ul>
 
-                <p style="margin-top: 15px;"><strong>✨ 完整版功能：</strong></p>
-                <ul>
-                    <li>📊 <strong>详细数据分析</strong>：维度百分比、认知功能栈、优势/劣势分析</li>
-                    <li>💾 <strong>数据自动留存</strong>：所有测试结果自动保存到本地</li>
-                    <li>📈 <strong>历史数据对比</strong>：可视化对比多次测试结果变化</li>
-                    <li>📝 <strong>个性化报告</strong>：职业建议、关系建议、成长路径</li>
-                </ul>
+<!-- 山水背景 -->
+<div class="mountain-bg"></div>
+<div class="paper-texture"></div>
 
-                <p style="margin-top: 15px;"><strong>使用说明：</strong></p>
-                <ul>
-                    <li>预计用时：15-20分钟</li>
-                    <li>请根据第一反应作答，无需过度思考</li>
-                    <li>没有《正确》或《错误》的答案</li>
-                    <li>所有数据仅存储在本地，保护隐私</li>
-                </ul>
-            </div>
+<!-- 加载页 -->
+<div class="loading-overlay" id="loading">
+  <div class="loading-seal">心</div>
+  <div class="loading-text">识己知人</div>
+</div>
 
-            <div class="action-buttons">
-                <button onclick="window.startTest()">开始测试</button>
-                <button class="secondary" onclick="window.showHistory()">历史记录 (<span id="history-count">0</span>)</button>
-            </div>
-            
-            <!-- 调试按钮（正式发布时可删除） -->
-            <div style="margin-top: 20px; text-align: center;">
-                <button onclick="alert('JavaScript正常工作！\nstartTest函数: ' + (typeof window.startTest === 'function' ? '已定义✓' : '未定义✗') + '\nquestions数量: ' + (typeof questions !== 'undefined' ? questions.length + '题' : '未加载'))" 
-                        style="background: #ccc; font-size: 0.8em; padding: 5px 10px;">调试：检查JS状态</button>
-            </div>
-        </div>
+<!-- 引导页 -->
+<div class="page" id="intro-page">
+  <div class="intro-seal"><span class="seal-char">心</span></div>
+  <h1 class="intro-title">识己·知人</h1>
+  <p class="intro-subtitle">MBTI 人格探索</p>
+  <div class="ornament-divider"></div>
+  <p class="intro-poem">
+    众鸟高飞尽，孤云独去闲<br>
+    天地之大，知己难觅<br>
+    然识己者，方能知人
+  </p>
+  <button class="brush-btn" onclick="startTest()">开启测试</button>
+  <div style="margin-top:20px">
+    <button class="brush-btn" onclick="showHistory()" style="font-size:13px;padding:10px 32px;letter-spacing:4px;opacity:0.6">查看历史</button>
+  </div>
+</div>
 
-        <!-- 测试页面 -->
-        <div id="test-page" class="page">
-            <div class="progress-bar">
-                <div class="progress-fill" id="progress-fill"></div>
-            </div>
-            <div class="question-counter" id="question-counter"></div>
-            <div id="question-container"></div>
-            <div class="navigation">
-                <button id="prev-btn" id="btn-prev" disabled>上一题</button>
-                <button id="next-btn" id="btn-next">下一题</button>
-            </div>
-        </div>
+<!-- 测试页 -->
+<div class="page" id="test-page">
+  <div class="test-header">
+    <div class="dimension-tag" id="dimension-tag">外向 · 内向</div>
+    <div class="question-card fade-in">
+      <div class="question-text" id="question-text">加载中…</div>
+      <div class="question-hint" id="question-hint"></div>
+    </div>
+  </div>
+  <div class="options-list" id="options-list"></div>
+  <div class="progress-wrap">
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+    <div class="progress-text" id="progress-text">1 / 93</div>
+  </div>
+</div>
 
-        <!-- 加载动画 -->
-        <div class="loading" id="loading">
-            <div class="spinner"></div>
-            <p>正在分析你的人格特质...</p>
-        </div>
+<!-- 结果页 -->
+<div class="page" id="result-page">
+  <div class="result-inner" id="result-inner"></div>
+</div>
 
-        <!-- 结果页面 -->
-        <div id="result-page" class="page">
-            <h1>你的测试结果</h1>
-            <div class="personality-type" id="personality-type"></div>
-            <div class="personality-name" id="personality-name"></div>
-            
-            <div class="tab-bar">
-                <div class="tab active" onclick="switchResultTab('overview')">概览</div>
-                <div class="tab" onclick="switchResultTab('analysis')">详细分析</div>
-                <div class="tab" onclick="switchResultTab('suggestions')">成长建议</div>
-            </div>
+<!-- 历史记录页 -->
+<div class="page" id="history-page">
+  <div class="history-inner">
+    <h2 class="history-title">往昔心声</h2>
+    <div id="history-list"></div>
+    <div style="text-align:center;margin-top:24px">
+      <button class="brush-btn" onclick="showIntro()" style="font-size:13px;padding:10px 32px;letter-spacing:4px">返回</button>
+    </div>
+  </div>
+</div>
 
-            <div id="tab-overview" class="tab-content">
-                <div class="dimension-scores" id="dimension-scores"></div>
-                <div class="radar-chart" id="radar-chart"></div>
-            </div>
+<!-- 分享模态框 -->
+<div class="modal-overlay" id="share-modal">
+  <div class="modal-box">
+    <div class="modal-title">分享你的心声</div>
+    <div class="modal-text" id="share-text"></div>
+    <button class="modal-close" onclick="closeModal()">关闭</button>
+  </div>
+</div>
 
-            <div id="tab-analysis" class="tab-content" style="display:none;">
-                <div class="analysis-section">
-                    <h3>🧠 认知功能栈</h3>
-                    <div class="cognitive-functions" id="cognitive-functions"></div>
-                </div>
+<script>
+// ==================== 诗词人格数据 ====================
+const poeticDB = {
+  "INTJ":{
+    fourChar:"孤雁排云",poeticName:"孤高清峻",poem:"「众鸟高飞尽，孤云独去闲」——李白",
+    figure:"李 白",figureDesc:"诗仙，太白星落凡尘，独坐敬亭，孤高绝尘",
+    strengths:"高瞻远瞩，谋定后动，如山峦峙立，不可撼动",
+    weaknesses:"孤傲自赏，难容他人之短，亦难诉心中之志",
+    careers:"谋士、战略家、科学家、法官",
+    relationship:"如敬亭山对孤云，相知者稀，相守者寡，然得一知己足矣",
+    growth:"学会入俗而非媚俗，以孤高为盾，以包容为剑",
+    compatibility:"与 ENFP、ENTP 相契；与 ESFJ、ESTJ 或有摩擦"
+  },
+  "INTP":{
+    fourChar:"秋水悟禅",poeticName:"思辨空灵",poem:"「明月松间照，清泉石上流」——王维",
+    figure:"苏 轼",figureDesc:"东坡居士，才通天地，词映古今",
+    strengths:"洞悉本质，逻辑缜密，万物皆可解构",
+    weaknesses:"想多做少，知而不行，空有凌云志",
+    careers:"哲学家、程序员、学术研究者、金融分析师",
+    relationship:"心灵之交胜于形骸之伴，宁缺毋滥",
+    growth:"知行合一，于纷繁世相中寻得一行之路",
+    compatibility:"与 INFJ、ENFJ 相契；与 ESTJ、ESFJ 或有摩擦"
+  },
+  "ENTJ":{
+    fourChar:"长风万里",poeticName:"豪迈凌云",poem:"「日月之行，若出其中；星汉灿烂，若出其里」——曹操",
+    figure:"曹 操",figureDesc:"魏武挥鞭，一代枭雄，气吞山河",
+    strengths:"领袖群伦，决断如铁，振臂一呼，应者云集",
+    weaknesses:"刚愎自用，难纳忠言，以势压人，失人和之利",
+    careers:"企业家、政治领袖、律师、高管",
+    relationship:"主导型伴侣，强势而深情，却需学会示弱",
+    growth:"刚柔并济，以柔克刚，方为真领袖",
+    compatibility:"与 INTP、INTJ 相契；与 ISFP、ISFJ 或有摩擦"
+  },
+  "ENTP":{
+    fourChar:"春风化育",poeticName:"灵动飞扬",poem:"「大鹏一日同风起，扶摇直上九万里」——李白",
+    figure:"庄 子",figureDesc:"逍遥游者，无拘无束，物我两忘",
+    strengths:"机敏善辩，创意无限，如春风化雨，万物滋生",
+    weaknesses:"虎头蛇尾，承诺易忘，锋芒毕露而失人和",
+    careers:"创业者、律师、策划、发明家",
+    relationship:"有趣的灵魂，却难以安定，灵魂伴侣胜于柴米夫妻",
+    growth:"择一而终，精于一艺，方不负天赋",
+    compatibility:"与 INTJ、INFJ 相契；与 ISTJ、ESTJ 或有摩擦"
+  },
+  "INFJ":{
+    fourChar:"幽兰空谷",poeticName:"温润高洁",poem:"「空谷幽兰，孤芳自赏」——古语",
+    figure:"陶渊明",figureDesc:"五柳先生，采菊东篱，悠然见山",
+    strengths:"洞察人心，润物无声，以无形化有形",
+    weaknesses:"压抑自我，取悦他人，隐忍过度而伤己",
+    careers:"心理咨询师、作家、教师、慈善工作者",
+    relationship:"深情如渊，却不轻付，托付一人，终其一生",
+    growth:"学会拒绝非议者，为自己发声",
+    compatibility:"与 ENTP、ENTJ 相契；与 ISTP、ESTP 或有摩擦"
+  },
+  "INFP":{
+    fourChar:"落梅如雪",poeticName:"纯粹孤绝",poem:"「零落成泥碾作尘，只有香如故」——陆游",
+    figure:"林 逋",figureDesc:"梅妻鹤子，孤山隐士，香远益清",
+    strengths:"理想主义者，赤子之心，文字可疗愈众生",
+    weaknesses:"逃避现实，消极被动，以幻想代行动",
+    careers:"作家、艺术家、心理治疗师、翻译",
+    relationship:"灵魂至上，渴望完美的柏拉图之恋",
+    growth:"以行动承载理想，而非以幻想逃避现实",
+    compatibility:"与 ENFJ、ENFP 相契；与 ESTJ、ENTJ 或有摩擦"
+  },
+  "ENFJ":{
+    fourChar:"春风化雨",poeticName:"润物无声",poem:"「随风潜入夜，润物细无声」——杜甫",
+    figure:"孔 子",figureDesc:"万世师表，杏坛讲学，有教无类",
+    strengths:"天生的领袖与导师，激励人心，聚合众生",
+    weaknesses:"取悦他人，过度付出，忽视自身需求",
+    careers:"教师、HR、咨询师、外交官、牧师",
+    relationship:"全情投入，为伴侣倾尽所有，然需学会自爱",
+    growth:"爱人之前先爱己，己所不欲，勿施于己",
+    compatibility:"与 INFP、ISFP 相契；与 ISTP、ESTP 或有摩擦"
+  },
+  "ENFP":{
+    fourChar:"江海寄余生",poeticName:"洒脱不羁",poem:"「小舟从此逝，江海寄余生」——苏轼",
+    figure:"苏 轼",figureDesc:"东坡居士，一蓑烟雨任平生",
+    strengths:"热情洋溢，创造力喷涌，点燃身边每一个人",
+    weaknesses:"专注不足，承诺难守，情绪起伏如潮汐",
+    careers:"记者、演员、心理咨询师、创业者",
+    relationship:"浪漫至上，爱如烈火，然亦需港湾停泊",
+    growth:"于万千热情中寻得一个锚点，深耕细作",
+    compatibility:"与 INTJ、INFJ 相契；与 ISTJ、ISFJ 或有摩擦"
+  },
+  "ISTJ":{
+    fourChar:"松柏后凋",poeticName:"沉稳持重",poem:"「岁寒，然后知松柏之后凋也」——论语",
+    figure:"杜 甫",figureDesc:"诗圣，沉郁顿挫，忧国忧民",
+    strengths:"忠诚可靠，责任心强，持家有道，处事有方",
+    weaknesses:"不知变通，批评过严，难容异见与瑕疵",
+    careers:"会计、律师、医生、军人、公务员",
+    relationship:"家庭支柱，默默守护，以行动代替言语",
+    growth:"接纳不完美，理解他人之难处",
+    compatibility:"与 ESFP、ESTP 相契；与 ENFP、ENTP 或有摩擦"
+  },
+  "ISFJ":{
+    fourChar:"润物无声",poeticName:"温厚绵长",poem:"「随风潜入夜，润物细无声」——杜甫",
+    figure:"孟浩然",figureDesc:"春眠不觉晓，处处闻啼鸟",
+    strengths:"温柔细腻，默默奉献，家人与友朋的避风港",
+    weaknesses:"不擅拒绝，过度担忧，压抑情感而失声",
+    careers:"护士、图书馆员、社工、行政人员",
+    relationship:"以家为重，甘为后盾，付出不求闻达",
+    growth:"表达需求不是自私，而是健康关系的开始",
+    compatibility:"与 ESTP、ESFP 相契；与 ENTP、ENTJ 或有摩擦"
+  },
+  "ESTJ":{
+    fourChar:"山岳巍然",poeticName:"刚健笃定",poem:"「泰山崩于前而色不变」——古语",
+    figure:"诸葛亮",figureDesc:"卧龙先生，出师一表，真名世",
+    strengths:"执行力冠绝，决策果断，秩序与效率的化身",
+    weaknesses:"缺乏弹性，固执己见，以律人之心律己",
+    careers:"CEO、军官、法官、财务总监",
+    relationship:"家庭秩序的维护者，强势却可靠",
+    growth:"柔和并非软弱，接纳他人的不同节奏",
+    compatibility:"与 ISTP、ISFP 相契；与 N 类型多有不协"
+  },
+  "ESFJ":{
+    fourChar:"兰桂齐芳",poeticName:"和煦温煦",poem:"「兰有秀兮菊有芳，怀佳人兮不能忘」——刘彻",
+    figure:"白居易",figureDesc:"琵琶行主，关怀民间疾苦",
+    strengths:"热情好客，人际润滑剂，凝聚团队于无形",
+    weaknesses:"从众心理重，过于在意外界评价",
+    careers:"销售、HR、教师、护士、公关",
+    relationship:"用心经营关系，以细腻关怀筑温暖之家",
+    growth:"敢于与众不同，忠于内心而非他人的期待",
+    compatibility:"与 ISFP、ISTP 相契；与 INTJ、INTP 或有摩擦"
+  },
+  "ISTP":{
+    fourChar:"明月松间",poeticName:"静观自得",poem:"「明月松间照，清泉石上流」——王维",
+    figure:"王 维",figureDesc:"诗佛，行到水穷处，坐看云起时",
+    strengths:"冷静务实，动手能力极强，问题终结者",
+    weaknesses:"情感疏离，不善表达，内心波澜不形于色",
+    careers:"工程师、飞行员、程序员、机械师",
+    relationship:"沉默的守护者，以行动代千言",
+    growth:"打开心扉，言语虽短，情意却长",
+    compatibility:"与 ESTJ、ESFJ 相契；与 ENFJ、NF 类型多有不协"
+  },
+  "ISFP":{
+    fourChar:"流水落花",poeticName:"柔韧从容",poem:"「流水落花春去也，天上人间」——李煜",
+    figure:"李清照",figureDesc:"千古第一才女，如梦令里，藕花深处",
+    strengths:"审美卓越，感知细腻，艺术与生活的融合者",
+    weaknesses:"回避冲突，犹豫不决，常待明日而蹉跎",
+    careers:"设计师、摄影师、花艺师、厨师",
+    relationship:"以柔克刚，在关系中寻求和谐与美",
+    growth:"冲突亦是成长，勇敢面对并非破坏和谐",
+    compatibility:"与 ENFJ、ESFJ 相契；与 ENTJ、ESTJ 或有摩擦"
+  },
+  "ESTP":{
+    fourChar:"大江东去",poeticName:"豪迈奔放",poem:"「大江东去，浪淘尽，千古风流人物」——苏轼",
+    figure:"辛弃疾",figureDesc:"词中之龙，挑灯看剑，气吞万里如虎",
+    strengths:"行动力强，危机处理高手，现活在当下",
+    weaknesses:"缺乏长远规划，冲动冒进，轻诺寡信",
+    careers:"销售、创业、律师、警察、投资人",
+    relationship:"活在当下，尽情享受每一次相聚",
+    growth:"未雨绸缪，三思而后行方为智者",
+    compatibility:"与 ISFJ、ISTJ 相契；与 INFJ、INFP 或有摩擦"
+  },
+  "ESFP":{
+    fourChar:"花间一壶",poeticName:"风流旖旎",poem:"「花间一壶酒，独酌无相亲」——李白",
+    figure:"李 白",figureDesc:"诗仙，将进酒，杯莫停，恣意淋漓",
+    strengths:"天生的聚光者，点燃氛围，让生活充满惊喜",
+    weaknesses:"难以忍受孤独，逃避责任，拒绝严肃",
+    careers:"演员、主持人、导游、策展人、公关",
+    relationship:"热爱分享，热情如火，让平凡日子发光",
+    growth:"学会独处，与自己和解，方能在热闹之后不感空虚",
+    compatibility:"与 ISFJ、ISTJ 相契；与 INTJ、INTP 或有摩擦"
+  }
+};
 
-                <div class="analysis-section">
-                    <h3>💪 核心优势</h3>
-                    <ul id="strengths-list"></ul>
-                </div>
+// 四维维度古典化标签
+const dimLabels = {
+  EI:["朝堂济世","山林归隐"],
+  SN:["烟火人间","诗意苍穹"],
+  TF:["冷眼观潮","柔肠济世"],
+  JP:["循法守正","逍遥任运"]
+};
+const dimNames = {EI:"外向·内向",SN:"感知·直觉",TF:"思考·情感",JP:"判断·知觉"};
+const dimTags = {EI:"dim-EI",SN:"dim-SN",TF:"dim-TF",JP:"dim-JP"};
 
-                <div class="analysis-section">
-                    <h3>⚠️ 潜在挑战</h3>
-                    <ul id="weaknesses-list"></ul>
-                </div>
+// ==================== 测试题目（93题）====================
+const questions = [
+  {id:1,text:"你通常更喜欢：",dimension:"EI",options:["与他人一起度过时光","独自度过时光"]},
+  {id:2,text:"在社交场合中，你通常：",dimension:"EI",options:["主动与陌生人交谈","等待别人来与你交谈"]},
+  {id:3,text:"你更倾向于：",dimension:"EI",options:["通过与人讨论来理清思路","通过独自思考来理清思路"]},
+  {id:4,text:"你觉得自己是：",dimension:"EI",options:["外向的","内向的"]},
+  {id:5,text:"在聚会中，你通常：",dimension:"EI",options:["认识很多新朋友并乐在其中","只与几个熟悉的朋友交谈"]},
+  {id:6,text:"你更喜欢：",dimension:"EI",options:["多个人一起工作","独自工作"]},
+  {id:7,text:"你通常：",dimension:"EI",options:["说话多于倾听","倾听多于说话"]},
+  {id:8,text:"你更容易被什么「充电」：",dimension:"EI",options:["与他人相处","独处"]},
+  {id:9,text:"你倾向于：",dimension:"EI",options:["广泛交友，朋友很多","深交几个好友"]},
+  {id:10,text:"在团队中，你通常：",dimension:"EI",options:["主动表达自己的观点","先听听别人的观点"]},
+  {id:11,text:"你更喜欢的工作环境是：",dimension:"EI",options:["开放、热闹的空间","安静、私密的空间"]},
+  {id:12,text:"你通常：",dimension:"EI",options:["先做再说","先想再做"]},
+  {id:13,text:"你更容易注意：",dimension:"EI",options:["外部世界的活动和变化","自己内心的想法和感受"]},
+  {id:14,text:"你觉得自己：",dimension:"EI",options:["容易接近和交谈","需要时间才能打开心扉"]},
+  {id:15,text:"在解决问题时，你倾向于：",dimension:"EI",options:["与他人讨论获得不同视角","自己独立思考"]},
+  {id:16,text:"你更喜欢：",dimension:"EI",options:["经常变化的活动","稳定规律的活动"]},
+  {id:17,text:"面对大型社交活动，你的感受是：",dimension:"EI",options:["兴奋且精力充沛","感到疲惫需要独处恢复"]},
+  {id:18,text:"你更愿意在哪种场合发言：",dimension:"EI",options:["有许多观众的场合","只有几个熟人的场合"]},
+  {id:19,text:"你的能量获取方式：",dimension:"EI",options:["与人互动给我力量","独处沉思给我力量"]},
+  {id:20,text:"当需要做决定时，你更倾向于：",dimension:"EI",options:["先询问他人意见","自己思考后做决定"]},
+  {id:21,text:"你更关注：",dimension:"SN",options:["具体的事实和细节","事物背后的含义和可能性"]},
+  {id:22,text:"你更喜欢：",dimension:"SN",options:["遵循已有的方法和流程","探索新的可能性"]},
+  {id:23,text:"你更容易记住：",dimension:"SN",options:["具体的日期、数字、事实","整体的概念和印象"]},
+  {id:24,text:"当学习新东西时，你更喜欢：",dimension:"SN",options:["一步一步按部就班","先了解整体框架"]},
+  {id:25,text:"你更注重：",dimension:"SN",options:["眼前实际的问题","未来的可能性"]},
+  {id:26,text:"你更容易被：",dimension:"SN",options:["具体、实际的东西吸引","抽象、理论的东西吸引"]},
+  {id:27,text:"在阅读时，你更倾向于：",dimension:"SN",options:["关注事实描述和细节","关注隐喻和深层含义"]},
+  {id:28,text:"你更喜欢：",dimension:"SN",options:["按照计划行事","随性而为"]},
+  {id:29,text:"当你描述一件事时，你通常会：",dimension:"SN",options:["详细描述具体细节","概括描述整体情况"]},
+  {id:30,text:"你更感兴趣的是：",dimension:"SN",options:["已经存在并可验证的","可能但尚未发生的"]},
+  {id:31,text:"你更信任：",dimension:"SN",options:["经验和方法","直觉和灵感"]},
+  {id:32,text:"在学习中，你更注重：",dimension:"SN",options:["掌握具体的技能","理解抽象的原理"]},
+  {id:33,text:"你更倾向于：",dimension:"SN",options:["脚踏实地","仰望星空"]},
+  {id:34,text:"你更喜欢听的故事是：",dimension:"SN",options:["基于真实事件的","充满想象力的"]},
+  {id:35,text:"当别人描述未来时，你的反应通常是：",dimension:"SN",options:["关心具体如何实现","享受想象的可能性"]},
+  {id:36,text:"你更容易相信：",dimension:"SN",options:["五官能感受到的","心中所感受到的"]},
+  {id:37,text:"处理问题时，你更依赖：",dimension:"SN",options:["过去的经验","新的想法"]},
+  {id:38,text:"你更欣赏：",dimension:"SN",options:["务实、有用的事物","美观、有创意的事物"]},
+  {id:39,text:"你更倾向于：",dimension:"SN",options:["现实主义","理想主义"]},
+  {id:40,text:"你更喜欢的工作内容是：",dimension:"SN",options:["处理具体的数据和流程","探索新项目新方向"]},
+  {id:41,text:"在做决定时，你更看重：",dimension:"TF",options:["逻辑和客观因素","情感和人际关系"]},
+  {id:42,text:"当朋友向你倾诉烦恼时，你通常：",dimension:"TF",options:["提供解决方案","给予情感支持"]},
+  {id:43,text:"你更倾向于：",dimension:"TF",options:["公平对待每个人","照顾到你关心的人"]},
+  {id:44,text:"在争论中，你更关心：",dimension:"TF",options:["什么是对的","如何让双方都感到好受"]},
+  {id:45,text:"你做决定时：",dimension:"TF",options:["主要依据逻辑分析","主要考虑人的感受"]},
+  {id:46,text:"你更认同：",dimension:"TF",options:["「对的事就该坚持」","「让人开心的方式才是好的」"]},
+  {id:47,text:"当你给别人反馈时，你倾向于：",dimension:"TF",options:["直接指出问题","委婉表达，照顾感受"]},
+  {id:48,text:"你更在意：",dimension:"TF",options:["规则和公正","和谐与关系"]},
+  {id:49,text:"在帮助他人时，你更看重：",dimension:"TF",options:["提供有效的帮助","给予真诚的关怀"]},
+  {id:50,text:"你更敏感于：",dimension:"TF",options:["逻辑上的漏洞","情感上的伤害"]},
+  {id:51,text:"你觉得「批评」：",dimension:"TF",options:["如果对，就是有价值的","应该尽量委婉表达"]},
+  {id:52,text:"你处理冲突的方式：",dimension:"TF",options:["直面问题，分析对错","调解情感，化解矛盾"]},
+  {id:53,text:"你认为成功的人生更重要在于：",dimension:"TF",options:["做出了不起的成就","影响了身边的人"]},
+  {id:54,text:"你更容易被什么打动：",dimension:"TF",options:["一个有说服力的论点","一个感人的故事"]},
+  {id:55,text:"当朋友做了不智的决定时，你会：",dimension:"TF",options:["坦诚指出潜在问题","先安慰再提建议"]},
+  {id:56,text:"你做选择时：",dimension:"TF",options:["理性权衡利弊","考虑对人的影响"]},
+  {id:57,text:"你更容易对什么产生共鸣：",dimension:"TF",options:["一个严密的论证","一个动人的情感表达"]},
+  {id:58,text:"你倾向于：",dimension:"TF",options:["追求真理哪怕伤害感情","维护和谐哪怕妥协事实"]},
+  {id:59,text:"你更喜欢的工作环境是：",dimension:"TF",options:["任务导向、效率优先","人际导向、氛围融洽"]},
+  {id:60,text:"你对自己在意的人：",dimension:"TF",options:["坦诚直接","温和体贴"]},
+  {id:61,text:"你更喜欢：",dimension:"JP",options:["有计划、有组织","灵活随性、顺其自然"]},
+  {id:62,text:"你更倾向于：",dimension:"JP",options:["提前规划行程","随时改变计划"]},
+  {id:63,text:"在截止日期前，你的状态通常是：",dimension:"JP",options:["提前完成","最后一刻赶工"]},
+  {id:64,text:"你更喜欢：",dimension:"JP",options:["按清单做事","保持开放选择"]},
+  {id:65,text:"你的房间/办公桌通常：",dimension:"JP",options:["整洁有序","随意自在"]},
+  {id:66,text:"你更害怕：",dimension:"JP",options:["最后期限临近","失去可能性"]},
+  {id:67,text:"你做事的方式：",dimension:"JP",options:["先列计划再行动","边做边调整"]},
+  {id:68,text:"你更认同：",dimension:"JP",options:["「早起的鸟儿有虫吃」","「船到桥头自然直」"]},
+  {id:69,text:"面对突发事件，你：",dimension:"JP",options:["迅速制定应对计划","先观察情况再说"]},
+  {id:70,text:"你更喜欢的生活节奏：",dimension:"JP",options:["有规律、可预测","自由、随性"]},
+  {id:71,text:"当别人邀请你临时参加活动时，你通常：",dimension:"JP",options:["很乐意参加","需要考虑安排"]},
+  {id:72,text:"你更倾向于：",dimension:"JP",options:["说到做到，严格遵守","随机应变，顺势而为"]},
+  {id:73,text:"你的日程表：",dimension:"JP",options:["提前几周就安排好了","通常只提前一两天"]},
+  {id:74,text:"你更享受：",dimension:"JP",options:["完成任务的那一刻","探索未知的过程"]},
+  {id:75,text:"面对多项任务时，你：",dimension:"JP",options:["按优先级逐项完成","同时处理多项任务"]},
+  {id:76,text:"你更欣赏：",dimension:"JP",options:["有条不紊的人","灵活应变的人"]},
+  {id:77,text:"旅行时，你更喜欢：",dimension:"JP",options:["提前订好行程和酒店","走到哪算哪，随遇而安"]},
+  {id:78,text:"你的工作风格：",dimension:"JP",options:["计划周全再动手","先做起来再说"]},
+  {id:79,text:"你更害怕：",dimension:"JP",options:["意外打乱计划","过于死板无趣"]},
+  {id:80,text:"约会时你通常：",dimension:"JP",options:["提前很久定好时间地点","临时商量去哪"]},
+  {id:81,text:"你如何面对变化：",dimension:"JP",options:["调整计划适应变化","尝试抗拒或推迟变化"]},
+  {id:82,text:"你更倾向于：",dimension:"JP",options:["有明确的短期目标","保持开放的可能性"]},
+  {id:83,text:"在压力下，你：",dimension:"JP",options:["更努力按计划执行","放弃计划，随性应对"]},
+  {id:84,text:"你更喜欢：",dimension:"JP",options:["按部就班的生活","充满惊喜的生活"]},
+  {id:85,text:"当你制定计划时，你：",dimension:"JP",options:["严格遵守","随时调整"]},
+  {id:86,text:"你更享受：",dimension:"JP",options:["把事情做完的满足感","保持各种可能性的自由感"]},
+  {id:87,text:"你倾向于：",dimension:"JP",options:["遵守日程和安排","保持弹性和适应性"]},
+  {id:88,text:"在开始一个新项目前，你：",dimension:"JP",options:["先制定详细的计划","先做起来再说"]},
+  {id:89,text:"你更喜欢哪种生活方式：",dimension:"JP",options:["有目标、有方向","自由、随缘"]},
+  {id:90,text:"当有人说「计划赶不上变化」时，你：",dimension:"JP",options:["同意，计划本来就需要灵活","不认同，好的计划能应对变化"]},
+  {id:91,text:"你的生活哲学接近：",dimension:"JP",options:["「谋事在人，成事在天」","「顺其自然，无为而治」"]},
+  {id:92,text:"你更倾向于是：",dimension:"JP",options:["一个组织者","一个探索者"]},
+  {id:93,text:"最终，你认为：",dimension:"JP",options:["有计划的人生更有意义","活在当下，随遇而安更自在"]}
+];
 
-                <div class="analysis-section">
-                    <h3>🎯 适合的职业方向</h3>
-                    <ul id="careers-list"></ul>
-                </div>
-            </div>
+// ==================== 全局状态 ====================
+let currentQuestion = 0;
+let answers = [];
+let scores = {E:0,I:0,S:0,N:0,T:0,F:0,J:0,P:0};
+let savedResults = [];
 
-            <div id="tab-suggestions" class="tab-content" style="display:none;">
-                <div class="analysis-section">
-                    <h3>💕 人际关系建议</h3>
-                    <p id="relationship-advice"></p>
-                </div>
+// ==================== 初始化 ====================
+window.onerror = function(msg,url,line,col,err){
+  console.error('Error:',msg,'Line:',line,'Col:',col);
+  alert('系统错误: '+msg+' (行:'+line+')');
+  return false;
+};
 
-                <div class="analysis-section">
-                    <h3>🌱 个人成长方向</h3>
-                    <p id="growth-advice"></p>
-                </div>
+window.onload = function(){
+  loadProgress();
+  loadResults();
+  showIntro();
+  setTimeout(()=>{document.getElementById('loading').style.display='none';},800);
+};
 
-                <div class="analysis-section">
-                    <h3>🌟 著名人物举例</h3>
-                    <p id="famous-people"></p>
-                </div>
+function showIntro(){
+  showPage('intro-page');
+}
 
-                <div class="analysis-section">
-                    <h3>💝 与其他类型的相处</h3>
-                    <p id="compatibility"></p>
-                </div>
-            </div>
+function showHistory(){
+  renderHistory();
+  showPage('history-page');
+}
 
-            <div class="action-buttons">
-                <button class="success" id="btn-share">分享结果</button>
-                <button onclick="window.showHistory()">历史记录</button>
-                <button class="secondary" onclick="window.restartTest()">重新测试</button>
-            </div>
-        </div>
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
 
-        <!-- 历史记录页面 -->
-        <div id="history-page" class="page">
-            <h1>历史测试记录</h1>
-            <p class="subtitle">共 <span id="total-records">0</span> 次测试记录</p>
+function loadProgress(){
+  try{
+    const p = localStorage.getItem('mbti-progress');
+    if(p){
+      const d = JSON.parse(p);
+      if(d.answers && d.answers.length>0 && confirm('检测到未完成的测试，是否继续？\n点击「取消」开始新测试。')){
+        answers = d.answers;
+        scores = d.scores;
+        currentQuestion = d.current;
+        showQuestion();
+        showPage('test-page');
+        return;
+      }
+    }
+  }catch(e){}
+  localStorage.removeItem('mbti-progress');
+}
 
-            <div class="action-buttons" style="margin-bottom: 20px;">
-                <button onclick="showIntro()">返回首页</button>
-                <button class="secondary" id="btn-show-compare">数据对比</button>
-                <button class="danger" id="btn-clear-history">清空记录</button>
-            </div>
+function saveProgress(){
+  try{
+    localStorage.setItem('mbti-progress',JSON.stringify({answers,scores,current:currentQuestion}));
+  }catch(e){}
+}
 
-            <div id="history-list" class="history-list"></div>
-        </div>
+function discardProgress(){
+  answers=[];scores={E:0,I:0,S:0,N:0,T:0,F:0,J:0,P:0};currentQuestion=0;
+  localStorage.removeItem('mbti-progress');
+}
 
-        <!-- 对比页面 -->
-        <div id="compare-page" class="page">
-            <h1>历史数据对比</h1>
-            <p class="subtitle">对比你的人格变化轨迹</p>
+function loadResults(){
+  try{
+    savedResults=JSON.parse(localStorage.getItem('mbti-results')||'[]');
+  }catch(e){savedResults=[];}
+}
 
-            <div id="compare-content"></div>
+function saveResult(mbtiType){
+  const now=new Date();
+  savedResults.unshift({
+    type:mbtiType,
+    date:now.toLocaleDateString('zh-CN'),
+    time:now.toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'})
+  });
+  if(savedResults.length>10)savedResults=savedResults.slice(0,10);
+  try{localStorage.setItem('mbti-results',JSON.stringify(savedResults));}catch(e){}
+}
 
-            <div class="action-buttons" style="margin-top: 20px;">
-                <button onclick="window.showHistory()">返回记录</button>
-                <button class="secondary" onclick="showIntro()">返回首页</button>
-            </div>
-        </div>
+function clearAllHistory(){
+  if(confirm('确定清除所有历史记录？此操作不可恢复。')){
+    savedResults=[];
+    try{localStorage.removeItem('mbti-results');}catch(e){}
+    renderHistory();
+  }
+}
 
-        <!-- 详情弹窗 -->
-        <div class="modal" id="detail-modal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3 id="modal-title">测试详情</h3>
-                    <button class="modal-close" onclick="closeModal()">×</button>
-                </div>
-                <div id="modal-body"></div>
-            </div>
-        </div>
+// ==================== 测试逻辑 ====================
+function startTest(){
+  answers=[];scores={E:0,I:0,S:0,N:0,T:0,F:0,J:0,P:0};currentQuestion=0;
+  showQuestion();
+  showPage('test-page');
+}
+
+function showQuestion(){
+  const q=questions[currentQuestion];
+  const tag=document.getElementById('dimension-tag');
+  tag.textContent=dimNames[q.dimension];
+  tag.className='dimension-tag '+dimTags[q.dimension];
+
+  const qText=document.getElementById('question-text');
+  const qHint=document.getElementById('question-hint');
+  qText.textContent=(currentQuestion+1)+'. '+q.text;
+  qHint.textContent='「'+dimLabels[q.dimension][0]+' ←→ '+dimLabels[q.dimension][1]+'」';
+
+  const optList=document.getElementById('options-list');
+  optList.innerHTML='';
+  q.options.forEach((opt,i)=>{
+    const div=document.createElement('div');
+    div.className='option-item fade-in';
+    div.style.animationDelay=(i*0.08)+'s';
+    div.textContent=opt;
+    div.onclick=()=>selectOption(i,q.dimension);
+    optList.appendChild(div);
+  });
+
+  const pct=Math.round((currentQuestion/questions.length)*100);
+  document.getElementById('progress-fill').style.width=pct+'%';
+  document.getElementById('progress-text').textContent=(currentQuestion+1)+' / '+questions.length;
+  saveProgress();
+}
+
+function selectOption(idx,dimension){
+  // 记录答案
+  answers.push({q:currentQuestion,choice:idx});
+  // 计分：偶数索引→第一个字母多
+  const first=dimension[0],second=dimension[1];
+  if(idx===0)scores[first]++;else scores[second]++;
+
+  document.querySelectorAll('.option-item').forEach((el,i)=>{
+    el.classList.remove('selected');
+    if(i===idx)el.classList.add('selected');
+  });
+
+  setTimeout(()=>{
+    currentQuestion++;
+    if(currentQuestion<questions.length){
+      showQuestion();
+    }else{
+      showResult();
+    }
+  },300);
+}
+
+// ==================== 结果计算 ====================
+function calculateType(){
+  let type='';
+  type+=(scores.E>=scores.I?'E':'I');
+  type+=(scores.S>=scores.N?'S':'N');
+  type+=(scores.T>=scores.F?'T':'F');
+  type+=(scores.J>=scores.P?'J':'P');
+  return type;
+}
+
+function showResult(){
+  localStorage.removeItem('mbti-progress');
+  const type=calculateType();
+  saveResult(type);
+  renderResult(type);
+  showPage('result-page');
+}
+
+function renderResult(type){
+  const db=poeticDB[type];
+  const dimData=[
+    {dim:'EI',val:scores.E,opp:scores.I,label:'外向',oppLabel:'内向'},
+    {dim:'SN',val:scores.S,opp:scores.N,label:'实感',oppLabel:'直觉'},
+    {dim:'TF',val:scores.T,opp:scores.F,label:'思考',oppLabel:'情感'},
+    {dim:'JP',val:scores.J,opp:scores.P,label:'判断',oppLabel:'知觉'}
+  ];
+
+  const container=document.getElementById('result-inner');
+  container.innerHTML=`
+    <div class="result-title-block">
+      <div class="result-four-char">${db.fourChar}</div>
+      <div class="result-type-line">
+        <span class="result-mbti">${type}</span>
+        <span class="result-sep">｜</span>
+        <span class="result-poetic-name">${db.poeticName}</span>
+      </div>
+      <div class="result-poem">${db.poem}</div>
     </div>
 
-    <script>
-        // 测试题目（93题）
-        const questions = [
-            // E/I 维度
-            { id: 1, text: "你通常更喜欢：", dimension: "EI", options: ["与他人一起度过时光", "独自度过时光"] },
-            { id: 2, text: "在社交场合中，你通常：", dimension: "EI", options: ["主动与陌生人交谈", "等待别人来与你交谈"] },
-            { id: 3, text: "你更倾向于：", dimension: "EI", options: ["通过与人讨论来理清思路", "通过独自思考来理清思路"] },
-            { id: 4, text: "你觉得自己是：", dimension: "EI", options: ["外向的", "内向的"] },
-            { id: 5, text: "在聚会中，你通常：", dimension: "EI", options: ["认识很多新朋友并乐在其中", "只与几个熟悉的朋友交谈"] },
-            { id: 6, text: "你更喜欢：", dimension: "EI", options: ["多个人一起工作", "独自工作"] },
-            { id: 7, text: "你通常：", dimension: "EI", options: ["说话多于倾听", "倾听多于说话"] },
-            { id: 8, text: "你更容易被什么\"充电\"：", dimension: "EI", options: ["与他人相处", "独处"] },
-            { id: 9, text: "你倾向于：", dimension: "EI", options: ["广泛交友，朋友很多", "深交几个好友"] },
-            { id: 10, text: "在团队中，你通常：", dimension: "EI", options: ["主动表达自己的观点", "先听听别人的观点"] },
-            { id: 11, text: "你更喜欢的工作环境是：", dimension: "EI", options: ["开放、热闹的空间", "安静、私密的空间"] },
-            { id: 12, text: "你通常：", dimension: "EI", options: ["先做再说", "先想再做"] },
-            { id: 13, text: "你更容易注意：", dimension: "EI", options: ["外部世界的活动和变化", "自己内心的想法和感受"] },
-            { id: 14, text: "你觉得自己：", dimension: "EI", options: ["容易接近和交谈", "需要时间才能打开心扉"] },
-            { id: 15, text: "在解决问题时，你倾向于：", dimension: "EI", options: ["与他人讨论获得不同视角", "自己独立思考"] },
-            { id: 16, text: "你更喜欢：", dimension: "EI", options: ["经常变化的活动", "稳定规律的活动"] },
-            { id: 17, text: "你通常：", dimension: "EI", options: ["表达情绪比较外露", "把情绪藏在心里"] },
-            { id: 18, text: "在会议中，你通常：", dimension: "EI", options: ["积极发言", "多数时候倾听"] },
-            { id: 19, text: "你更容易：", dimension: "EI", options: ["快速做出决定并行动", "深思熟虑后再行动"] },
-            { id: 20, text: "你更喜欢的学习方式是：", dimension: "EI", options: ["通过讨论和互动", "通过阅读和思考"] },
-            { id: 21, text: "你通常觉得：", dimension: "EI", options: ["与人相处很容易", "与人相处需要努力"] },
-            { id: 22, text: "你更倾向于：", dimension: "EI", options: ["成为关注的焦点", "在幕后工作"] },
-            { id: 23, text: "你的能量主要来自：", dimension: "EI", options: ["外部世界的人和事", "内心世界的想法和反思"] },
-            
-            // S/N 维度
-            { id: 24, text: "你更倾向于相信：", dimension: "SN", options: ["实际经验和事实", "直觉和灵感"] },
-            { id: 25, text: "你更关注：", dimension: "SN", options: ["具体的事实和细节", "整体的模式和可能性"] },
-            { id: 26, text: "你更喜欢：", dimension: "SN", options: ["处理具体、实际的问题", "探索抽象、理论的概念"] },
-            { id: 27, text: "你更容易被什么吸引：", dimension: "SN", options: ["实际的、可操作的事物", "创新的、有创意的想法"] },
-            { id: 28, text: "你更倾向于：", dimension: "SN", options: ["按照既定程序工作", "寻找新的、更好的方法"] },
-            { id: 29, text: "你更擅长：", dimension: "SN", options: ["记住具体的细节和事实", "看到事物的整体和联系"] },
-            { id: 30, text: "你更喜欢的描述是：", dimension: "SN", options: ["务实的、现实的", "有想象力的、有远见的"] },
-            { id: 31, text: "在面对新情况时，你更倾向于：", dimension: "SN", options: ["依靠过去的经验", "相信自己的直觉"] },
-            { id: 32, text: "你更容易注意到：", dimension: "SN", options: ["眼前的具体事物", "未来可能的发展"] },
-            { id: 33, text: "你更喜欢的工作是：", dimension: "SN", options: ["有明确步骤和程序", "充满变化和不确定性"] },
-            { id: 34, text: "你更倾向于：", dimension: "SN", options: ["使用已经证明有效的方法", "尝试全新的、未经测试的方法"] },
-            { id: 35, text: "你更看重：", dimension: "SN", options: ["实用性和可行性", "创新性和原创性"] },
-            { id: 36, text: "你更容易理解：", dimension: "SN", options: ["字面意思和具体说明", "隐含意义和深层含义"] },
-            { id: 37, text: "你更喜欢：", dimension: "SN", options: ["专注于当下", "思考未来"] },
-            { id: 38, text: "你更倾向于：", dimension: "SN", options: ["循序渐进地学习", "跳跃式地学习"] },
-            { id: 39, text: "你更容易：", dimension: "SN", options: ["接受现状", "想象事物可以如何不同"] },
-            { id: 40, text: "你更喜欢的信息呈现方式是：", dimension: "SN", options: ["具体、详细的说明", "概括、概念性的框架"] },
-            { id: 41, text: "你更倾向于：", dimension: "SN", options: ["依赖感官获取信息", "依赖直觉获取信息"] },
-            { id: 42, text: "你更容易被什么打动：", dimension: "SN", options: ["真实的、具体的事物", "象征性的、有意义的事物"] },
-            { id: 43, text: "你更喜欢：", dimension: "SN", options: ["处理现实问题", "探索理论可能性"] },
-            { id: 44, text: "你更倾向于：", dimension: "SN", options: ["关注\"是什么\"", "关注\"可能是什么\""] },
-            { id: 45, text: "你更容易：", dimension: "SN", options: ["记住具体的事件和细节", "记住整体的印象和感觉"] },
-            { id: 46, text: "你更喜欢的描述是：", dimension: "SN", options: ["脚踏实地", "头在云端"] },
-            
-            // T/F 维度
-            { id: 47, text: "在做决定时，你更倾向于：", dimension: "TF", options: ["客观分析利弊", "考虑对他人的影响"] },
-            { id: 48, text: "你更容易：", dimension: "TF", options: ["注意到逻辑上的不一致", "注意到他人的情绪变化"] },
-            { id: 49, text: "你更倾向于：", dimension: "TF", options: ["说实话，即使可能伤害感情", "说善意的谎言来维护和谐"] },
-            { id: 50, text: "你更看重：", dimension: "TF", options: ["公平（对所有人一视同仁）", "仁慈（考虑个人情况）"] },
-            { id: 51, text: "在面对冲突时，你通常：", dimension: "TF", options: ["直接面对问题", "试图缓和气氛"] },
-            { id: 52, text: "你更容易被什么激励：", dimension: "TF", options: ["完成任务的成就感", "帮助他人带来的满足感"] },
-            { id: 53, text: "你更倾向于：", dimension: "TF", options: ["依据逻辑做决定", "依据价值观做决定"] },
-            { id: 54, text: "你更擅长：", dimension: "TF", options: ["分析复杂问题", "理解他人感受"] },
-            { id: 55, text: "你更容易：", dimension: "TF", options: ["批评他人的想法", "鼓励他人的想法"] },
-            { id: 56, text: "你更倾向于：", dimension: "TF", options: ["被视为理性、客观的人", "被视为温暖、有同理心的人"] },
-            { id: 57, text: "在做决定时，你更依赖：", dimension: "TF", options: ["头脑", "心灵"] },
-            { id: 58, text: "你更容易注意到：", dimension: "TF", options: ["事物运作的原理", "人与人之间的关系"] },
-            { id: 59, text: "你更倾向于：", dimension: "TF", options: ["坚持原则，即使不受欢迎", "灵活变通，维持和谐"] },
-            { id: 60, text: "你更容易：", dimension: "TF", options: ["表达自己的观点", "倾听他人的观点"] },
-            { id: 61, text: "你更看重：", dimension: "TF", options: ["真理和正直", "和谐和合作"] },
-            { id: 62, text: "在面对批评时，你通常：", dimension: "TF", options: ["关注批评的内容是否有道理", "关注批评的方式是否伤害感情"] },
-            { id: 63, text: "你更容易被什么说服：", dimension: "TF", options: ["逻辑严密的论证", "情感真挚的故事"] },
-            { id: 64, text: "你更倾向于：", dimension: "TF", options: ["解决问题时保持冷静客观", "解决问题时考虑人的因素"] },
-            { id: 65, text: "你更容易：", dimension: "TF", options: ["做决定后不轻易改变", "根据新情况调整决定"] },
-            { id: 66, text: "你更喜欢的工作环境是：", dimension: "TF", options: ["理性、高效导向", "温暖、人际关系导向"] },
-            { id: 67, text: "你更倾向于：", dimension: "TF", options: ["直截了当的沟通", "委婉体贴的沟通"] },
-            { id: 68, text: "你更容易：", dimension: "TF", options: ["看到他人的错误", "看到他人的优点"] },
-            { id: 69, text: "你更倾向于：", dimension: "TF", options: ["被视为有能力的", "被视为好人"] },
-            
-            // J/P 维度
-            { id: 70, text: "你更倾向于：", dimension: "JP", options: ["提前计划好所有事情", "随遇而安，灵活应对"] },
-            { id: 71, text: "你更容易：", dimension: "JP", options: ["早早完成任务", "等到截止日期前才完成"] },
-            { id: 72, text: "你更喜欢：", dimension: "JP", options: ["一切井然有序", "保持一定的灵活性和混乱"] },
-            { id: 73, text: "你更倾向于：", dimension: "JP", options: ["做出决定并坚持下去", "保持选择的开放性"] },
-            { id: 74, text: "你更容易：", dimension: "JP", options: ["按照计划行事", "根据情况调整计划"] },
-            { id: 75, text: "你更喜欢的工作方式是：", dimension: "JP", options: ["设定明确的目标和截止日期", "保持工作的开放性和自由度"] },
-            { id: 76, text: "你更倾向于：", dimension: "JP", options: ["快速完成决策", "尽可能收集更多信息"] },
-            { id: 77, text: "你更容易感到：", dimension: "JP", options: ["完成任务后的满足感", "开始新任务时的兴奋感"] },
-            { id: 78, text: "你更倾向于：", dimension: "JP", options: ["控制局面", "适应局面"] },
-            { id: 79, text: "你更喜欢：", dimension: "JP", options: ["有结构、有秩序的生活", "自由、随性的生活"] },
-            { id: 80, text: "你更容易：", dimension: "JP", options: ["把事情做完", "开始新事情"] },
-            { id: 81, text: "你更倾向于：", dimension: "JP", options: ["遵循时间表", "跟随自己的节奏"] },
-            { id: 82, text: "你更容易：", dimension: "JP", options: ["把工作放在玩乐之前", "把玩乐和工作混合"] },
-            { id: 83, text: "你更喜欢的描述是：", dimension: "JP", options: ["有组织、有纪律", "自发、灵活"] },
-            { id: 84, text: "你更倾向于：", dimension: "JP", options: ["尽快回复邮件和信息", "当有时间时再回复"] },
-            { id: 85, text: "你更容易：", dimension: "JP", options: ["坚持既定安排", "临时改变计划"] },
-            { id: 86, text: "你更喜欢：", dimension: "JP", options: ["事情明确、可预测", "事情开放、充满可能性"] },
-            { id: 87, text: "你更倾向于：", dimension: "JP", options: ["把工作视为待完成的任务", "把工作视为待探索的过程"] },
-            { id: 88, text: "你更容易：", dimension: "JP", options: ["感到焦虑当事情未定", "感到无聊当事情太固定"] },
-            { id: 89, text: "你更喜欢：", dimension: "JP", options: ["提前知道行程安排", "到了现场再决定"] },
-            { id: 90, text: "你更倾向于：", dimension: "JP", options: ["解决问题后继续前进", "继续探索问题的其他可能性"] },
-            { id: 91, text: "你更容易：", dimension: "JP", options: ["把东西收拾整齐", "把东西随手放置"] },
-            { id: 92, text: "你更喜欢的描述是：", dimension: "JP", options: ["果断的", "好奇的"] },
-            { id: 93, text: "你更倾向于：", dimension: "JP", options: ["喜欢闭合（完成感）", "喜欢开放（可能性）"] }
-        ];
-
-        // 16种人格类型完整数据
-        const personalityData = {
-            "INTJ": {
-                name: "建筑师",
-                nickname: "战略思想家",
-                description: "你是一个富有想象力和战略性的思想家，对一切都有计划。",
-                cognitiveFunctions: [
-                    { name: "Ni", desc: "内倾直觉 - 远见卓识" },
-                    { name: "Te", desc: "外倾思考 - 高效执行" },
-                    { name: "Fi", desc: "内倾情感 - 深度价值" },
-                    { name: "Se", desc: "外倾实感 - 当下体验" }
-                ],
-                strengths: [
-                    "理性、客观的思考能力",
-                    "强大的长期战略眼光",
-                    "独立自主，不受他人影响",
-                    "追求完美，高标准要求",
-                    "善于识别模式和趋势"
-                ],
-                weaknesses: [
-                    "可能显得过于批判和傲慢",
-                    "对他人情感不够敏感",
-                    "完美主义导致拖延",
-                    "不善于表达内心感受",
-                    "可能显得冷漠疏离"
-                ],
-                careers: ["战略顾问", "系统架构师", "投资分析师", "科学家", "工程师", "律师", "管理顾问", "产品经理"],
-                relationship: "在人际关系中，你重视深度和质量超过广度。你寻找能够与你进行智力对话、尊重你独立性的伴侣。你可能不擅长表达情感，但内心深处有强烈的爱和忠诚。",
-                growth: "学会关注他人的情感需求，培养耐心和同理心。不要让完美主义阻碍你开始行动。尝试更多地活在当下，享受过程而不仅仅是结果。",
-                famous: "埃隆·马斯克、马克·扎克伯格、弗里德里希·尼采、米开朗基罗",
-                compatibility: "与 ENFP 和 ENTP 最匹配，因为他们的外向直觉和情感特质能平衡你的内向思考。与 ESFP 关系最具挑战性。"
-            },
-            "INTP": {
-                name: "逻辑学家",
-                nickname: "创新思想家",
-                description: "你是一个创新的发明家，对知识有着无尽的渴望。",
-                cognitiveFunctions: [
-                    { name: "Ti", desc: "内倾思考 - 逻辑分析" },
-                    { name: "Ne", desc: "外倾直觉 - 创意联想" },
-                    { name: "Si", desc: "内倾实感 - 经验记忆" },
-                    { name: "Fe", desc: "外倾情感 - 人际和谐" }
-                ],
-                strengths: [
-                    "强大的逻辑分析能力",
-                    "富有创造力和想象力",
-                    "客观理性的思考",
-                    "善于发现问题和矛盾",
-                    "独立思考，不盲从权威"
-                ],
-                weaknesses: [
-                    "可能过于专注理论忽视实践",
-                    "不善于处理人际冲突",
-                    "容易拖延重要决定",
-                    "可能显得冷漠或疏离",
-                    "对日常事务缺乏耐心"
-                ],
-                careers: ["软件架构师", "数据科学家", "哲学家", "数学家", "研究员", "作家", "经济学家"],
-                relationship: "你重视智力和独立性，寻找能够与你进行深入思想交流的伴侣。你可能不擅长表达情感，但会以独特的方式展现爱意。需要学会更多地关注伴侣的情感需求。",
-                growth: "将你的想法付诸实践，不要让完美的理论成为行动的障碍。培养社交技能和情感表达能力。学会在适当的时候做出决定并坚持执行。",
-                famous: "阿尔伯特·爱因斯坦、比尔·盖茨、艾萨克·牛顿、列奥纳多·达·芬奇",
-                compatibility: "与 ENTJ 和 ENFJ 最匹配，他们能帮助你将想法付诸实践。与 ESFJ 关系最具挑战性。"
-            },
-            "ENTJ": {
-                name: "指挥官",
-                nickname: "天生的领导者",
-                description: "你是一个大胆、富有想象力的领导者，总能找到或创造解决问题的方法。",
-                cognitiveFunctions: [
-                    { name: "Te", desc: "外倾思考 - 高效组织" },
-                    { name: "Ni", desc: "内倾直觉 - 战略远见" },
-                    { name: "Se", desc: "外倾实感 - 实际行动" },
-                    { name: "Fi", desc: "内倾情感 - 核心价值" }
-                ],
-                strengths: [
-                    "天生的领导能力",
-                    "高效的组织执行",
-                    "战略性思考",
-                    "自信果断",
-                    "善于识别低效并改进"
-                ],
-                weaknesses: [
-                    "可能过于强势和专制",
-                    "不耐烦他人的慢节奏",
-                    "可能忽视他人情感",
-                    "工作狂倾向",
-                    "可能显得冷酷无情"
-                ],
-                careers: ["首席执行官", "管理顾问", "律师", "企业家", "投资银行家", "军官", "政治领袖"],
-                relationship: "你直接、坦率，在关系中寻求智力挑战和共同成长。你重视诚实和直接的沟通。需要学会更多地表达柔情和欣赏。",
-                growth: "学会倾听他人的观点，培养同理心和耐心。记住不是所有事情都需要立即解决，给关系留出成长空间。工作与生活需要平衡。",
-                famous: "史蒂夫·乔布斯、玛格丽特·撒切尔、切·格瓦拉、拿破仑·波拿巴",
-                compatibility: "与 INTP 和 INFP 最匹配，他们能软化你的强硬。与 ISFP 关系最具挑战性。"
-            },
-            "ENTP": {
-                name: "辩论家",
-                nickname: "智力挑战者",
-                description: "你是一个聪明的思想家，喜欢挑战智力的极限。",
-                cognitiveFunctions: [
-                    { name: "Ne", desc: "外倾直觉 - 创意联想" },
-                    { name: "Ti", desc: "内倾思考 - 逻辑分析" },
-                    { name: "Fe", desc: "外倾情感 - 人际和谐" },
-                    { name: "Si", desc: "内倾实感 - 经验细节" }
-                ],
-                strengths: [
-                    "思维敏捷，反应快",
-                    "富有创造力和创新",
-                    "优秀的辩论能力",
-                    "善于看到多种可能性",
-                    "知识面广，好奇心强"
-                ],
-                weaknesses: [
-                    "难以坚持长期项目",
-                    "容易争论而不妥协",
-                    "对常规感到厌烦",
-                    "可能忽视细节",
-                    "承诺困难"
-                ],
-                careers: ["企业家", "创意总监", "律师", "发明家", "营销专家", "记者", "顾问"],
-                relationship: "你充满魅力和智慧，在关系中寻求智力刺激和新鲜感。你享受辩论和思想的碰撞。需要学会在争论中给予伴侣情感安全感。",
-                growth: "学会将创意想法落实到具体行动。培养耐心和专注力。重视他人的情感需求，不仅仅是智力层面的交流。",
-                famous: "托马斯·爱迪生、马克·吐温、本杰明·富兰克林、萨尔瓦多·达利",
-                compatibility: "与 INFJ 和 INTJ 最匹配，他们能与你进行深度对话。与 ISFJ 关系最具挑战性。"
-            },
-            "INFJ": {
-                name: "提倡者",
-                nickname: "理想主义的倡导者",
-                description: "你是一个富有同情心、富有理想主义的导师，总是希望帮助他人。",
-                cognitiveFunctions: [
-                    { name: "Ni", desc: "内倾直觉 - 深层洞察" },
-                    { name: "Fe", desc: "外倾情感 - 人际和谐" },
-                    { name: "Ti", desc: "内倾思考 - 逻辑分析" },
-                    { name: "Se", desc: "外倾实感 - 感官体验" }
-                ],
-                strengths: [
-                    "深刻的洞察力和直觉",
-                    "强烈的同理心",
-                    "坚持理想和价值观",
-                    "善于帮助他人成长",
-                    "富有创造力和想象力"
-                ],
-                weaknesses: [
-                    "对批评过于敏感",
-                    "容易 burn out（精疲力竭）",
-                    "过度理想主义",
-                    "难以设定界限",
-                    "完美主义倾向"
-                ],
-                careers: ["心理咨询师", "作家", "教师", "社会工作者", "艺术家", "宗教领袖", "人力资源"],
-                relationship: "你追求深度和真实的人际关系，是忠诚而温柔的伴侣。你能深刻理解伴侣的需求，但可能因为付出过多而疲惫。需要学会接受而不是总是给予。",
-                growth: "学会设定健康的界限，照顾自己的需求。接受不完美，包括他人和自己的不完美。避免过度分析关系，让感情自然流动。",
-                famous: "马丁·路德·金、特蕾莎修女、柏拉图、莫扎特",
-                compatibility: "与 ENTP 和 ENFP 最匹配，他们能激发你的外向直觉。与 ESTP 关系最具挑战性。"
-            },
-            "INFP": {
-                name: "调停者",
-                nickname: "理想主义的和平使者",
-                description: "你是一个温和、敏感的诗人，珍视内心深处的理想。",
-                cognitiveFunctions: [
-                    { name: "Fi", desc: "内倾情感 - 核心价值" },
-                    { name: "Ne", desc: "外倾直觉 - 创意可能" },
-                    { name: "Si", desc: "内倾实感 - 经验记忆" },
-                    { name: "Te", desc: "外倾思考 - 组织执行" }
-                ],
-                strengths: [
-                    "强烈的个人价值观",
-                    "富有同理心",
-                    "创造力和艺术天赋",
-                    "对他人真诚关心",
-                    "忠于自我"
-                ],
-                weaknesses: [
-                    "过于理想化",
-                    "难以处理批评",
-                    "可能过于敏感",
-                    "回避冲突",
-                    "容易自我怀疑"
-                ],
-                careers: ["作家", "艺术家", "心理咨询师", "音乐家", "教师", "图书管理员", "社会工作者"],
-                relationship: "你寻求灵魂深处的连接，是浪漫而忠诚的伴侣。你重视情感的真实和深度，但可能因为期待过高而失望。需要学会接受伴侣的不完美。",
-                growth: "将理想转化为实际行动，不要让梦想只停留在脑海。培养自我接纳，不要总是与他人比较。学会面对和处理冲突，而不是回避。",
-                famous: "威廉·莎士比亚、约翰·列侬、梵高、奥黛丽·赫本",
-                compatibility: "与 ENFJ 和 ENTJ 最匹配，他们能帮助你实现想法。与 ESTJ 关系最具挑战性。"
-            },
-            "ENFJ": {
-                name: "主人公",
-                nickname: "天生的启发者",
-                description: "你是一个富有魅力、富有同情心的领导者，能够激励他人。",
-                cognitiveFunctions: [
-                    { name: "Fe", desc: "外倾情感 - 人际和谐" },
-                    { name: "Ni", desc: "内倾直觉 - 远见洞察" },
-                    { name: "Se", desc: "外倾实感 - 当下体验" },
-                    { name: "Ti", desc: "内倾思考 - 逻辑分析" }
-                ],
-                strengths: [
-                    "出色的沟通能力",
-                    "富有同理心",
-                    "天生的领导者",
-                    "善于激励他人",
-                    "负责任和可靠"
-                ],
-                weaknesses: [
-                    "过于关注他人而忽视自己",
-                    "可能过于理想化",
-                    "对批评敏感",
-                    "难以做艰难决定",
-                    "可能操控他人"
-                ],
-                careers: ["教师", "心理咨询师", "人力资源经理", "销售经理", "宗教领袖", "政治家", "培训师"],
-                relationship: "你热情、关怀，在关系中是支持和鼓励的伴侣。你愿意为伴侣付出很多，但可能因为付出过多而感到不平衡。需要学会接受爱而不只是给予爱。",
-                growth: "学会设定界限，不要为了和谐而牺牲自己的需求。培养客观决策能力，不要总是被他人的情感影响。相信自己的判断，不要过度依赖他人的认可。",
-                famous: "巴拉克·奥巴马、奥普拉·温弗瑞、马丁·路德·金、孔子",
-                compatibility: "与 INFP 和 INTP 最匹配，他们能让你看到不同的视角。与 ISTP 关系最具挑战性。"
-            },
-            "ENFP": {
-                name: "竞选者",
-                nickname: "热情的探索者",
-                description: "你是一个热情、富有创造力的社交蝴蝶，总能找到理由微笑。",
-                cognitiveFunctions: [
-                    { name: "Ne", desc: "外倾直觉 - 创意可能" },
-                    { name: "Fi", desc: "内倾情感 - 核心价值" },
-                    { name: "Te", desc: "外倾思考 - 组织执行" },
-                    { name: "Si", desc: "内倾实感 - 经验细节" }
-                ],
-                strengths: [
-                    "热情洋溢，富有感染力",
-                    "出色的社交能力",
-                    "创造力和创新思维",
-                    "善于看到他人的潜力",
-                    "适应能力强"
-                ],
-                weaknesses: [
-                    "难以坚持长期项目",
-                    "容易分心",
-                    "过度思考，焦虑倾向",
-                    "不擅长处理细节",
-                    "难以做艰难决定"
-                ],
-                careers: ["营销专员", "记者", "演员", "企业家", "顾问", "教师", "活动策划"],
-                relationship: "你充满热情和浪漫，在关系中寻求深度的情感连接和共同成长。你善于让伴侣感到被欣赏，但可能因为变化太快而让伴侣不安。需要学会在变化中保持稳定。",
-                growth: "学会将创意想法落实到具体行动。培养专注力和坚持。接受不是所有可能性都能实现，学会做减法。",
-                famous: "沃尔特·迪士尼、罗宾·威廉姆斯、马克·吐温、塞雷娜·威廉姆斯",
-                compatibility: "与 INTJ 和 INFJ 最匹配，他们能与你进行深度对话。与 ISTJ 关系最具挑战性。"
-            },
-            "ISTJ": {
-                name: "物流师",
-                nickname: "可靠的组织者",
-                description: "你是一个实际、注重事实的人，可靠性是你最大的特点。",
-                cognitiveFunctions: [
-                    { name: "Si", desc: "内倾实感 - 经验细节" },
-                    { name: "Te", desc: "外倾思考 - 组织执行" },
-                    { name: "Fi", desc: "内倾情感 - 核心价值" },
-                    { name: "Ne", desc: "外倾直觉 - 创意可能" }
-                ],
-                strengths: [
-                    "诚实守信",
-                    "强烈的责任感",
-                    "注重细节",
-                    "稳定可靠",
-                    "实际务实"
-                ],
-                weaknesses: [
-                    "固执，不易变通",
-                    "可能过于严肃",
-                    "抗拒变化",
-                    "不善表达情感",
-                    "可能过于传统"
-                ],
-                careers: ["会计", "项目经理", "军官", "法官", "医生", "系统管理员", "审计师"],
-                relationship: "你忠诚可靠，是可以依靠的伴侣。你用行动而非言语表达爱意。虽然不浪漫，但你的稳定和可靠是最珍贵的品质。需要学会更多地表达情感。",
-                growth: "学会接受变化和新的可能性。培养开放的心态，不要过度依赖过去的方法。学会表达情感，不要只用行动说话。",
-                famous: "乔治·华盛顿、安格拉·默克尔、沃伦·巴菲特、斯蒂芬·金",
-                compatibility: "与 ESFP 和 ESTP 最匹配，他们能给你的生活带来乐趣。与 ENFP 关系最具挑战性。"
-            },
-            "ISFJ": {
-                name: "守卫者",
-                nickname: "温暖的守护者",
-                description: "你是一个温暖的守护者，总是准备保护你所爱的人。",
-                cognitiveFunctions: [
-                    { name: "Si", desc: "内倾实感 - 经验细节" },
-                    { name: "Fe", desc: "外倾情感 - 人际和谐" },
-                    { name: "Ti", desc: "内倾思考 - 逻辑分析" },
-                    { name: "Ne", desc: "外倾直觉 - 创意可能" }
-                ],
-                strengths: [
-                    "支持他人",
-                    "可靠和负责任",
-                    "耐心和细心",
-                    "善于观察",
-                    "实际解决问题"
-                ],
-                weaknesses: [
-                    "过于谦虚",
-                    "压抑自己的需求",
-                    "抗拒变化",
-                    "过度承担",
-                    "难以接受赞美"
-                ],
-                careers: ["护士", "教师", "行政助理", "图书管理员", "社会工作者", "客户服务"],
-                relationship: "你温柔体贴，是关心和支持伴侣的好伴侣。你记得所有重要的日子和细节，但可能因为付出过多而感到疲惫。需要学会接受伴侣的照顾。",
-                growth: "学会表达自己的需求，不要总是把他人放在第一位。接受变化，不要让舒适区限制你的成长。学会说《不》，不要总是勉强自己。",
-                famous: "特蕾莎修女、凯特·米德尔顿、碧昂丝、蕾哈娜",
-                compatibility: "与 ESFP 和 ESTP 最匹配，他们能带给你欢乐和刺激。与 ENTJ 关系最具挑战性。"
-            },
-            "ESTJ": {
-                name: "总经理",
-                nickname: "高效的组织者",
-                description: "你是一个出色的管理者，在执行事情方面无与伦比。",
-                cognitiveFunctions: [
-                    { name: "Te", desc: "外倾思考 - 组织执行" },
-                    { name: "Si", desc: "内倾实感 - 经验细节" },
-                    { name: "Ne", desc: "外倾直觉 - 创意可能" },
-                    { name: "Fi", desc: "内倾情感 - 核心价值" }
-                ],
-                strengths: [
-                    "强大的执行力",
-                    "直接坦率的沟通",
-                    "强烈的责任感",
-                    "天生的领导者",
-                    "实际和务实"
-                ],
-                weaknesses: [
-                    "可能过于固执",
-                    "不灵活",
-                    "难以表达情感",
-                    "可能显得专制",
-                    "工作狂倾向"
-                ],
-                careers: ["管理者", "律师", "法官", "军官", "项目经理", "财务总监", "销售经理"],
-                relationship: "你直接可靠，在关系中是负责任的伴侣。你用行动表达爱意，但可能因为太专注于《应该做什么》而忽略情感的交流。需要学会更多地关注伴侣的感受。",
-                growth: "学会倾听不同的观点，不要总是坚持自己的方式。培养情感表达的能力，不要只用行动说话。学会在必要时展现温柔和同理心。",
-                famous: "约翰·洛克菲勒、亨利·福特、米歇尔·奥巴马、桑德拉·戴",
-                compatibility: "与 ISFP 和 INFP 最匹配，他们能软化你的强硬。与 INTP 关系最具挑战性。"
-            },
-            "ESFJ": {
-                name: "执政官",
-                nickname: "热心的照顾者",
-                description: "你是一个极富同情心的人，总是渴望帮助他人。",
-                cognitiveFunctions: [
-                    { name: "Fe", desc: "外倾情感 - 人际和谐" },
-                    { name: "Si", desc: "内倾实感 - 经验细节" },
-                    { name: "Ti", desc: "内倾思考 - 逻辑分析" },
-                    { name: "Ne", desc: "外倾直觉 - 创意可能" }
-                ],
-                strengths: [
-                    "强烈的责任感",
-                    "出色的社交能力",
-                    "实际解决问题",
-                    "忠诚可靠",
-                    "善于照顾他人"
-                ],
-                weaknesses: [
-                    "过于在意他人看法",
-                    "容易受到批评影响",
-                    "不善于处理变化",
-                    "过度自我牺牲",
-                    "可能过于传统"
-                ],
-                careers: ["护士", "教师", "销售经理", "活动策划", "公关专员", "人力资源", "客户服务"],
-                relationship: "你热情、关怀，在关系中是支持和鼓励的伴侣。你重视传统和稳定，努力营造和谐的家庭氛围。但可能因为过于在意他人看法而感到压力。",
-                growth: "学会区分《重要他人》和《其他人的看法》。接受变化，不要让传统限制你的选择。培养自我接纳，不要总是需要他人的认可。",
-                famous: "泰勒·斯威夫特、詹妮弗·洛佩兹、比尔·克林顿、玛丽·居里",
-                compatibility: "与 ISFP 和 ISTP 最匹配，他们能给你独立的空间。与 INTJ 关系最具挑战性。"
-            },
-            "ISTP": {
-                name: "鉴赏家",
-                nickname: "冷静的问题解决者",
-                description: "你是一个大胆的实验者，擅长解决紧急问题。",
-                cognitiveFunctions: [
-                    { name: "Ti", desc: "内倾思考 - 逻辑分析" },
-                    { name: "Se", desc: "外倾实感 - 当下体验" },
-                    { name: "Ni", desc: "内倾直觉 - 深层洞察" },
-                    { name: "Fe", desc: "外倾情感 - 人际和谐" }
-                ],
-                strengths: [
-                    "冷静理性的分析",
-                    "解决实际问题的能力",
-                    "适应力强",
-                    "独立自主",
-                    "危机处理能力"
-                ],
-                weaknesses: [
-                    "可能显得冷漠",
-                    "不善于表达情感",
-                    "容易感到无聊",
-                    "可能过于冒险",
-                    "承诺困难"
-                ],
-                careers: ["工程师", "机械师", "飞行员", "运动员", "程序员", "消防员", "调查记者"],
-                relationship: "你独立、理性，在关系中需要自由和空间。你不善于表达情感，但会以实际行动展现爱意。需要学会更多地与伴侣沟通情感需求。",
-                growth: "学会表达情感，不要只用行动说话。培养长期承诺的能力，不要因为无聊而逃避关系。学会在必要时展现同理心和温柔。",
-                famous: "克林特·伊斯特伍德、迈克尔·乔丹、汤姆·克鲁斯、布鲁斯·李",
-                compatibility: "与 ESFJ 和 ESTJ 最匹配，他们能给你稳定和温暖。与 ENFJ 关系最具挑战性。"
-            },
-            "ISFP": {
-                name: "探险家",
-                nickname: "温和的艺术家",
-                description: "你是一个灵活、富有魅力的艺术家，时刻准备探索新的可能。",
-                cognitiveFunctions: [
-                    { name: "Fi", desc: "内倾情感 - 核心价值" },
-                    { name: "Se", desc: "外倾实感 - 当下体验" },
-                    { name: "Ni", desc: "内倾直觉 - 深层洞察" },
-                    { name: "Te", desc: "外倾思考 - 组织执行" }
-                ],
-                strengths: [
-                    "艺术天赋和审美能力",
-                    "对当下敏感",
-                    "温柔善良",
-                    "实际行动能力",
-                    "忠于自我"
-                ],
-                weaknesses: [
-                    "过于敏感",
-                    "难以处理批评",
-                    "回避冲突",
-                    "难以长期规划",
-                    "容易自我怀疑"
-                ],
-                careers: ["艺术家", "设计师", "音乐家", "厨师", "摄影师", "兽医", "理疗师"],
-                relationship: "你温柔、敏感，在关系中渴望真实和自由的连接。你用感官体验表达爱意，创造美的氛围。但可能因为过于敏感而难以处理冲突。",
-                growth: "学会面对冲突，不要总是回避。培养长期目标，不要只活在当下。学会接受不完美，包括自己和他人的不完美。",
-                famous: "迈克尔·杰克逊、大卫·鲍伊、玛丽莲·梦露、Lady Gaga",
-                compatibility: "与 ENFJ 和 ESFJ 最匹配，他们能给你安全感和认可。与 ENTJ 关系最具挑战性。"
-            },
-            "ESTP": {
-                name: "企业家",
-                nickname: "充满活力的实干家",
-                description: "你是一个聪明的、精力充沛的人，真正享受生活在边缘的感觉。",
-                cognitiveFunctions: [
-                    { name: "Se", desc: "外倾实感 - 当下体验" },
-                    { name: "Ti", desc: "内倾思考 - 逻辑分析" },
-                    { name: "Fe", desc: "外倾情感 - 人际和谐" },
-                    { name: "Ni", desc: "内倾直觉 - 深层洞察" }
-                ],
-                strengths: [
-                    "行动力强",
-                    "适应变化",
-                    "解决危机的能力",
-                    "善于说服他人",
-                    "充满活力"
-                ],
-                weaknesses: [
-                    "冲动，缺乏耐心",
-                    "可能忽视他人感受",
-                    "抗拒约束",
-                    "容易感到无聊",
-                    "可能不思考后果"
-                ],
-                careers: ["销售", "企业家", "演员", "运动员", "警察", "消防员", "急救人员"],
-                relationship: "你充满活力和魅力，在关系中寻求刺激和冒险。你善于让伴侣感到兴奋，但可能因为过于关注当下而忽略长期承诺。",
-                growth: "学会思考长期后果，不要只顾眼前。培养同理心，关注伴侣的情感需求。学会在必要时克制冲动，三思后行。",
-                famous: "唐纳德·特朗普、麦当娜、杰克·尼科尔森、布鲁斯·威利斯",
-                compatibility: "与 ISFJ 和 ISTJ 最匹配，他们能给你稳定和安全感。与 INFJ 关系最具挑战性。"
-            },
-            "ESFP": {
-                name: "表演者",
-                nickname: "热情的娱乐者",
-                description: "你是一个自发的、精力充沛的人，生活从不无聊。",
-                cognitiveFunctions: [
-                    { name: "Se", desc: "外倾实感 - 当下体验" },
-                    { name: "Fi", desc: "内倾情感 - 核心价值" },
-                    { name: "Te", desc: "外倾思考 - 组织执行" },
-                    { name: "Ni", desc: "内倾直觉 - 深层洞察" }
-                ],
-                strengths: [
-                    "充满热情和活力",
-                    "出色的社交能力",
-                    "实际解决问题",
-                    "适应力强",
-                    "善于带来欢乐"
-                ],
-                weaknesses: [
-                    "难以做长期规划",
-                    "容易分心",
-                    "对批评敏感",
-                    "可能过于追求刺激",
-                    "可能忽视他人的需求"
-                ],
-                careers: ["演员", "销售", "活动策划", "导游", "教练", "公关专员", "娱乐行业"],
-                relationship: "你热情、慷慨，在关系中是带来欢乐和刺激的伴侣。你重视当下的快乐，但可能因为过于追求新鲜感而难以面对困难。",
-                growth: "学会面对和处理困难时刻，不要总是逃避。培养长期目标和规划能力。学会关注他人的需求，不要只关注自己的快乐。",
-                famous: "玛丽莲·梦露、杰米·福克斯、凯文·哈特、艾迪·墨菲",
-                compatibility: "与 ISFJ 和 ISTJ 最匹配，他们能给你稳定和安全感。与 INTJ 关系最具挑战性。"
-            }
-        };
-
-        // 全局状态
-        let currentQuestion = 0;
-        let answers = [];
-        let scores = {
-            EI: { left: 0, right: 0 },
-            SN: { left: 0, right: 0 },
-            TF: { left: 0, right: 0 },
-            JP: { left: 0, right: 0 }
-        };
-        let currentResult = null;
-
-        // ========== 数据存储 ==========
-        const STORAGE_KEYS = {
-            HISTORY: 'mbti-test-history',
-            PROGRESS: 'mbti-test-progress'
-        };
-
-        function saveToHistory(result) {
-            let history = getHistory();
-            result.id = Date.now();
-            result.timestamp = new Date().toISOString();
-            history.unshift(result); // 最新的在前面
-            // 最多保存50条
-            if (history.length > 50) {
-                history = history.slice(0, 50);
-            }
-            localStorage.setItem(STORAGE_KEYS.HISTORY, JSON.stringify(history));
-        }
-
-        function getHistory() {
-            const data = localStorage.getItem(STORAGE_KEYS.HISTORY);
-            return data ? JSON.parse(data) : [];
-        }
-
-        function saveProgress() {
-            const data = {
-                currentQuestion,
-                answers,
-                scores,
-                timestamp: Date.now()
-            };
-            localStorage.setItem(STORAGE_KEYS.PROGRESS, JSON.stringify(data));
-        }
-
-        function loadProgress() {
-            const saved = localStorage.getItem(STORAGE_KEYS.PROGRESS);
-            if (saved) {
-                const data = JSON.parse(saved);
-                currentQuestion = data.currentQuestion || 0;
-                answers = data.answers || [];
-                scores = data.scores || {
-                    EI: { left: 0, right: 0 },
-                    SN: { left: 0, right: 0 },
-                    TF: { left: 0, right: 0 },
-                    JP: { left: 0, right: 0 }
-                };
-                return true;
-            }
-            return false;
-        }
-
-        function clearProgress() {
-            localStorage.removeItem(STORAGE_KEYS.PROGRESS);
-        }
-
-        function clearAllHistory() {
-            if (confirm('确定要清空所有历史记录吗？此操作不可恢复！')) {
-                localStorage.removeItem(STORAGE_KEYS.HISTORY);
-                showHistory();
-            }
-        }
-
-        // ========== 页面切换 ==========
-        function showPage(pageId) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.getElementById(pageId).classList.add('active');
-            window.scrollTo(0, 0);
-        }
-
-        function showIntro() {
-            updateHistoryCount();
-            showPage('intro-page');
-        }
-
-        function showHistory() {
-            renderHistory();
-            showPage('history-page');
-        }
-
-        function showCompare() {
-            renderCompare();
-            showPage('compare-page');
-        }
-
-        // ========== 测试流程 ==========
-        function startTest() {
-            if (loadProgress() && answers.length > 0) {
-                if (confirm('检测到未完成的测试，是否继续？\n点击《取消》开始新测试。')) {
-                    showPage('test-page');
-                    showQuestion();
-                    return;
-                } else {
-                    clearProgress();
-                    answers = [];
-                    scores = {
-                        EI: { left: 0, right: 0 },
-                        SN: { left: 0, right: 0 },
-                        TF: { left: 0, right: 0 },
-                        JP: { left: 0, right: 0 }
-                    };
-                }
-            }
-
-            currentQuestion = 0;
-            answers = [];
-            scores = {
-                EI: { left: 0, right: 0 },
-                SN: { left: 0, right: 0 },
-                TF: { left: 0, right: 0 },
-                JP: { left: 0, right: 0 }
-            };
-            showPage('test-page');
-            showQuestion();
-        }
-
-        function showQuestion() {
-            const question = questions[currentQuestion];
-            const container = document.getElementById('question-container');
-            
-            container.innerHTML = `
-                <div class="question">${question.text}</div>
-                <div class="options">
-                    <div class="option" data-index="0">${question.options[0]}</div>
-                    <div class="option" data-index="1">${question.options[1]}</div>
-                </div>
-            `;
-
-            const options = container.querySelectorAll('.option');
-            options.forEach(opt => {
-                opt.addEventListener('click', function() {
-                    const index = parseInt(this.getAttribute('data-index'));
-                    selectOption(index);
-                });
-
-                if (answers[currentQuestion] !== undefined) {
-                    if (parseInt(opt.getAttribute('data-index')) === answers[currentQuestion]) {
-                        opt.classList.add('selected');
-                    }
-                }
-            });
-
-            updateProgress();
-            updateNavigation();
-        }
-
-        function selectOption(optionIndex) {
-            answers[currentQuestion] = optionIndex;
-            
-            const options = document.querySelectorAll('.option');
-            options.forEach((opt, idx) => {
-                if (idx === optionIndex) {
-                    opt.classList.add('selected');
-                } else {
-                    opt.classList.remove('selected');
-                }
-            });
-
-            saveProgress();
-
-            if (currentQuestion < questions.length - 1) {
-                setTimeout(() => nextQuestion(), 500);
-            }
-        }
-
-        function nextQuestion() {
-            if (answers[currentQuestion] === undefined) {
-                alert('请先选择答案！');
-                return;
-            }
-
-            if (!wasAnsweredBefore(currentQuestion)) {
-                const question = questions[currentQuestion];
-                const dimension = question.dimension;
-                const answer = answers[currentQuestion];
-
-                if (answer === 0) {
-                    scores[dimension].left++;
-                } else {
-                    scores[dimension].right++;
-                }
-            }
-
-            if (currentQuestion < questions.length - 1) {
-                currentQuestion++;
-                showQuestion();
-            } else {
-                showResult();
-            }
-        }
-
-        function wasAnsweredBefore(questionIndex) {
-            const saved = localStorage.getItem(STORAGE_KEYS.PROGRESS);
-            if (saved) {
-                const data = JSON.parse(saved);
-                return data.answers && data.answers[questionIndex] !== undefined;
-            }
-            return false;
-        }
-
-        function previousQuestion() {
-            if (currentQuestion > 0) {
-                currentQuestion--;
-                showQuestion();
-            }
-        }
-
-        function updateProgress() {
-            const progress = ((currentQuestion + 1) / questions.length) * 100;
-            document.getElementById('progress-fill').style.width = progress + '%';
-            document.getElementById('question-counter').textContent = `第 ${currentQuestion + 1} 题 / 共 ${questions.length} 题`;
-        }
-
-        function updateNavigation() {
-            document.getElementById('prev-btn').disabled = currentQuestion === 0;
-            
-            if (currentQuestion === questions.length - 1) {
-                document.getElementById('next-btn').textContent = '查看结果';
-            } else {
-                document.getElementById('next-btn').textContent = '下一题';
-            }
-        }
-
-        // ========== 结果展示 ==========
-        function showResult() {
-            showPage('loading');
-            document.getElementById('loading').classList.add('active');
-
-            setTimeout(() => {
-                document.getElementById('loading').classList.remove('active');
-                showPage('result-page');
-
-                const type = calculateType();
-                currentResult = {
-                    type,
-                    name: personalityData[type].name,
-                    scores: JSON.parse(JSON.stringify(scores)),
-                    date: new Date().toISOString()
-                };
-
-                // 保存到历史
-                saveToHistory(currentResult);
-                clearProgress();
-
-                // 渲染结果
-                document.getElementById('personality-type').textContent = type;
-                document.getElementById('personality-name').textContent = personalityData[type].name + ' · ' + personalityData[type].nickname;
-
-                displayDimensionScores();
-                displayRadarChart();
-                displayAnalysis(type);
-                displaySuggestions(type);
-            }, 1500);
-        }
-
-        function calculateType() {
-            let type = '';
-            type += scores.EI.left >= scores.EI.right ? 'E' : 'I';
-            type += scores.SN.left >= scores.SN.right ? 'S' : 'N';
-            type += scores.TF.left >= scores.TF.right ? 'T' : 'F';
-            type += scores.JP.left >= scores.JP.right ? 'J' : 'P';
-            return type;
-        }
-
-        function displayDimensionScores() {
-            const container = document.getElementById('dimension-scores');
-            const dimensions = [
-                { key: 'EI', label: '外向(E) vs 内向(I)', left: 'E', right: 'I' },
-                { key: 'SN', label: '实感(S) vs 直觉(N)', left: 'S', right: 'N' },
-                { key: 'TF', label: '思考(T) vs 情感(F)', left: 'T', right: 'F' },
-                { key: 'JP', label: '判断(J) vs 感知(P)', left: 'J', right: 'P' }
-            ];
-
-            container.innerHTML = '';
-
-            dimensions.forEach(dim => {
-                const score = scores[dim.key];
-                const total = score.left + score.right;
-                const leftPercent = (score.left / total * 100).toFixed(1);
-                const rightPercent = (score.right / total * 100).toFixed(1);
-
-                const dimDiv = document.createElement('div');
-                dimDiv.className = 'dimension';
-                dimDiv.innerHTML = `
-                    <div class="dimension-label">${dim.label}</div>
-                    <div class="dimension-score">
-                        <span>${dim.left} (${leftPercent}%)</span>
-                        <span>${dim.right} (${rightPercent}%)</span>
-                    </div>
-                    <div class="dimension-bar">
-                        <div class="dimension-fill left" style="width: ${leftPercent}%;"></div>
-                        <div class="dimension-fill right" style="width: ${rightPercent}%;"></div>
-                    </div>
-                `;
-                container.appendChild(dimDiv);
-            });
-        }
-
-        function displayRadarChart() {
-            const container = document.getElementById('radar-chart');
-            // 计算4个维度的得分（0-100）
-            const dimensions = [
-                { name: 'E-I', value: (scores.EI.left / (scores.EI.left + scores.EI.right)) * 100 },
-                { name: 'S-N', value: (scores.SN.left / (scores.SN.left + scores.SN.right)) * 100 },
-                { name: 'T-F', value: (scores.TF.left / (scores.TF.left + scores.TF.right)) * 100 },
-                { name: 'J-P', value: (scores.JP.left / (scores.JP.left + scores.JP.right)) * 100 }
-            ];
-
-            const size = 280;
-            const center = size / 2;
-            const radius = size / 2 - 30;
-
-            // 计算雷达图坐标
-            const points = dimensions.map((d, i) => {
-                const angle = (Math.PI * 2 * i) / dimensions.length - Math.PI / 2;
-                const r = (d.value / 100) * radius;
-                return {
-                    x: center + Math.cos(angle) * r,
-                    y: center + Math.sin(angle) * r,
-                    labelX: center + Math.cos(angle) * (radius + 15),
-                    labelY: center + Math.sin(angle) * (radius + 15),
-                    value: d.value,
-                    name: d.name
-                };
-            });
-
-            const polygon = points.map(p => `${p.x},${p.y}`).join(' ');
-
-            container.innerHTML = `
-                <svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
-                    <!-- 网格 -->
-                    ${[0.25, 0.5, 0.75, 1].map(scale => {
-                        const gridPoints = dimensions.map((_, i) => {
-                            const angle = (Math.PI * 2 * i) / dimensions.length - Math.PI / 2;
-                            const r = radius * scale;
-                            return `${center + Math.cos(angle) * r},${center + Math.sin(angle) * r}`;
-                        }).join(' ');
-                        return `<polygon points="${gridPoints}" fill="none" stroke="#e0e0e0" stroke-width="1"/>`;
-                    }).join('')}
-                    
-                    <!-- 维度轴线 -->
-                    ${points.map(p => `<line x1="${center}" y1="${center}" x2="${p.labelX - Math.cos(Math.atan2(p.labelY - center, p.labelX - center)) * 15}" y2="${p.labelY - Math.sin(Math.atan2(p.labelY - center, p.labelX - center)) * 15}" stroke="#e0e0e0" stroke-width="1"/>`).join('')}
-                    
-                    <!-- 数据多边形 -->
-                    <polygon points="${polygon}" fill="rgba(102, 126, 234, 0.3)" stroke="#667eea" stroke-width="2"/>
-                    
-                    <!-- 数据点 -->
-                    ${points.map(p => `<circle cx="${p.x}" cy="${p.y}" r="4" fill="#667eea"/>`).join('')}
-                    
-                    <!-- 标签 -->
-                    ${points.map(p => `<text x="${p.labelX}" y="${p.labelY}" text-anchor="middle" alignment-baseline="middle" font-size="12" fill="#333">${p.name}<br/>${p.value.toFixed(0)}%</text>`).join('')}
-                </svg>
-            `;
-        }
-
-        function displayAnalysis(type) {
-            const data = personalityData[type];
-
-            // 认知功能
-            const functionsContainer = document.getElementById('cognitive-functions');
-            functionsContainer.innerHTML = data.cognitiveFunctions.map(f => `
-                <div class="function-item">
-                    <div class="function-name">${f.name}</div>
-                    <div class="function-desc">${f.desc}</div>
-                </div>
-            `).join('');
-
-            // 优势
-            document.getElementById('strengths-list').innerHTML = data.strengths.map(s => `<li>${s}</li>`).join('');
-            
-            // 挑战
-            document.getElementById('weaknesses-list').innerHTML = data.weaknesses.map(w => `<li>${w}</li>`).join('');
-            
-            // 职业
-            document.getElementById('careers-list').innerHTML = data.careers.map(c => `<li>${c}</li>`).join('');
-        }
-
-        function displaySuggestions(type) {
-            const data = personalityData[type];
-            document.getElementById('relationship-advice').textContent = data.relationship;
-            document.getElementById('growth-advice').textContent = data.growth;
-            document.getElementById('famous-people').textContent = data.famous;
-            document.getElementById('compatibility').textContent = data.compatibility;
-        }
-
-        function switchResultTab(tabName) {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
-            
-            event.target.classList.add('active');
-            document.getElementById('tab-' + tabName).style.display = 'block';
-        }
-
-        function restartTest() {
-            if (confirm('确定要重新测试吗？')) {
-                clearProgress();
-                answers = [];
-                scores = {
-                    EI: { left: 0, right: 0 },
-                    SN: { left: 0, right: 0 },
-                    TF: { left: 0, right: 0 },
-                    JP: { left: 0, right: 0 }
-                };
-                showIntro();
-            }
-        }
-
-        function shareResult() {
-            if (!currentResult) return;
-            const type = currentResult.type;
-            const name = currentResult.name;
-            const text = `我刚完成了MBTI人格测试，我的人格类型是 ${type} (${name})！快来测测你的人格类型吧！`;
-
-            if (navigator.share) {
-                navigator.share({
-                    title: '我的MBTI测试结果',
-                    text: text
-                }).catch(err => console.log('分享失败', err));
-            } else {
-                copyToClipboard(text);
-                alert('结果已复制到剪贴板！');
-            }
-        }
-
-        function copyToClipboard(text) {
-            if (navigator.clipboard) {
-                navigator.clipboard.writeText(text).catch(() => fallbackCopy(text));
-            } else {
-                fallbackCopy(text);
-            }
-        }
-
-        function fallbackCopy(text) {
-            const textarea = document.createElement('textarea');
-            textarea.value = text;
-            document.body.appendChild(textarea);
-            textarea.select();
-            document.execCommand('copy');
-            document.body.removeChild(textarea);
-        }
-
-        // ========== 历史记录 ==========
-        function updateHistoryCount() {
-            const history = getHistory();
-            document.getElementById('history-count').textContent = history.length;
-        }
-
-        function renderHistory() {
-            const history = getHistory();
-            const list = document.getElementById('history-list');
-            document.getElementById('total-records').textContent = history.length;
-
-            if (history.length === 0) {
-                list.innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-state-icon">📋</div>
-                        <p>还没有测试记录</p>
-                        <p style="font-size: 0.9em; margin-top: 10px;">完成第一次测试后，记录会显示在这里</p>
-                    </div>
-                `;
-                return;
-            }
-
-            list.innerHTML = history.map((item, index) => {
-                const date = new Date(item.timestamp);
-                const dateStr = `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')} ${String(date.getHours()).padStart(2,'0')}:${String(date.getMinutes()).padStart(2,'0')}`;
-                return `
-                    <div class="history-item" onclick="showHistoryDetail(${index})">
-                        <div>
-                            <div class="history-type">${item.type}</div>
-                            <div class="history-name">${item.name}</div>
-                        </div>
-                        <div class="history-date">${dateStr}</div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        function showHistoryDetail(index) {
-            const history = getHistory();
-            const item = history[index];
-            const data = personalityData[item.type];
-
-            const date = new Date(item.timestamp);
-            const dateStr = date.toLocaleString('zh-CN');
-
-            const dimensions = [
-                { key: 'EI', label: 'E-I', left: 'E', right: 'I' },
-                { key: 'SN', label: 'S-N', left: 'S', right: 'N' },
-                { key: 'TF', label: 'T-F', left: 'T', right: 'F' },
-                { key: 'JP', label: 'J-P', left: 'J', right: 'P' }
-            ];
-
-            const dimensionHTML = dimensions.map(dim => {
-                const score = item.scores[dim.key];
-                const total = score.left + score.right;
-                const leftPercent = (score.left / total * 100).toFixed(1);
-                const rightPercent = (score.right / total * 100).toFixed(1);
-                return `
-                    <div class="dimension" style="margin-bottom: 10px;">
-                        <div class="dimension-label">${dim.label}</div>
-                        <div class="dimension-score">
-                            <span>${dim.left} (${leftPercent}%)</span>
-                            <span>${dim.right} (${rightPercent}%)</span>
-                        </div>
-                        <div class="dimension-bar">
-                            <div class="dimension-fill left" style="width: ${leftPercent}%;"></div>
-                            <div class="dimension-fill right" style="width: ${rightPercent}%;"></div>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-
-            document.getElementById('modal-title').textContent = `${item.type} - ${item.name}`;
-            document.getElementById('modal-body').innerHTML = `
-                <p style="color: #666; margin-bottom: 15px;">测试时间：${dateStr}</p>
-                <p style="margin-bottom: 20px;">${data.description}</p>
-                <h3 style="margin-bottom: 15px;">各维度得分</h3>
-                ${dimensionHTML}
-                <div style="margin-top: 20px; display: flex; gap: 10px;">
-                    <button class="danger" onclick="deleteHistory(${index})" style="flex: 1;">删除此记录</button>
-                </div>
-            `;
-            document.getElementById('detail-modal').classList.add('active');
-        }
-
-        function deleteHistory(index) {
-            if (confirm('确定要删除这条记录吗？')) {
-                let history = getHistory();
-                history.splice(index, 1);
-                localStorage.setItem(STORAGE_KEYS.HISTORY, JSON.stringify(history));
-                closeModal();
-                renderHistory();
-            }
-        }
-
-        function closeModal() {
-            document.getElementById('detail-modal').classList.remove('active');
-        }
-
-        // ========== 数据对比 ==========
-        function renderCompare() {
-            const history = getHistory();
-            const container = document.getElementById('compare-content');
-
-            if (history.length < 2) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-state-icon">📊</div>
-                        <p>至少需要2条测试记录才能对比</p>
-                        <p style="font-size: 0.9em; margin-top: 10px;">当前有 ${history.length} 条记录</p>
-                    </div>
-                `;
-                return;
-            }
-
-            const latest = history[0];
-            const oldest = history[history.length - 1];
-
-            const dimensions = [
-                { key: 'EI', label: '外向(E) vs 内向(I)', left: 'E', right: 'I' },
-                { key: 'SN', label: '实感(S) vs 直觉(N)', left: 'S', right: 'N' },
-                { key: 'TF', label: '思考(T) vs 情感(F)', left: 'T', right: 'F' },
-                { key: 'JP', label: '判断(J) vs 感知(P)', left: 'J', right: 'P' }
-            ];
-
-            const sameType = latest.type === oldest.type;
-            const changes = dimensions.map(dim => {
-                const oldTotal = oldest.scores[dim.key].left + oldest.scores[dim.key].right;
-                const newTotal = latest.scores[dim.key].left + latest.scores[dim.key].right;
-                const oldPercent = (oldest.scores[dim.key].left / oldTotal * 100);
-                const newPercent = (latest.scores[dim.key].left / newTotal * 100);
-                return { ...dim, oldPercent, newPercent, change: newPercent - oldPercent };
-            });
-
-            const latestDate = new Date(latest.timestamp).toLocaleDateString('zh-CN');
-            const oldestDate = new Date(oldest.timestamp).toLocaleDateString('zh-CN');
-
-            container.innerHTML = `
-                <div class="comparison-chart">
-                    <h3>类型变化</h3>
-                    <p style="margin: 10px 0;">
-                        <strong>${oldestDate}：</strong>${oldest.type} (${oldest.name})<br>
-                        <strong>${latestDate}：</strong>${latest.type} (${latest.name})
-                    </p>
-                    <p style="padding: 10px; background: ${sameType ? '#d4edda' : '#fff3cd'}; border-radius: 8px; color: ${sameType ? '#155724' : '#856404'};">
-                        ${sameType ? '✓ 你的核心人格类型保持稳定' : '⚠ 你的核心人格类型发生了变化'}
-                    </p>
-                </div>
-
-                <div class="comparison-chart">
-                    <h3>维度变化</h3>
-                    <div class="legend">
-                        <div class="legend-item">
-                            <div class="legend-color old"></div>
-                            <span>${oldestDate}</span>
-                        </div>
-                        <div class="legend-item">
-                            <div class="legend-color new"></div>
-                            <span>${latestDate}</span>
-                        </div>
-                    </div>
-                    ${changes.map(c => `
-                        <div class="comparison-item">
-                            <div class="comparison-label">${c.label}</div>
-                            <div class="comparison-bars">
-                                <div class="comparison-bar-old" style="left: ${c.oldPercent}%; width: 4px;"></div>
-                                <div class="comparison-bar-new" style="left: ${c.newPercent}%; width: 4px;"></div>
-                            </div>
-                            <div style="display: flex; justify-content: space-between; font-size: 0.85em; color: #666; margin-top: 5px;">
-                                <span>${c.left}倾向: ${c.oldPercent.toFixed(1)}% → ${c.newPercent.toFixed(1)}%</span>
-                                <span>变化: ${c.change > 0 ? '+' : ''}${c.change.toFixed(1)}%</span>
-                            </div>
-                        </div>
-                    `).join('')}
-                </div>
-
-                <div class="comparison-chart">
-                    <h3>趋势分析</h3>
-                    <p>${generateTrendAnalysis(history, changes, sameType)}</p>
-                </div>
-
-                <div class="comparison-chart">
-                    <h3>历史概览（共${history.length}次）</h3>
-                    <p>从 <strong>${oldestDate}</strong> 到 <strong>${latestDate}</strong>，你共进行了 <strong>${history.length}</strong> 次测试。</p>
-                    <p style="margin-top: 10px;">各类型出现次数：</p>
-                    ${getTypeFrequency(history)}
-                </div>
-            `;
-        }
-
-        function generateTrendAnalysis(history, changes, sameType) {
-            let analysis = '';
-            
-            if (sameType) {
-                analysis += '你的核心人格类型保持稳定，这表明你对自己的认知是清晰一致的。';
-            } else {
-                analysis += '你的人格类型发生了变化，这可能反映了你近期的成长或生活状态的变化。';
-            }
-
-            const significantChanges = changes.filter(c => Math.abs(c.change) > 10);
-            if (significantChanges.length > 0) {
-                analysis += '\n\n以下维度发生了显著变化：';
-                significantChanges.forEach(c => {
-                    const direction = c.change > 0 ? `更倾向于${c.left}` : `更倾向于${c.right}`;
-                    analysis += `\n• ${c.label}：${direction}`;
-                });
-            } else {
-                analysis += '\n\n所有维度的变化都在10%以内，说明你的人格特质相对稳定。';
-            }
-
-            return analysis.replace(/\n/g, '<br>');
-        }
-
-        function getTypeFrequency(history) {
-            const freq = {};
-            history.forEach(h => {
-                freq[h.type] = (freq[h.type] || 0) + 1;
-            });
-            
-            return Object.entries(freq)
-                .sort((a, b) => b[1] - a[1])
-                .map(([type, count]) => {
-                    const percent = (count / history.length * 100).toFixed(0);
-                    return `<div style="margin: 8px 0; padding: 8px; background: #f0f0f0; border-radius: 6px;">
-                        <strong>${type}</strong> - ${personalityData[type]?.name || '未知'} - ${count}次 (${percent}%)
-                    </div>`;
-                }).join('');
-        }
-
-        // ========== 初始化 ==========
-        updateHistoryCount();
-    
-        // ========== 事件绑定（替代 inline onclick）==========
-        document.addEventListener('DOMContentLoaded', function() {
-            // 首页按钮
-            const btnStart = document.getElementById('btn-start-test');
-            if (btnStart) btnStart.addEventListener('click', startTest);
-            
-            const btnHistory = document.getElementById('btn-show-history');
-            if (btnHistory) btnHistory.addEventListener('click', showHistory);
-            
-            // 结果页和历史对比页的历史记录按钮
-            const btnHistoryResult = document.getElementById('btn-show-history-result');
-            if (btnHistoryResult) btnHistoryResult.addEventListener('click', showHistory);
-            
-            const btnHistoryCompare = document.getElementById('btn-show-history-compare');
-            if (btnHistoryCompare) btnHistoryCompare.addEventListener('click', showHistory);
-            
-            const btnCompare = document.getElementById('btn-show-compare');
-            if (btnCompare) btnCompare.addEventListener('click', showCompare);
-            
-            const btnResume = document.getElementById('btn-resume');
-            if (btnResume) btnResume.addEventListener('click', resumeTest);
-            
-            const btnDiscard = document.getElementById('btn-discard');
-            if (btnDiscard) btnDiscard.addEventListener('click', discardProgress);
-            
-            // 测试页按钮
-            const btnPrev = document.getElementById('btn-prev');
-            if (btnPrev) btnPrev.addEventListener('click', previousQuestion);
-            
-            const btnNext = document.getElementById('btn-next');
-            if (btnNext) btnNext.addEventListener('click', nextQuestion);
-            
-            // 结果页按钮
-            const btnShare = document.getElementById('btn-share');
-            if (btnShare) btnShare.addEventListener('click', shareResult);
-            
-            const btnClear = document.getElementById('btn-clear-history');
-            if (btnClear) btnClear.addEventListener('click', clearAllHistory);
-            
-            // Tab 切换
-            const tabOverview = document.getElementById('tab-overview');
-            if (tabOverview) tabOverview.addEventListener('click', function() { switchResultTab('overview', this); });
-
-        // ========== 暴露函数到全局作用域（让onclick能找到）==========
-        window.startTest = startTest;
-        window.showHistory = showHistory;
-        window.showCompare = showCompare;
-        window.resumeTest = resumeTest;
-        window.discardProgress = discardProgress;
-        window.previousQuestion = previousQuestion;
-        window.nextQuestion = nextQuestion;
-        window.shareResult = shareResult;
-        window.clearAllHistory = clearAllHistory;
-        window.closeModal = closeModal;
-        window.showIntro = showIntro;
-        window.switchResultTab = switchResultTab;
-        
-        console.log('函数已暴露到全局作用域');
-        
-        const tabAnalysis = document.getElementById('tab-analysis');
-        if (tabAnalysis) tabAnalysis.addEventListener('click', function() { switchResultTab('analysis', this); });
-        
-        const tabSuggestions = document.getElementById('tab-suggestions');
-        if (tabSuggestions) tabSuggestions.addEventListener('click', function() { switchResultTab('suggestions', this); });
-        
-        console.log('所有事件已绑定');
-    });
-    
-    // ========== 暴露函数到全局作用域（script顶层，确保onclick一定能调用）==========
-    window.startTest = startTest;
-    window.showHistory = showHistory;
-    window.showCompare = showCompare;
-    window.resumeTest = resumeTest;
-    window.discardProgress = discardProgress;
-    window.previousQuestion = previousQuestion;
-    window.nextQuestion = nextQuestion;
-    window.shareResult = shareResult;
-    window.clearAllHistory = clearAllHistory;
-    window.closeModal = closeModal;
-    window.showIntro = showIntro;
-    window.switchResultTab = switchResultTab;
-    
-    console.log('✓ 函数已在script顶层暴露到window');
-    </script>
+    <div class="figure-block">
+      <div class="figure-avatar">人</div>
+      <div class="figure-name">${db.figure}</div>
+      <div class="figure-desc">${db.figureDesc}</div>
+    </div>
+
+    <div class="dimension-results">
+      ${dimData.map(d=>`
+        <div class="dim-result">
+          <div class="dim-result-label">${dimNames[d.dim]}</div>
+          <div class="dim-result-value">${d.label} ${d.val} : ${d.opp} ${d.oppLabel}</div>
+          <div class="dim-result-sub">${d.val>d.opp?dimLabels[d.dim][0]:dimLabels[d.dim][1]}</div>
+        </div>
+      `).join('')}
+    </div>
+
+    <div class="result-detail-card">
+      <div class="detail-section">
+        <div class="detail-title">长处</div>
+        <div class="detail-text">${db.strengths}</div>
+      </div>
+      <div class="detail-section">
+        <div class="detail-title">短板</div>
+        <div class="detail-text">${db.weaknesses}</div>
+      </div>
+      <div class="detail-section">
+        <div class="detail-title">契合领域</div>
+        <div class="detail-text">${db.careers}</div>
+      </div>
+      <div class="detail-section">
+        <div class="detail-title">情感与关系</div>
+        <div class="detail-text">${db.relationship}</div>
+      </div>
+      <div class="detail-section">
+        <div class="detail-title">成长之路</div>
+        <div class="detail-text">${db.growth}</div>
+      </div>
+      <div class="detail-section">
+        <div class="detail-title">知己难觅</div>
+        <div class="detail-text">${db.compatibility}</div>
+      </div>
+    </div>
+
+    <div class="result-actions">
+      <button class="action-btn" onclick="shareResult('${type}','${db.fourChar}')">分 享</button>
+      <button class="action-btn" onclick="showHistory()">历 史</button>
+      <button class="action-btn" onclick="startTest()">重 测</button>
+    </div>
+  `;
+}
+
+function renderHistory(){
+  const list=document.getElementById('history-list');
+  if(savedResults.length===0){
+    list.innerHTML='<div class="history-empty">尚无记录<br>开启你的第一次探索</div>';
+    return;
+  }
+  list.innerHTML=savedResults.map(r=>`
+    <div class="history-item" onclick="rerenderResult('${r.type}')">
+      <div>
+        <div class="history-type">${r.type}</div>
+        <div class="history-name">${poeticDB[r.type]?poeticDB[r.type].fourChar:''}</div>
+      </div>
+      <div>
+        <div class="history-date">${r.date} ${r.time}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function rerenderResult(type){
+  renderResult(type);
+  showPage('result-page');
+}
+
+function shareResult(type,fourChar){
+  const db=poeticDB[type];
+  const text=`我在「识己·知人」测得 ${type} ${fourChar}\n\n「${db.poem}」\n\n—— ${db.figure} · ${db.poeticName}\n\n${db.figureDesc}\n\n你也来测一测？`;
+  document.getElementById('share-text').innerHTML=text.replace(/\n/g,'<br>');
+  document.getElementById('share-modal').classList.add('active');
+}
+
+function closeModal(){
+  document.getElementById('share-modal').classList.remove('active');
+}
+
+// Expose to window for onclick
+window.startTest=startTest;
+window.showHistory=showHistory;
+window.showIntro=showIntro;
+window.shareResult=shareResult;
+window.closeModal=closeModal;
+window.rerenderResult=rerenderResult;
+window.discardProgress=discardProgress;
+window.clearAllHistory=clearAllHistory;
+</script>
 </body>
 </html>
