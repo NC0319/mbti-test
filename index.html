@@ -1524,14 +1524,23 @@ const EXPIRE_MS=7*24*60*60*1000; // 7天过期
 window.onload=function(){
   loadData();
   initProgressDots();
-  checkResume();
+  // 先显示 intro 页，再检查恢复（确保 resume-card DOM 已渲染）
+  showPage('intro');
   requestAnimationFrame(()=>{
+    checkResume();
+    // 触发初始页面卡片入场
     document.querySelectorAll('.page.active .card').forEach((card,i)=>{
       card.style.animationDelay=i*0.08+'s';
       card.classList.add('anim-in');
     });
   });
-  // 离开页面时自动保存进度
+  // 离开页面时自动保存进度（pagehide 比 beforeunload 更可靠）
+  window.addEventListener('pagehide',()=>{
+    if(answers.length>0&&answers.length<questions.length){
+      try{saveProgress();}catch(e){}
+    }
+  });
+  // beforeunload 作为备用
   window.addEventListener('beforeunload',()=>{
     if(answers.length>0&&answers.length<questions.length){
       try{saveProgress();}catch(e){}
@@ -1549,20 +1558,33 @@ function loadData(){
 function checkResume(){
   try{
     const raw=localStorage.getItem(PROGRESS_KEY);
-    if(!raw)return;
+    if(!raw){console.log('[checkResume] no raw');return;}
     const p=JSON.parse(raw);
     // 过期检查
     if(Date.now()-p.savedAt>EXPIRE_MS){
       localStorage.removeItem(PROGRESS_KEY);
+      console.log('[checkResume] expired');
       return;
     }
     // 有效进度
     if(p.answers&&p.answers.length>0&&p.answers.length<questions.length){
-      document.getElementById('resume-card').style.display='block';
-      document.getElementById('resume-count').textContent=p.answers.length;
+      const card=document.getElementById('resume-card');
+      if(card) card.style.display='block';
+      const cnt=document.getElementById('resume-count');
+      if(cnt) cnt.textContent=p.answers.length;
       window._savedProgress=p;
+      console.log('[checkResume] found',p.answers.length,'answers, curQ=',p.curQ);
+    }else{
+      console.log('[checkResume] answers invalid',p.answers);
     }
-  }catch(e){console.error(e);}
+  }catch(e){console.error('[checkResume] error',e);}
+}
+
+function discardProgress(){
+  clearProgress();
+  const card=document.getElementById('resume-card');
+  if(card) card.style.display='none';
+  window._savedProgress=null;
 }
 
 function resumeTest(){
@@ -1652,14 +1674,16 @@ function updateProgress(){
 }
 
 function startTest(){
-  // 如果有保存的进度，让用户选择恢复或重开
-  if(window._savedProgress){
-    if(!confirm('检测到未完成的测试（第 '+(window._savedProgress.answers.length+1)+' 题）。\n\n确定要重新开始吗？\n点击「取消」继续上次的测试。')){
+  // 优先使用 _savedProgress（由 checkResume 设置）
+  const saved=window._savedProgress;
+  if(saved&&saved.answers&&saved.answers.length>0&&saved.answers.length<questions.length){
+    const label=saved.answers.length+1;
+    if(!confirm('检测到未完成的测试（第 '+label+' 题）。\n\n确定要重新开始吗？\n点击「取消」继续上次的测试。')){
       resumeTest();
       return;
     }
   }
-  clearProgress();
+  discardProgress();
   curQ=0;answers=[];scores={E:0,I:0,S:0,N:0,T:0,F:0,J:0,P:0};
   showQuestion();
   showPage('test');
@@ -1708,14 +1732,16 @@ function showQuestion(){
 
 function prevQuestion(){
   if(curQ===0)return;
-  // 回退：弹出一条已答的记录，扣分
-  const last=answers.pop();
-  if(last){
-    const q=questions[last.q];
-    const first=q.dim[0],second=q.dim[1];
-    if(last.choice===0)scores[first]--;else scores[second]--;
-  }
   curQ--;
+  // 移除当前题的记录（回退后允许重新选择）
+  answers=answers.filter(a=>a.q!==curQ);
+  // 重新计算 scores
+  scores={E:0,I:0,S:0,N:0,T:0,F:0,J:0,P:0};
+  answers.forEach(a=>{
+    const qDim=questions[a.q].dim;
+    const f=qDim[0],s=qDim[1];
+    if(a.choice===0)scores[f]++;else scores[s]++;
+  });
   saveProgress();
   showQuestion();
 }
@@ -1725,9 +1751,17 @@ function selectOption(idx,dim){
   opts.forEach(el=>el.classList.remove('ripple'));
   opts[idx].classList.add('ripple','selected');
   setTimeout(()=>opts[idx].classList.remove('ripple'),500);
+  // 先移除该题的旧记录（防止回退后再前进产生重复 q）
+  answers=answers.filter(a=>a.q!==curQ);
   answers.push({q:curQ,choice:idx});
   const first=dim[0],second=dim[1];
-  if(idx===0)scores[first]++;else scores[second]++;
+  // 重新计算 scores（从 answers 完整重算，避免累加误差）
+  scores={E:0,I:0,S:0,N:0,T:0,F:0,J:0,P:0};
+  answers.forEach(a=>{
+    const qDim=questions[a.q].dim;
+    const f=qDim[0],s=qDim[1];
+    if(a.choice===0)scores[f]++;else scores[s]++;
+  });
   curQ++;
   saveProgress();
   setTimeout(()=>{
