@@ -1525,12 +1525,17 @@ window.onload=function(){
   loadData();
   initProgressDots();
   checkResume();
-  // 触发初始页面卡片入场
   requestAnimationFrame(()=>{
     document.querySelectorAll('.page.active .card').forEach((card,i)=>{
       card.style.animationDelay=i*0.08+'s';
       card.classList.add('anim-in');
     });
+  });
+  // 离开页面时自动保存进度
+  window.addEventListener('beforeunload',()=>{
+    if(answers.length>0&&answers.length<questions.length){
+      try{saveProgress();}catch(e){}
+    }
   });
 };
 
@@ -1566,9 +1571,17 @@ function resumeTest(){
   curQ=p.curQ;
   answers=p.answers;
   scores=p.scores;
+  // 如果恢复的 curQ 对应的题已作答过（说明保存的是已答题目的索引），自动跳到下一题
+  while(curQ<questions.length&&answers.find(a=>a.q===curQ)){
+    curQ++;
+  }
+  if(curQ>=questions.length){
+    clearProgress();
+    showResult();
+    return;
+  }
   showQuestion();
   showPage('test');
-  // 不删除进度，下次会再次提示
 }
 
 function saveProgress(){
@@ -1689,6 +1702,8 @@ function showQuestion(){
     prevBtn.style.cursor='pointer';
   }
   updateProgress();
+  // 每次翻题都保存进度，防止用户未作答就退出
+  saveProgress();
 }
 
 function prevQuestion(){
@@ -1713,9 +1728,9 @@ function selectOption(idx,dim){
   answers.push({q:curQ,choice:idx});
   const first=dim[0],second=dim[1];
   if(idx===0)scores[first]++;else scores[second]++;
+  curQ++;
   saveProgress();
   setTimeout(()=>{
-    curQ++;
     if(curQ<questions.length){
       showQuestion();
     }else{
