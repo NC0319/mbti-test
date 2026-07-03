@@ -1642,7 +1642,8 @@ function showPage(name){
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   const pg=document.getElementById('page-'+name);
   pg.classList.add('active');
-  document.querySelector('.nav-item[data-page="'+name+'"]')?.classList.add('active');
+  const navItem=document.querySelector('.nav-item[data-page="'+name+'"]');
+  if(navItem) navItem.classList.add('active');
   // 触发卡片入场动画
   requestAnimationFrame(()=>{
     pg.querySelectorAll('.card').forEach((card,i)=>{
@@ -1929,12 +1930,12 @@ function renderResult(type){
         <div class="match-row">
           <div class="match-col good">
             <div class="match-tag">「 心有灵犀 」</div>
-            <div class="match-types">${db.best.map(t=>`<span class="match-type" onclick="rerenderResult('${t}')">${t} · ${poeticDB[t]?.four||''}</span>`).join('')}</div>
+            <div class="match-types">${db.best.map(t=>`<span class="match-type" onclick="rerenderResult('${t}')">${t} · ${(poeticDB[t]&&poeticDB[t].four)||''}</span>`).join('')}</div>
             <div class="match-desc">与此类人相处，你感到被理解、被看见。</div>
           </div>
           <div class="match-col bad">
             <div class="match-tag" style="color:var(--accent)">「 擦出火花 」</div>
-            <div class="match-types">${db.worst.map(t=>`<span class="match-type" onclick="rerenderResult('${t}')">${t} · ${poeticDB[t]?.four||''}</span>`).join('')}</div>
+            <div class="match-types">${db.worst.map(t=>`<span class="match-type" onclick="rerenderResult('${t}')">${t} · ${(poeticDB[t]&&poeticDB[t].four)||''}</span>`).join('')}</div>
             <div class="match-desc">与此类人相处，需要更多耐心与倾听。</div>
           </div>
         </div>
@@ -1969,7 +1970,7 @@ function showHistory(){
       <div class="history-item" onclick="rerenderResult('${h.type}')">
         <div class="history-left">
           <div class="history-type">${h.type}</div>
-          <div class="history-name">${poeticDB[h.type]?.four||''}</div>
+          <div class="history-name">${(poeticDB[h.type]&&poeticDB[h.type].four)||''}</div>
         </div>
         <div class="history-date">${h.date}</div>
       </div>
