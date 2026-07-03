@@ -954,6 +954,13 @@ window.onload=function(){
   loadData();
   initProgressDots();
   checkResume();
+  // 触发初始页面卡片入场
+  requestAnimationFrame(()=>{
+    document.querySelectorAll('.page.active .card').forEach((card,i)=>{
+      card.style.animationDelay=i*0.08+'s';
+      card.classList.add('anim-in');
+    });
+  });
 };
 
 function loadData(){
