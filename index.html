@@ -22,11 +22,19 @@
 }
 
 html,body{
-  height:100%;
+  min-height:100vh;
+  min-height:100dvh; /* 动态视口高度，覆盖地址栏 */
   font-family:'Noto Serif SC','STSong','SimSun',serif;
   background:var(--bg);
   color:var(--ink);
   overflow:hidden;
+  /* iPhone 刘海屏 */
+  padding-top:env(safe-area-inset-top);
+  padding-left:env(safe-area-inset-left);
+  padding-right:env(safe-area-inset-right);
+  /* 禁止双击缩放 */
+  touch-action:manipulation;
+  -webkit-text-size-adjust:100%;
 }
 
 /* ===== 页面容器 ===== */
@@ -334,20 +342,20 @@ html,body{
   border-radius:2px;
 }
 
-/* 详情 */
+/* ===== 详情 ===== */
 .detail-section{
   text-align:left;
-  margin-bottom:20px;
+  margin-bottom:16px;
 }
 .detail-section:last-child{margin-bottom:0}
 .detail-title{
   display:flex;
   align-items:center;
   gap:8px;
-  font-size:12px;
+  font-size:11px;
   color:var(--accent);
   letter-spacing:3px;
-  margin-bottom:10px;
+  margin-bottom:8px;
 }
 .detail-title::before{
   content:'';
@@ -357,40 +365,39 @@ html,body{
   background:var(--accent);
 }
 .detail-text{
-  font-size:13px;
+  font-size:clamp(12px,3.5vw,13px);
   color:var(--ink-light);
-  line-height:2;
+  line-height:1.8;
   padding-left:14px;
   border-left:1px solid var(--accent-soft);
 }
 
-/* 按钮组 */
+/* ===== 按钮组 ===== */
 .result-actions{
   display:flex;
-  gap:12px;
-  margin-top:24px;
+  gap:10px;
+  margin-top:20px;
 }
 .result-btn{
   flex:1;
-  padding:14px;
+  padding:clamp(12px,3.5vw,14px);
   background:var(--bg-warm);
   border:1px solid transparent;
   border-radius:10px;
   font-family:'Noto Serif SC',serif;
-  font-size:13px;
+  font-size:clamp(12px,3.5vw,13px);
   color:var(--ink);
-  letter-spacing:3px;
+  letter-spacing:2px;
   cursor:pointer;
   transition:all 0.3s;
+  -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;
 }
-.result-btn:hover{
-  background:var(--card);
-  border-color:var(--accent-soft);
+.result-btn:active{transform:scale(0.97)}
+@media(hover:hover){
+  .result-btn:hover{background:var(--card);border-color:var(--accent-soft)}
 }
-.result-btn.primary{
-  background:var(--ink);
-  color:var(--card);
-}
+.result-btn.primary{background:var(--ink);color:var(--card)}
 .result-btn.primary:hover{background:var(--accent)}
 
 /* ===== 底部导航 ===== */
@@ -477,14 +484,17 @@ html,body{
   align-items:center;
   justify-content:center;
   padding:20px;
+  padding:env(safe-area-inset-top,20px) env(safe-area-inset-right,20px) env(safe-area-inset-bottom,20px) env(safe-area-inset-left,20px);
   z-index:100;
+  backdrop-filter:blur(2px);
+  -webkit-backdrop-filter:blur(2px);
 }
 .modal.active{display:flex}
 .modal-card{
   background:var(--card);
   border-radius:20px;
-  padding:28px;
-  max-width:320px;
+  padding:clamp(20px,6vw,28px);
+  max-width:clamp(280px,85vw,320px);
   width:100%;
   text-align:center;
 }
@@ -519,17 +529,38 @@ html,body{
 /* ===== 空状态 ===== */
 .empty-state{
   text-align:center;
-  padding:60px 20px;
+  padding:clamp(40px,12vw,60px) 20px;
   color:var(--ink-muted);
 }
 .empty-icon{
-  font-size:48px;
-  margin-bottom:16px;
+  font-size:clamp(36px,10vw,48px);
+  margin-bottom:14px;
   opacity:0.3;
 }
 .empty-text{
-  font-size:13px;
+  font-size:12px;
   letter-spacing:2px;
+}
+
+/* ===== 平板/桌面适配 ===== */
+@media (min-width:600px){
+  .card{
+    border-radius:20px;
+    padding:clamp(24px,4vw,32px);
+    margin-bottom:16px;
+  }
+  .header{padding-top:clamp(20px,4vw,32px)}
+  .result-four{letter-spacing:12px}
+}
+
+/* ===== 大屏居中+背景 ===== */
+@media (min-width:768px){
+  body{background:#EDE8DF}
+  .app{
+    box-shadow:0 0 60px rgba(0,0,0,0.08);
+    border-left:1px solid rgba(0,0,0,0.04);
+    border-right:1px solid rgba(0,0,0,0.04);
+  }
 }
 </style>
 </head>
