@@ -1106,9 +1106,11 @@ html,body{
   letter-spacing:2px;
 }
 .poster-interpret{
-  font-size:12px;color:var(--ink-light);line-height:1.8;
-  text-align:center;max-width:300px;margin-bottom:24px;
-  padding:0 10px;
+  font-size:13px;color:var(--ink-light);line-height:1.9;
+  text-align:center;max-width:320px;margin-bottom:24px;
+  padding:0 10px;word-break:break-all;
+  display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;
+  overflow:hidden;
 }
 .poster-qr-area{
   display:flex;align-items:center;gap:14px;
@@ -2154,7 +2156,9 @@ function openShare(){
     ShareModule.init({
       type: type,
       name: db.name || '未知',
-      desc: db.figure + ' · ' + (db.essence || '').substring(0, 50) + '...',
+      desc: (db.essence || '').substring(0, 60),
+      poem: db.poem || '',
+      figure: db.figure || '',
       traits: db.talent ? db.talent.slice(0, 4) : ['理想主义', '有深度', '神秘', '有原则']
     });
     ShareModule.showShareModal();
@@ -2166,7 +2170,7 @@ function openShare(){
 
 function generatePoster(type, db){
   const wrap=document.getElementById('poster-canvas-wrap');
-  // 构建海报内部 HTML
+  // 构建海报内部 HTML（重排版版）
   wrap.innerHTML='<div class="poster-inner" id="poster-inner">'+
     '<div class="poster-brand">SHI JI · ZHI REN</div>'+
     '<div class="poster-type">'+type+'</div>'+
@@ -2175,7 +2179,7 @@ function generatePoster(type, db){
     '<div class="poster-divider"></div>'+
     '<div class="poster-poem">'+db.poem+'</div>'+
     '<div class="poster-figure">—— '+db.figure+'</div>'+
-    '<div class="poster-interpret">'+(db.essence||'').substring(0,80)+'…</div>'+
+    '<div class="poster-interpret">'+(db.essence||'')+'</div>'+
     '<div class="poster-qr-area">'+
       '<div class="poster-qr-code" id="poster-qr"></div>'+
       '<div class="poster-url-text">'+
