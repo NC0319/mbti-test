@@ -119,8 +119,8 @@ const ShareModule = (function() {
         // 右侧人物 SVG（已预加载为 characterImg）
         if (characterImg && characterImg.complete && characterImg.naturalWidth > 0) {
             // 人物画在右侧区域 660-1020, 中心 (840, 540)
-            const imgW = 360, imgH = 480;
-            const imgX = 840 - imgW/2, imgY = 540 - imgH/2;
+            const imgW = 360, imgH = 540;
+            const imgX = 840 - imgW/2, imgY = 540 - imgH/2 + 20;
             ctx.drawImage(characterImg, imgX, imgY, imgW, imgH);
         } else {
             // 降级：使用 Canvas 绘制火柴人
