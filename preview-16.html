@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>16型水墨人物预览 - 诸葛亮/苏轼/岳飞/班固/杨贵妃/霍去病...</title>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; background: #F5E6D3; padding: 30px 20px; min-height: 100vh; }
+    h1 { text-align: center; color: #4A2A1A; margin-bottom: 8px; font-size: 28px; }
+    .subtitle { text-align: center; color: #8B6B3A; margin-bottom: 30px; font-size: 14px; }
+    .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; max-width: 1280px; margin: 0 auto; }
+    .card { background: #FFFBF2; border-radius: 8px; padding: 12px; box-shadow: 0 4px 12px rgba(74,42,26,0.15); text-align: center; }
+    .card svg { width: 100%; height: auto; max-height: 360px; }
+    .label { margin-top: 8px; font-size: 14px; color: #4A2A1A; font-weight: bold; }
+    .mbti { font-size: 12px; color: #8B6B3A; margin-top: 2px; }
+    .desc { font-size: 11px; color: #A88B5A; margin-top: 4px; line-height: 1.4; }
+</style>
+</head>
+<body>
+<h1>16型水墨人物预览</h1>
+<p class="subtitle">识己·MBTI古韵人格探索 — 配图设计稿</p>
+<div class="grid" id="grid"></div>
+
+<script src="character-art.js"></script>
+<script>
+    const types = ['INTJ','INTP','ENTJ','ENTP','INFJ','INFP','ENFJ','ENFP','ISTJ','ISFJ','ESTJ','ESFJ','ISTP','ISFP','ESTP','ESFP'];
+    const grid = document.getElementById('grid');
+    types.forEach(t => {
+        const c = CharacterArt.characters[t];
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+            ${CharacterArt.getSVG(t)}
+            <div class="label">${c.name}</div>
+            <div class="mbti">${t} · ${c.title}</div>
+            <div class="desc">${c.desc}</div>
+        `;
+        grid.appendChild(card);
+    });
+</script>
+</body>
+</html>
