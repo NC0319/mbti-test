@@ -1665,6 +1665,11 @@ function loadData(){
 
 function checkResume(){
   try{
+    // 确保 questions 已加载
+    if(typeof questions==='undefined'||!questions){
+      console.log('[checkResume] questions not loaded yet');
+      return;
+    }
     const raw=localStorage.getItem(PROGRESS_KEY);
     if(!raw){console.log('[checkResume] no raw');return;}
     const p=JSON.parse(raw);
@@ -1674,8 +1679,11 @@ function checkResume(){
       console.log('[checkResume] expired');
       return;
     }
-    // 有效进度
-    if(p.answers&&p.answers.length>0&&p.answers.length<questions.length){
+    // 有效进度：已答至少1题且未答完
+    const hasAnswers=p.answers&&Array.isArray(p.answers)&&p.answers.length>0;
+    const notFinished=hasAnswers&&p.answers.length<questions.length;
+    console.log('[checkResume] hasAnswers:',hasAnswers,'notFinished:',notFinished,'total:',questions.length);
+    if(hasAnswers&&notFinished){
       const card=document.getElementById('resume-card');
       if(card) card.style.display='block';
       const cnt=document.getElementById('resume-count');
@@ -1683,7 +1691,7 @@ function checkResume(){
       window._savedProgress=p;
       console.log('[checkResume] found',p.answers.length,'answers, curQ=',p.curQ);
     }else{
-      console.log('[checkResume] answers invalid',p.answers);
+      console.log('[checkResume] answers invalid or finished',p.answers?p.answers.length:0);
     }
   }catch(e){console.error('[checkResume] error',e);}
 }
@@ -1697,19 +1705,33 @@ function discardProgress(){
 
 function resumeTest(){
   const p=window._savedProgress;
-  if(!p)return;
-  curQ=p.curQ;
-  answers=p.answers;
-  scores=p.scores;
-  // 如果恢复的 curQ 对应的题已作答过（说明保存的是已答题目的索引），自动跳到下一题
+  if(!p){
+    console.log('[resumeTest] no saved progress');
+    return;
+  }
+  // 恢复数据
+  curQ=p.curQ||0;
+  answers=p.answers||[];
+  scores=p.scores||{E:0,I:0,S:0,N:0,T:0,F:0,J:0,P:0};
+  console.log('[resumeTest] restoring curQ:',curQ,'answers:',answers.length);
+  
+  // 如果恢复的 curQ 对应的题已作答过，自动跳到下一题
   while(curQ<questions.length&&answers.find(a=>a.q===curQ)){
     curQ++;
   }
+  
+  // 隐藏恢复提示卡片
+  const card=document.getElementById('resume-card');
+  if(card) card.style.display='none';
+  
   if(curQ>=questions.length){
+    console.log('[resumeTest] all questions answered, showing result');
     clearProgress();
     showResult();
     return;
   }
+  
+  console.log('[resumeTest] showing question',curQ);
   showQuestion();
   showPage('test');
 }
@@ -1729,10 +1751,8 @@ function clearProgress(){
 function pauseTest(){
   saveProgress();
   // 提示用户已保存
-  const btn=document.querySelector('.start-btn');
-  // 简单提示
   if(confirm('进度已保存，下次进来会自动询问是否继续。\n\n确定要退出吗？')){
-    clearProgress();
+    // 不要清除进度！让用户可以选择继续
     showPage('intro');
   }
 }
@@ -1783,8 +1803,22 @@ function updateProgress(){
 }
 
 function startTest(){
-  // 优先使用 _savedProgress（由 checkResume 设置）
-  const saved=window._savedProgress;
+  // 优先使用 _savedProgress（由 checkResume 设置），如果没有则从 localStorage 读取
+  let saved=window._savedProgress;
+  if(!saved){
+    try{
+      const raw=localStorage.getItem(PROGRESS_KEY);
+      if(raw){
+        const p=JSON.parse(raw);
+        if(p.answers&&p.answers.length>0&&p.answers.length<questions.length&&Date.now()-p.savedAt<=EXPIRE_MS){
+          saved=p;
+          window._savedProgress=p;
+          console.log('[startTest] loaded progress from localStorage:',p.answers.length);
+        }
+      }
+    }catch(e){console.error('[startTest] error loading progress',e);}
+  }
+  
   if(saved&&saved.answers&&saved.answers.length>0&&saved.answers.length<questions.length){
     const label=saved.answers.length+1;
     if(!confirm('检测到未完成的测试（第 '+label+' 题）。\n\n确定要重新开始吗？\n点击「取消」继续上次的测试。')){
